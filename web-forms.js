@@ -2882,30 +2882,43 @@ function cb_SetValidityMessage(element)
     if (!element.validity)
         return;
 
+    if (element.__wfcValidityMessage)
+    {
+        element.setCustomValidity("");
+        element.__wfcValidityMessage = "";
+    }
+
     const validity = element.validity;
 
-    if (validity.valueMissing)
-        element.setCustomValidity(WebFormsOptions.ValidityValueMissing);
-    else if (validity.typeMismatch)
-        element.setCustomValidity(WebFormsOptions.ValidityTypeMismatch);
-    else if (validity.patternMismatch)
-        element.setCustomValidity(WebFormsOptions.ValidityPatternMismatch);
-    else if (validity.tooLong)
-        element.setCustomValidity(WebFormsOptions.ValidityTooLong.replaceAll("{{maxLength}}", element.maxLength).replaceAll("{{valueLength}}", element.value.length));
-    else if (validity.tooShort)
-        element.setCustomValidity(WebFormsOptions.ValidityTooShort.replaceAll("{{minLength}}", element.minLength).replaceAll("{{valueLength}}", element.value.length));
-    else if (validity.rangeUnderflow)
-        element.setCustomValidity(WebFormsOptions.ValidityRangeUnderflow.replaceAll("{{min}}", element.min));
-    else if (validity.rangeOverflow)
-        element.setCustomValidity(WebFormsOptions.ValidityRangeOverflow.replaceAll("{{max}}", element.max));
-    else if (validity.stepMismatch)
-        element.setCustomValidity(WebFormsOptions.ValidityStepMismatch);
-    else if (validity.badInput)
-        element.setCustomValidity(WebFormsOptions.ValidityBadInput);
-    else if (validity.customError)
+    if (validity.customError)
         return;
-    else
-        element.setCustomValidity("");
+
+    let message = "";
+
+    if (validity.valueMissing)
+        message = WebFormsOptions.ValidityValueMissing;
+    else if (validity.typeMismatch)
+        message = WebFormsOptions.ValidityTypeMismatch;
+    else if (validity.patternMismatch)
+        message = WebFormsOptions.ValidityPatternMismatch;
+    else if (validity.tooLong)
+        message = WebFormsOptions.ValidityTooLong.replaceAll("{{maxLength}}", element.maxLength).replaceAll("{{valueLength}}", element.value.length);
+    else if (validity.tooShort)
+        message = WebFormsOptions.ValidityTooShort.replaceAll("{{minLength}}", element.minLength).replaceAll("{{valueLength}}", element.value.length);
+    else if (validity.rangeUnderflow)
+        message = WebFormsOptions.ValidityRangeUnderflow.replaceAll("{{min}}", element.min);
+    else if (validity.rangeOverflow)
+        message = WebFormsOptions.ValidityRangeOverflow.replaceAll("{{max}}", element.max);
+    else if (validity.stepMismatch)
+        message = WebFormsOptions.ValidityStepMismatch;
+    else if (validity.badInput)
+        message = WebFormsOptions.ValidityBadInput;
+
+    if (message)
+    {
+        element.setCustomValidity(message);
+        element.__wfcValidityMessage = message;
+    }
 }
 
 function cb_SetFormCustomValidity(obj)
