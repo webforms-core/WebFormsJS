@@ -1,4 +1,4 @@
-/* WebFormsJS 2.1.2 - The Front-End Part of WebForms Core Technology, Owned by Elanat (https://elanat.net) */
+/* WebFormsJS 2.2 - The Front-End Part of WebForms Core Technology, Owned by Elanat (https://elanat.net) */
 
 /* Start Options */
 
@@ -45,6 +45,7 @@ WebFormsOptions.RestoreListenersAfterHistoryReview = true;
 
 // Queue
 WebFormsOptions.UseQueue = true;
+WebFormsOptions.QueueLockDuration = 100;
 WebFormsOptions.UseQueueForWebFormsValue = true;
 WebFormsOptions.UseDebounceDelay = true;
 WebFormsOptions.QueueDebounceDelay = 200;
@@ -1251,7 +1252,7 @@ function cb_DebugGo()
         cb_DebugStart();
 
     cb_DebugPaused = false;
-    cb_UpdateDebugStatus();cb_CreateDebugger
+    cb_UpdateDebugStatus();
 }
 
 function cb_DebugPause()
@@ -2901,6 +2902,8 @@ function cb_SetValidityMessage(element)
         element.setCustomValidity(WebFormsOptions.ValidityStepMismatch);
     else if (validity.badInput)
         element.setCustomValidity(WebFormsOptions.ValidityBadInput);
+    else if (validity.customError)
+        return;
     else
         element.setCustomValidity("");
 }
@@ -3178,6 +3181,8 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
     let StartIndexIsNumber = StartIndex.IsNumber();
     let StartIndexIndex = StartIndexIsNumber ? parseInt(StartIndex) : 0;
     let IndexForStartIndex = 1;
+    let TryHasStarted = false;
+    let DebugIsStarted = false;
 
     // Loop
     let ForEachStartIndexStack = new Array();
@@ -3213,7 +3218,14 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
             // Using Debug
             if (cb_DebugActive)
             {
-                console.info("Stop in: " + WebFormsList[i]);
+                console.info(`[${i + 1}/${WebFormsList.length}] Stop in: ` + WebFormsList[i]);
+
+                if (!DebugIsStarted)
+                {
+                    DebugIsStarted = true;
+                    cb_DebugCurrentStep++;
+                    cb_UpdateDebugStep();
+                }
 
                 if (cb_DebugPaused)
                 {
@@ -3224,12 +3236,21 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
                     cb_DebugPaused = true;
                 }
 
-                console.info("Running: " + WebFormsList[i]);
+                console.info(`[${i + 1}/${WebFormsList.length}] Running: ` + WebFormsList[i]);
             }
 
             let ActionControl = WebFormsList[i].FullTrim();
 
             if (!ActionControl)
+                continue;
+
+            if (ActionControl == "tr")
+            {
+                TryHasStarted = true; 
+                continue;
+            }
+
+            if (ActionControl.startsWith("//"))
                 continue;
 
             // Checking Index Process
@@ -3667,6 +3688,11 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
                                 path = window.location.pathname + window.location.search + window.location.hash;
 
                             cb_SPA.render(evt, path);
+                            continue;
+                        }
+                        case 'q':
+                        {
+                            cb_LockQueue(v1);
                             continue;
                         }
                     }
@@ -4107,6 +4133,22 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
                             cb_SetStorage(isCache, cacheName, cb_GetStorage(isCache, cacheName).Replace(searchValue, cacheValue));
                             continue;
                         }
+                        case 'F':
+                        {
+                            const replacement = v3.Replace("$[ln];", '\n');
+                            cb_SetStorage(isCache, cacheName, cb_SetFormat(cb_GetStorage(isCache, cacheName), v2, replacement));
+                            continue;
+                        }
+                        case 'M':
+                        {
+                            cb_SetStorage(isCache, cacheName, cb_SetArithmetic(cb_GetStorage(isCache, cacheName), v2, v3));
+                            continue;
+                        }
+                        case 'T':
+                        {
+                            cb_SetStorage(isCache, cacheName, cb_SetTextOperation(cb_GetStorage(isCache, cacheName), v2, v3, v4));
+                            continue;
+                        }
                     }
                     break;
                 }
@@ -4301,11 +4343,26 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
         }
         catch (er)
         {
-            if (WebFormsOptions.AddConsoleMessage)
-                console.warn("There was a problem in webforms value whene executing the command: " + er + "\nError in command: " + WebFormsList[i] + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+            if (!er.cb_Trace)
+            {
+                if (WebFormsOptions.AddConsoleMessage)
+                    console.warn("There was a problem in webforms value whene executing the command: " + er + "\nError in command: " + WebFormsList[i] + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
-            if (WebFormsOptions.AddMessageForProblemInSetWebFormsValue)
-                cb_ShowMessage(WebFormsOptions.ProblemInSetWebFormsValueLang, "problem", WebFormsOptions.MessageDuration);
+                if (WebFormsOptions.AddMessageForProblemInSetWebFormsValue)
+                    cb_ShowMessage(WebFormsOptions.ProblemInSetWebFormsValueLang, "problem", WebFormsOptions.MessageDuration);
+            }
+            
+            if (TryHasStarted)
+            {
+                TryHasStarted = false;
+
+                for (var k = i + 1; k < WebFormsList.length; k++)
+                {
+                    i = k;
+                    if (WebFormsList[k] == "ca")
+                        break;
+                }
+            }
         }
     }
 }
@@ -5326,11 +5383,26 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
                     }
                     break;
 
+                case 'r':
+                    switch (ActionFeature)
+                    {
+                        case 'S': cb_Snapshot(CurrentElement, v1, v2); break;
+                        case 'B': cb_RollBack(CurrentElement, v1, v2); break;
+                    }
+                    break;
+
                 case 'u':
                     switch (ActionFeature)
                     {
                         case 'o': cb_UseOnlyChangeUpdate(CurrentElement); break;
                         case 'w': CurrentElement.setAttribute("usewebsocket", "true");
+                    }
+                    break;
+
+                case 'c':
+                    switch (ActionFeature)
+                    {
+                        case 'v': CurrentElement.setCustomValidity(v1);
                     }
                     break;
 
@@ -5497,6 +5569,8 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
 
             if (WebFormsOptions.AddMessageForProblemInSetValueToInput)
                 cb_ShowMessage(WebFormsOptions.ProblemInSetValueToInputLang, "problem", WebFormsOptions.MessageDuration);
+
+            throw cb_AddTrace(er, "set-value-to-input");
         }
     }
 
@@ -5943,13 +6017,13 @@ function cb_ElementPlaceCriteria(element, criteria)
     else if (!Array.isArray(element))
         element = [element];
 
-    criteria = criteria.Replace("$[vb];", '|').Replace("$[qu];", '?');
+    criteria = criteria.Replace("$[vb];", '|').Replace("$[eq];", '=');
 
     const criterias = criteria.substring(1).split('?');
 
     for (const item of criterias)
     {
-        let criteria = item;
+        let criteria = item.Replace("$[qu];", '?');
 
         const isPositive = !criteria.startsWith('!');
 
@@ -6024,6 +6098,31 @@ function cb_ElementPlaceCriteria(element, criteria)
                         case '~':
                             result = text.split(/\s+/).includes(tmpValue);
                             break;
+
+                        case '#':
+                        {
+                            let pattern = tmpValue;
+                            let flags = "";
+
+                            const m = pattern.match(/^\/([\s\S]+)\/([a-z]*)$/);
+
+                            if (m)
+                            {
+                                pattern = m[1];
+                                flags = m[2];
+                            }
+
+                            try
+                            {
+                                result = new RegExp(pattern, flags).test(text);
+                            }
+                            catch
+                            {
+                                result = false;
+                            }
+
+                            break;
+                        }
 
                         case '>':
                         {
@@ -6369,7 +6468,7 @@ async function cb_FetchValue(evt, Value)
         {
             Value = Value.substring(1);
 
-            if (Value.substring(1) == '$')
+            if (Value.substring(0, 1) == '$')
                 return Value;
 
             if (WebFormsOptions.DisablePassObject)
@@ -6513,7 +6612,7 @@ async function cb_FetchValue(evt, Value)
                     case 'L':
                     if (Value.Contains('['))
                     {
-                        var lines = localStorage.getItem(Value.GetTextBefore('[')).split("\n");
+                        var lines = cb_GetStorage(true, Value.GetTextBefore('[')).split("\n");
 
                         var index = Number(Value.GetTextAfter('['));
 
@@ -6524,7 +6623,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     else
                     {
-                        var lines = localStorage.getItem(Value).split("\n");
+                        var lines = cb_GetStorage(true, Value).split("\n");
                         var FirtsLine = lines[0];
 
                         lines.shift();
@@ -6534,7 +6633,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     case 'I':
                     {
-                        var lines = localStorage.getItem(Value.GetTextBefore('[')).split("\n");
+                        var lines = cb_GetStorage(true, Value.GetTextBefore('[')).split("\n");
 
                         for (var i = 0; i < lines.length; i++)
                             if (lines[i].GetTextBefore('=') == Value.GetTextAfter('['))
@@ -6552,30 +6651,30 @@ async function cb_FetchValue(evt, Value)
                     case 's':
                         if (Value.Contains(RS))
                         {
-                            var TmpValue = sessionStorage.getItem(Value.GetTextBefore(RS));
+                            var TmpValue = cb_GetStorage(false, Value.GetTextBefore(RS));
                             sessionStorage.setItem(Value.GetTextBefore(RS), Value.GetTextAfter(RS));
                             return TmpValue;
                         }
                         else
-                            return sessionStorage.getItem(Value);
+                            return cb_GetStorage(false, Value);
                     case 'l':
                     {
-                        var TmpValue = sessionStorage.getItem(Value);
+                        var TmpValue = cb_GetStorage(false, Value);
                         sessionStorage.removeItem(Value);
                         return TmpValue;
                     }
                     case 'd':
                         if (Value.Contains(RS))
                         {
-                            var TmpValue = localStorage.getItem(Value.GetTextBefore(RS));
+                            var TmpValue = cb_GetStorage(true, Value.GetTextBefore(RS));
                             localStorage.setItem(Value.GetTextBefore(RS), Value.GetTextAfter(RS));
                             return TmpValue;
                         }
                         else
-                            return localStorage.getItem(Value);
+                            return cb_GetStorage(true, Value);
                     case 't':
                     {
-                        var TmpValue = localStorage.getItem(Value);
+                        var TmpValue = cb_GetStorage(true, Value);
                         localStorage.removeItem(Value);
                         return TmpValue;
                     }
@@ -6598,8 +6697,8 @@ async function cb_FetchValue(evt, Value)
                             return await cb_RunMethod(evt, Value);
                         else
                             return await cb_RunModuleMethod(evt, Value);
-                    case 'g': return sessionStorage.getItem(Value).length;
-                    case 'G': return localStorage.getItem(Value).length;
+                    case 'g': return cb_GetStorage(false, Value).length;
+                    case 'G': return cb_GetStorage(true, Value).length;
                 }
                 break;
 
@@ -6666,7 +6765,7 @@ async function cb_FetchValue(evt, Value)
                     case 'L':
                     if (Value.Contains('['))
                     {
-                        var lines = sessionStorage.getItem(Value.GetTextBefore('[')).split("\n");
+                        var lines = cb_GetStorage(false, Value.GetTextBefore('[')).split("\n");
 
                         var index = Number(Value.GetTextAfter('['));
 
@@ -6677,7 +6776,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     else
                     {
-                        var lines = sessionStorage.getItem(Value).split("\n");
+                        var lines = cb_GetStorage(false, Value).split("\n");
                         var FirtsLine = lines[0];
 
                         lines.shift();
@@ -6687,7 +6786,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     case 'I':
                     {
-                        var lines = sessionStorage.getItem(Value.GetTextBefore('[')).split("\n");
+                        var lines = cb_GetStorage(false, Value.GetTextBefore('[')).split("\n");
 
                         for (var i = 0; i < lines.length; i++)
                             if (lines[i].GetTextBefore('=') == Value.GetTextAfter('['))
@@ -7053,23 +7152,24 @@ function cb_GetValue(evt, action, value, currentElement)
         case 'T': return currentElement.style.textAlign || "left";
         case 'L': return currentElement.childNodes.length;
         case 'V': return ((currentElement.style.visibility == "hidden") ? "false" : "true");
+        case 'H': return cb_GetHashSHA256(currentElement.outerHTML);
     }
 }
 
-function cb_SetStorage(IsCache, Name, Value)
+function cb_SetStorage(isCache, key, value)
 {
-    if (IsCache)
-        localStorage.setItem(Name, Value);
+    if (isCache)
+        localStorage.setItem(key, value);
     else
-        sessionStorage.setItem(Name, Value);
+        sessionStorage.setItem(key, value);
 }
 
-function cb_GetStorage(IsCache, Name)
+function cb_GetStorage(isCache, key)
 {
-    if (IsCache)
-        return localStorage.getItem(Name) ?? "";
+    if (isCache)
+        return localStorage.getItem(key) ?? "";
     else
-        return sessionStorage.getItem(Name) ?? "";
+        return sessionStorage.getItem(key) ?? "";
 }
 
 async function cb_SetDynamicValueInlineMap(evt, Value, Splitter)
@@ -7169,17 +7269,17 @@ async function cb_SetDynamicForValue(evt, Value)
 
 function cb_UsedCache(evt, RequestName, RequestNameForCache)
 {
-    const SessionCacheValue = sessionStorage.getItem(RequestName);
+    const SessionCacheValue = cb_GetStorage(false, RequestName);
     if (SessionCacheValue)
     {
         cb_SetWebFormsValues(evt, RequestNameForCache, SessionCacheValue, true, true);
         return true;
     }
 
-    const LocalCacheValue = localStorage.getItem(RequestName);
+    const LocalCacheValue = cb_GetStorage(true, RequestName);
     if (LocalCacheValue)
     {
-        const LocalCacheDateValue = localStorage.getItem(RequestName + "-date");
+        const LocalCacheDateValue = cb_GetStorage(true, RequestName + "-date");
         if (LocalCacheDateValue)
         {
             const CacheDate = new Date(LocalCacheDateValue);
@@ -7216,7 +7316,7 @@ function cb_CleanExpiredCache()
 
         if (key.endsWith("-date"))
         {
-            const expirationDate = new Date(localStorage.getItem(key)).getTime();
+            const expirationDate = new Date(cb_GetStorage(true, key)).getTime();
 
             if (now >= expirationDate)
             {
@@ -7230,12 +7330,12 @@ function cb_CleanExpiredCache()
 
 function cb_LocalCacheExists(key)
 {
-    return localStorage.getItem(key) !== null;
+    return cb_GetStorage(true, key) !== null;
 }
 
 function cb_SessionCacheExists(key)
 {
-    return sessionStorage.getItem(key) !== null;
+    return cb_GetStorage(false, key) != "";
 }
 
 /* End Cache */
@@ -7913,6 +8013,68 @@ function cb_IsTrue(value)
     return false;
 }
 
+function cb_SetFormat(text, regex, replacement)
+{
+    return text.replace(new RegExp(regex, "g"), replacement);
+}
+
+function cb_SetArithmetic(text, operator, value)
+{
+    const a = Number(text);
+    const b = Number(value);
+
+    switch(operator)
+    {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        case '%': return a % b;
+        case "//": return Math.floor(a / b);
+        case "**": return a ** b;
+    }
+    return text;
+}
+
+function cb_SetTextOperation(text, operation, Value1, Value2)
+{
+    switch(operation)
+    {
+        case "textafter": return text.GetTextAfter(Value1);
+        case "textafterlast": return text.GetTextAfterLast(Value1);
+        case "textbefore": return text.GetTextBefore(Value1);
+        case "textbeforelast": return text.GetTextBeforeLast(Value1);
+        case "substring":
+        {
+            let start = Number(Value1);
+            let end   = (Value2 === undefined || Value2 === null || Value2 === "") ? text.length : Number(Value2);
+
+            if (start < 0)
+                start = Math.max(text.length + start, 0);
+            if (end   < 0)
+                end   = Math.max(text.length + end,   0);
+
+            return text.substring(start, end);
+        }
+        case "remove":
+        {
+            let start = Number(Value1);
+            let count = Number(Value2);
+
+            if (start < 0) start = Math.max(text.length + start, 0);
+
+            if (count < 0)
+            {
+                const fromEnd = Math.max(text.length + count, 0);
+                return text.substring(0, fromEnd);
+            }
+
+            return text.substring(0, start) + text.substring(start + count);
+        }
+    }
+    return text;
+}
+
 /* End String */
 
 /* Start Extension Methods */
@@ -8123,6 +8285,19 @@ Number.prototype.IsNumber = function()
 let cb_QueueList = [];
 let cb_QueueIsPending = false;
 let cb_QueueDebounceTimer = null;
+let cb_QueueLockTimer = null;
+
+function cb_LockQueue(miliSecond)
+{
+    WebFormsOptions.QueueLockDuration = miliSecond;
+
+    clearTimeout(cb_QueueLockTimer);
+
+    cb_QueueLockTimer = setTimeout(() =>
+    {
+        WebFormsOptions.QueueLockDuration = WebFormsDefaultOptions.QueueLockDuration;
+    }, miliSecond);
+}
 
 async function cb_ProcessQueue()
 {
@@ -8174,7 +8349,35 @@ function cb_AddToQueue(action)
 
     return new Promise((resolve, reject) =>
     {
-        cb_QueueList.push({ action, resolve, reject });
+        cb_QueueList.push(
+        {
+            action: async () =>
+            {
+                const result = action();
+
+                if (result instanceof Promise)
+                {
+                    const timeout = (async () =>
+                    {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+
+                        return await new Promise(resolve =>
+                            setTimeout(
+                                () => resolve(null),
+                                WebFormsOptions.QueueLockDuration - 100
+                            )
+                        );
+                    })();
+
+                    return await Promise.race([result, timeout]);
+                }
+
+                return result;
+            },
+            resolve,
+            reject
+        });
+
         cb_ProcessQueue();
     });
 }
@@ -8628,6 +8831,176 @@ async function cb_GetHashSHA256(text)
     return hashHex;
 }
 
+const cb_SnapshotStateRegistry = {};
+
+function cb_Snapshot(element, key, isPermanent)
+{
+    cb_SetStorage(isPermanent, key, element.outerHTML);
+
+    const state = {
+        selectValues: {},
+        inputValues: {},
+        events: {}
+    };
+
+    // Save Select Values
+    element.querySelectorAll("select").forEach((select, index) =>
+    {
+        state.selectValues[`select-${index}`] = [];
+
+        for (const option of select.options)
+            if (option.selected)
+                state.selectValues[`select-${index}`].push(option.index);
+    });
+
+    // Save Input And Textarea Values
+    element.querySelectorAll("input, textarea").forEach((input, index) =>
+    {
+        state.inputValues[`input-${index}`] = {
+            value: input.value,
+            checked: input.checked
+        };
+    });
+
+    // Save Event Listeners
+    Object.keys(cb_EventRegistry).forEach(objId =>
+    {
+        let originalElement;
+
+        if (objId.startsWith("cb_"))
+            originalElement = document.querySelector(`[cb-data-id="${objId}"]`);
+        else
+            originalElement = document.getElementById(objId);
+
+        if (!originalElement || !element.contains(originalElement))
+            return;
+
+        state.events[objId] = {};
+
+        Object.keys(cb_EventRegistry[objId]).forEach(eventType =>
+        {
+            state.events[objId][eventType] =
+                cb_EventRegistry[objId][eventType].map(listener => ({
+                    callback: listener.callback,
+                    currentFunction: listener.currentFunction,
+                    args: listener.args,
+                    functionType: listener.functionType
+                }));
+        });
+    });
+
+    const stateKey = (isPermanent ? "permanent:" : "temporary:") + key;
+
+    cb_SnapshotStateRegistry[stateKey] = state;
+}
+
+
+function cb_RollBack(element, key, isPermanent)
+{
+    const html = cb_GetStorage(isPermanent, key);
+
+    if (!html)
+        return;
+
+    const stateKey = (isPermanent ? "permanent:" : "temporary:") + key;
+    const state = cb_SnapshotStateRegistry[stateKey];
+
+    // Remove EventRegistry Entries Belonging To Current DOM
+    Object.keys(cb_EventRegistry).forEach(objId =>
+    {
+        let currentElement;
+
+        if (objId.startsWith("cb_"))
+            currentElement = document.querySelector(`[cb-data-id="${objId}"]`);
+        else
+            currentElement = document.getElementById(objId);
+
+        if (currentElement && element.contains(currentElement))
+            delete cb_EventRegistry[objId];
+    });
+
+    // Restore HTML
+    const temp = document.createElement("div");
+
+    temp.innerHTML = html;
+
+    const restoredElement = temp.firstElementChild;
+
+    if (!restoredElement)
+        return;
+
+    element.replaceWith(restoredElement);
+
+    if (!state)
+        return;
+
+    // Restore Select Values
+    restoredElement.querySelectorAll("select").forEach((select, index) =>
+    {
+        const selectedIndexes = state.selectValues[`select-${index}`];
+
+        if (!selectedIndexes)
+            return;
+
+        for (const option of select.options)
+            option.selected = selectedIndexes.includes(option.index);
+    });
+
+    // Restore Input And Textarea Values
+    restoredElement.querySelectorAll("input, textarea").forEach((input, index) =>
+    {
+        const inputState = state.inputValues[`input-${index}`];
+
+        if (!inputState)
+            return;
+
+        input.value = inputState.value;
+
+        if (input instanceof HTMLInputElement)
+            input.checked = inputState.checked;
+    });
+
+    // Restore Event Listeners
+    Object.keys(state.events).forEach(objId =>
+    {
+        let newElement;
+
+        if (objId.startsWith("cb_"))
+            newElement = restoredElement.querySelector(`[cb-data-id="${objId}"]`);
+        else
+            newElement = restoredElement.querySelector(`#${CSS.escape(objId)}`);
+
+        if (!newElement)
+            return;
+
+        const events = state.events[objId];
+
+        Object.keys(events).forEach(eventType =>
+        {
+            events[eventType].forEach(listener =>
+            {
+                newElement.addEventListener(
+                    eventType,
+                    listener.callback
+                );
+
+                if (!cb_EventRegistry[objId])
+                    cb_EventRegistry[objId] = {};
+
+                if (!cb_EventRegistry[objId][eventType])
+                    cb_EventRegistry[objId][eventType] = [];
+
+                cb_EventRegistry[objId][eventType].push({
+                    callback: listener.callback,
+                    currentFunction: listener.currentFunction,
+                    args: listener.args,
+                    functionType: listener.functionType
+                });
+            });
+        });
+    });
+}
+
 /* End State Management */
 
 /* Start Loader */
@@ -8700,6 +9073,7 @@ function cb_CreateLoader()
         width: "100%",
         height: "100%",
         background: "rgba(0,0,0,0.4)",
+        backdropFilter: "blur(5px)",
         zIndex: "9999",
         justifyContent: "center",
         alignItems: "center"
@@ -9679,510 +10053,15 @@ async function cb_RunWasmMethodResult(wasmLanguage, wasmUrl, funcName, args = []
 {
     switch (wasmLanguage)
     {
+        case "as": return (await cb_RunWasmMethod_AS(wasmUrl, funcName, args)).result;
         case 'c': return (await cb_RunWasmMethod_C(wasmUrl, funcName, args)).result;
-        case "rust": return (await cb_RunWasmMethod_Rust(wasmUrl, funcName, args)).result;
-        case "csharp":
-        case "csharp-m":
-             return (await cb_RunWasmMethod_CSharp(wasmUrl, funcName, args)).result;
+        case "csharp": return (await cb_RunWasmMethod_CSharp(wasmUrl, funcName, args)).result;
         case "go": return (await cb_RunWasmMethod_Go(wasmUrl, funcName, args)).result;
         case "java": return (await cb_RunWasmMethod_Java(wasmUrl, funcName, args)).result;
-        case "as": return (await cb_RunWasmMethod_AS(wasmUrl, funcName, args)).result;
+        case "rust": return (await cb_RunWasmMethod_Rust(wasmUrl, funcName, args)).result;
     }
 
     return null;
-}
-
-// RUST
-async function cb_RunWasmMethod_Rust(wasmUrl, funcName, args = [])
-{
-    if (wasmUrl.EndsWith(".wasm"))
-    {
-        let instance;
-        let memory;
-        let wasmBindgen = false;
-
-        try
-        {
-            const response = await fetch(wasmUrl);
-
-            if (!response.ok)
-                throw new Error(`Failed to fetch WASM: ${response.status} ${response.statusText}`);
-
-            const bytes = await response.arrayBuffer();
-            const module = await WebAssembly.compile(bytes);
-
-            const imports = WebAssembly.Module.imports(module);
-            const importObject = {};
-
-            for (const item of imports)
-            {
-                if (!importObject[item.module])
-                    importObject[item.module] = {};
-
-                if (item.name === "__wbindgen_init_externref_table")
-                {
-                    importObject[item.module][item.name] = function()
-                    {
-                        const table = instance.exports.__wbindgen_externrefs;
-                        const offset = table.grow(4);
-
-                        table.set(0, undefined);
-                        table.set(offset + 0, undefined);
-                        table.set(offset + 1, null);
-                        table.set(offset + 2, true);
-                        table.set(offset + 3, false);
-                    };
-                }
-                else
-                    throw new Error(`Unsupported WASM import: ${item.module}.${item.name}`);
-            }
-
-            wasmBindgen = imports.some(x => x.name.startsWith("__wbindgen_")) || WebAssembly.Module.exports(module).some(x => x.name.startsWith("__wbindgen_"));
-
-            const result = await WebAssembly.instantiate(module, importObject);
-
-            instance = result instanceof WebAssembly.Instance ? result : result.instance;
-
-            memory = instance.exports.memory;
-
-            if (!memory)
-                throw new Error("WASM memory export not found.");
-
-            if (wasmBindgen && instance.exports.__wbindgen_start)
-                instance.exports.__wbindgen_start();
-        }
-        catch (er)
-        {
-            throw new Error(`Failed to instantiate WASM module: ${er.message}`,{ cause: er });
-        }
-
-        let method = instance.exports[funcName];
-
-        if (typeof method !== "function")
-        {
-            const snakeName = funcName.replace(/[A-Z]/g, letter => "_" + letter.toLowerCase());
-
-            method = instance.exports[snakeName];
-        }
-
-        if (typeof method !== "function")
-            throw new Error(`Function "${funcName}" not found. Available: ${Object.keys(instance.exports).join(", ")}`);
-
-        if (wasmBindgen)
-        {
-            const processedArgs = [];
-
-            for (const arg of args)
-            {
-                if (typeof arg === "string")
-                {
-                    const encoder = new TextEncoder();
-                    const encoded = encoder.encode(arg);
-
-                    const ptr = instance.exports.__wbindgen_malloc(encoded.length, 1);
-
-                    new Uint8Array(memory.buffer).subarray(ptr, ptr + encoded.length).set(encoded);
-
-                    processedArgs.push(ptr);
-                    processedArgs.push(encoded.length);
-                }
-                else
-                    processedArgs.push(arg);
-            }
-
-            const ret = method(...processedArgs);
-
-            // wasm-bindgen String Return:
-            // [pointer, length]
-            if (ret && typeof ret === "object" && 0 in ret && 1 in ret)
-            {
-                const ptr = ret[0];
-                const len = ret[1];
-
-                const text = new TextDecoder("utf-8").decode(new Uint8Array(memory.buffer).subarray(ptr, ptr + len));
-
-                if (instance.exports.__wbindgen_free)
-                    instance.exports.__wbindgen_free(ptr, len, 1);
-
-                return {result: text, memory};
-            }
-
-            return {result: ret, memory};
-        }
-
-        const processedArgs = [];
-
-        for (const arg of args)
-        {
-            if (typeof arg === "string")
-            {
-                if (!instance.exports.alloc)
-                {
-                    if (WebFormsOptions.AddConsoleMessage)
-                        console.warn("alloc not exported: cannot pass strings to WASM directly");
-
-                    processedArgs.push(0);
-                }
-                else
-                {
-                    const encoder = new TextEncoder();
-                    const encoded = encoder.encode(arg + "\0");
-
-                    const ptr = instance.exports.alloc(encoded.length);
-
-                    new Uint8Array(memory.buffer)
-                        .set(encoded, ptr);
-
-                    processedArgs.push(ptr);
-                }
-            }
-            else
-                processedArgs.push(arg);
-        }
-
-        let result = method(...processedArgs);
-
-        if (typeof result === "number" && result > 0 && memory)
-        {
-            try
-            {
-                const memView = new Uint8Array(memory.buffer);
-                let end = result;
-
-                while (end < memView.length && memView[end] !== 0)
-                    end++;
-
-                const text = new TextDecoder("utf-8").decode(memView.subarray(result, end));
-
-                if (text.trim().length > 0)
-                    result = text;
-            }
-            catch
-            {
-                /* empty */
-            }
-        }
-
-        return {result, memory};
-    }
-    else if (wasmUrl.EndsWith(".js"))
-    {
-        let module;
-
-        try
-        {
-            const absoluteUrl = new URL(wasmUrl, document.baseURI).href;
-
-            module = await import(absoluteUrl);
-        }
-        catch (er)
-        {
-            throw new Error(`Failed to load WASM JavaScript module: ${er.message}`, { cause: er });
-        }
-
-        // wasm-bindgen initialization
-        if (typeof module.default === "function")
-            await module.default();
-
-        let method = module[funcName];
-
-        // Support camelCase names for snake_case Rust exports.
-        if (typeof method !== "function")
-        {
-            const snakeName = funcName.replace(/[A-Z]/g, letter => "_" + letter.toLowerCase());
-
-            method = module[snakeName];
-        }
-
-        if (typeof method !== "function")
-        {
-            throw new Error(`Function "${funcName}" not found. Available: ${Object.keys(module).join(", ")}`);
-        }
-
-        const result = await method(...args);
-
-        return {result};
-    }
-}
-
-// C/C++
-async function cb_RunWasmMethod_C(wasmUrl, funcName, args = [])
-{
-    let instance;
-    let memory;
-
-    const imports = {
-        env: {
-            memory: new WebAssembly.Memory({ initial: 256 }),
-            table: new WebAssembly.Table({ initial: 0, element: "anyfunc" }),
-            abort: () => { throw new Error("WASM aborted"); }
-        }
-    };
-
-    try
-    {
-        const response = await fetch(wasmUrl);
-        const bytes = await response.arrayBuffer();
-        const { instance: inst } = await WebAssembly.instantiate(bytes, imports);
-        instance = inst;
-        memory = instance.exports.memory || imports.env.memory;
-    }
-    catch (er)
-    {
-        throw new Error(`Failed to instantiate WASM module: ${er.message}`, er);
-    }
-
-    const method = instance.exports[funcName];
-    if (typeof method !== "function")
-        throw new Error(`Function "${funcName}" not found. Available: ${Object.keys(instance.exports).join(", ")}`);
-
-    // Inputs
-    const processedArgs = [];
-    for (const arg of args)
-    {
-        if (typeof arg === "string")
-        {
-            if (WebFormsOptions.AddConsoleMessage)
-                console.warn("Passing strings requires custom alloc in C/C++ wasm");
-
-            processedArgs.push(0);
-        }
-        else
-            processedArgs.push(arg);
-    }
-
-    let result = method(...processedArgs);
-
-    // Output Detection
-    if (typeof result === "number" && result > 0 && memory)
-    {
-        try
-        {
-            const memView = new Uint8Array(memory.buffer);
-            let end = result;
-
-            while (end < memView.length && memView[end] !== 0)
-                end++;
-
-            const text = new TextDecoder("utf-8").decode(memView.subarray(result, end));
-            if (text.trim().length > 0)
-                result = text;
-        }
-        catch
-        {
-            /* empty */
-        }
-    }
-
-    return { result, memory };
-}
-
-// C# (.NET)
-async function cb_RunWasmMethod_CSharp(wasmUrl, funcName, args = [])
-{
-    if (wasmUrl.EndsWith(".wasm"))
-    {
-        const frameworkUrl = wasmUrl.substring(0, wasmUrl.lastIndexOf('/') + 1);
-
-        const dotnet = await import(frameworkUrl + "dotnet.js");
-
-        const runtime = await dotnet.dotnet.withApplicationArgumentsFromQuery().create();
-
-        const config = runtime.getConfig();
-
-        const exports = await runtime.getAssemblyExports(config.mainAssemblyName);
-
-        const lastDot = funcName.lastIndexOf(".");
-
-        if (lastDot <= 0 || lastDot === funcName.length - 1)
-            throw new Error(`Invalid C# method name: ${funcName}`);
-
-        const typeName = funcName.substring(0, lastDot);
-        const methodName = funcName.substring(lastDot + 1);
-
-        const type = exports[typeName];
-
-        if (!type)
-            throw new Error(`Type ${typeName} not found`);
-
-        const method = type[methodName];
-
-        if (typeof method !== "function")
-            throw new Error(`Function ${funcName} not found`);
-
-        const result = await method(...args);
-        return { result };
-    }
-    else if (wasmUrl.EndsWith(".js"))
-    {
-        const dotnet = await import(wasmUrl);
-
-        const runtime = await dotnet.dotnet.withApplicationArgumentsFromQuery().create();
-
-        const config = runtime.getConfig();
-
-        const exports = await runtime.getAssemblyExports(config.mainAssemblyName);
-
-        const lastDot = funcName.lastIndexOf('.');
-
-        if (lastDot <= 0 || lastDot === funcName.length - 1)
-            throw new Error(`Invalid C# method name: ${funcName}`);
-
-        const typeName = funcName.substring(0, lastDot);
-        const methodName = funcName.substring(lastDot + 1);
-
-        const type = exports[typeName];
-
-        if (!type)
-            throw new Error(`Type ${typeName} not found`);
-
-        const method = type[methodName];
-
-        if (typeof method !== "function")
-            throw new Error(`Function ${funcName} not found`);
-
-        const result = await method(...args);
-        return { result };
-    }
-}
-
-// GO
-async function cb_RunWasmMethod_Go(wasmUrl, funcName, args = [])
-{
-    try
-    {
-        const slash = wasmUrl.lastIndexOf("/");
-        const baseUrl = slash >= 0 ? wasmUrl.substring(0, slash + 1) : "";
-
-        let wasmExecUrl = baseUrl + "wasm_exec.js";
-        let wasmFileUrl = wasmUrl;
-
-        // If wasm_exec.js was provided, find the WASM file in the same directory.
-        if (wasmUrl.toLowerCase().endsWith("wasm_exec.js"))
-            wasmFileUrl = baseUrl + "webforms-go.wasm";
-
-        // Load Go WASM Runtime
-        if (typeof Go === "undefined")
-        {
-            await new Promise((resolve, reject) =>
-            {
-                const script = document.createElement("script");
-
-                script.src = wasmExecUrl;
-
-                script.onload = () =>
-                {
-                    if (typeof Go === "undefined")
-                    {
-                        reject(new Error("wasm_exec.js loaded, but Go runtime was not found."));
-                        return;
-                    }
-
-                    resolve();
-                };
-
-                script.onerror = () =>
-                {
-                    reject(new Error("Failed to load Go WASM runtime: " + wasmExecUrl));
-                };
-
-                document.head.appendChild(script);
-            });
-        }
-
-        const go = new Go();
-
-        const response = await fetch(wasmFileUrl);
-
-        if (!response.ok)
-            throw new Error(
-                `Failed to fetch Go WASM: ${response.status} ${response.statusText}`
-            );
-
-        const bytes = await response.arrayBuffer();
-
-        const result = await WebAssembly.instantiate(
-            bytes,
-            go.importObject
-        );
-
-        go.run(result.instance);
-
-        const method = globalThis[funcName];
-
-        if (typeof method !== "function")
-            throw new Error(`Function ${funcName} not found in Go WASM.`);
-
-        const output = method(...args);
-
-        return {
-            result: output
-        };
-    }
-    catch (er)
-    {
-        throw new Error(`Go WASM execution failed: ${er.message}`, er);
-    }
-}
-
-// JAVA
-async function cb_RunWasmMethod_Java(wasmUrl, funcName, args = [])
-{
-    let instance;
-    let memory;
-
-    const imports = { env: {} };
-
-    try
-    {
-        const response = await fetch(wasmUrl);
-        const bytes = await response.arrayBuffer();
-        const { instance: inst } = await WebAssembly.instantiate(bytes, imports);
-        instance = inst;
-        memory = instance.exports.memory;
-    }
-    catch (er)
-    {
-        throw new Error(`Java WASM init failed: ${er.message}`, er);
-    }
-
-    const method = instance.exports[funcName];
-    if (typeof method !== "function")
-        throw new Error(`Function ${funcName} not found in Java WASM exports`);
-
-    // Inputs
-    const processedArgs = [];
-    for (const arg of args)
-    {
-        if (typeof arg === "string")
-        {
-            const encoder = new TextEncoder();
-            const encoded = encoder.encode(arg);
-            const ptr = instance.exports.malloc(encoded.length);
-            new Uint8Array(memory.buffer).set(encoded, ptr);
-            processedArgs.push(ptr, encoded.length);
-        }
-        else
-            processedArgs.push(arg);
-    }
-
-    let result = method(...processedArgs);
-
-    // Output Detection
-    if (typeof result === "number" && result > 0)
-    {
-        const memView = new Uint8Array(memory.buffer);
-        let end = result;
-
-        while (end < memView.length && memView[end] !== 0)
-            end++;
-
-        const text = new TextDecoder("utf-8").decode(memView.subarray(result, end));
-        if (text.trim().length > 0)
-            result = text;
-    }
-
-    return { result, memory };
 }
 
 // AssemblyScript
@@ -10396,6 +10275,530 @@ async function cb_RunWasmMethod_AS(wasmUrl, funcName, args = [], resultType = "a
         const result = await method(...args);
 
         return {result, exports};
+    }
+}
+
+// C/C++ (Emscripten)
+async function cb_RunWasmMethod_C(wasmUrl, funcName, args = [])
+{
+    let module;
+
+    try
+    {
+        const jsUrl = wasmUrl.endsWith(".js") ? wasmUrl : wasmUrl.replace(/\.wasm$/, ".js");
+
+        const wasmFileUrl = wasmUrl.endsWith(".wasm") ? wasmUrl : wasmUrl.replace(/\.js$/, ".wasm");
+
+        if (!window.CppWasmModule)
+        {
+            window.CppWasmModule = await new Promise((resolve, reject) =>
+            {
+                const Module = {
+                    locateFile: file =>
+                        file.endsWith(".wasm")
+                            ? wasmFileUrl
+                            : file,
+
+                    onRuntimeInitialized()
+                    {
+                        resolve(Module);
+                    },
+
+                    onAbort(reason)
+                    {
+                        reject(new Error(reason || "Emscripten aborted"));
+                    }
+                };
+
+                window.Module = Module;
+
+                const script = document.createElement("script");
+
+                script.src = jsUrl;
+                script.async = true;
+
+                script.onerror = () => reject(new Error(`Failed to load ${jsUrl}`));
+
+                document.head.appendChild(script);
+            });
+        }
+
+        module = window.CppWasmModule;
+    }
+    catch (er)
+    {
+        throw new Error(`C++ WASM init failed: ${er.message}`, { cause: er });
+    }
+
+    if (typeof module.ccall !== "function")
+        throw new Error("Emscripten ccall is not available");
+
+    try
+    {
+        const argTypes = args.map(arg =>
+            typeof arg === "string" ? "string" : "number"
+        );
+
+        const returnType =
+            args.length == 0 || args.every(arg => typeof arg === "string")
+                ? "string"
+                : "number";
+
+        const result = module.ccall(
+            funcName,
+            returnType,
+            argTypes,
+            args
+        );
+
+        return {
+            result,
+            memory: null
+        };
+    }
+    catch (er)
+    {
+        throw new Error(
+            `C++ WASM method failed: ${funcName}: ${er.message}`,
+            { cause: er }
+        );
+    }
+}
+
+// C# (.NET) (AOT and Runtime)
+async function cb_RunWasmMethod_CSharp(wasmUrl, funcName, args = [])
+{
+    if (wasmUrl.EndsWith(".wasm"))
+    {
+        const frameworkUrl = wasmUrl.substring(0, wasmUrl.lastIndexOf('/') + 1);
+
+        const dotnet = await import(frameworkUrl + "dotnet.js");
+
+        const runtime = await dotnet.dotnet.withApplicationArgumentsFromQuery().create();
+
+        const config = runtime.getConfig();
+
+        const exports = await runtime.getAssemblyExports(config.mainAssemblyName);
+
+        const lastDot = funcName.lastIndexOf(".");
+
+        if (lastDot <= 0 || lastDot === funcName.length - 1)
+            throw new Error(`Invalid C# method name: ${funcName}`);
+
+        const typeName = funcName.substring(0, lastDot);
+        const methodName = funcName.substring(lastDot + 1);
+
+        const type = exports[typeName];
+
+        if (!type)
+            throw new Error(`Type ${typeName} not found`);
+
+        const method = type[methodName];
+
+        if (typeof method !== "function")
+            throw new Error(`Function ${funcName} not found`);
+
+        const result = await method(...args);
+        return { result };
+    }
+    else if (wasmUrl.EndsWith(".js"))
+    {
+        const dotnet = await import(wasmUrl);
+
+        const runtime = await dotnet.dotnet.withApplicationArgumentsFromQuery().create();
+
+        const config = runtime.getConfig();
+
+        const exports = await runtime.getAssemblyExports(config.mainAssemblyName);
+
+        const lastDot = funcName.lastIndexOf('.');
+
+        if (lastDot <= 0 || lastDot === funcName.length - 1)
+            throw new Error(`Invalid C# method name: ${funcName}`);
+
+        const typeName = funcName.substring(0, lastDot);
+        const methodName = funcName.substring(lastDot + 1);
+
+        const type = exports[typeName];
+
+        if (!type)
+            throw new Error(`Type ${typeName} not found`);
+
+        const method = type[methodName];
+
+        if (typeof method !== "function")
+            throw new Error(`Function ${funcName} not found`);
+
+        const result = await method(...args);
+        return { result };
+    }
+}
+
+// GO
+async function cb_RunWasmMethod_Go(wasmUrl, funcName, args = [])
+{
+    try
+    {
+        const slash = wasmUrl.lastIndexOf("/");
+        const baseUrl = slash >= 0 ? wasmUrl.substring(0, slash + 1) : "";
+
+        let wasmExecUrl = baseUrl + "wasm_exec.js";
+        let wasmFileUrl = wasmUrl;
+
+        // If wasm_exec.js was provided, find the WASM file in the same directory.
+        if (wasmUrl.toLowerCase().endsWith("wasm_exec.js"))
+            wasmFileUrl = baseUrl + "webforms-go.wasm";
+
+        // Load Go WASM Runtime
+        if (typeof Go === "undefined")
+        {
+            await new Promise((resolve, reject) =>
+            {
+                const script = document.createElement("script");
+
+                script.src = wasmExecUrl;
+
+                script.onload = () =>
+                {
+                    if (typeof Go === "undefined")
+                    {
+                        reject(new Error("wasm_exec.js loaded, but Go runtime was not found."));
+                        return;
+                    }
+
+                    resolve();
+                };
+
+                script.onerror = () =>
+                {
+                    reject(new Error("Failed to load Go WASM runtime: " + wasmExecUrl));
+                };
+
+                document.head.appendChild(script);
+            });
+        }
+
+        const go = new Go();
+
+        const response = await fetch(wasmFileUrl);
+
+        if (!response.ok)
+            throw new Error(
+                `Failed to fetch Go WASM: ${response.status} ${response.statusText}`
+            );
+
+        const bytes = await response.arrayBuffer();
+
+        const result = await WebAssembly.instantiate(
+            bytes,
+            go.importObject
+        );
+
+        go.run(result.instance);
+
+        const method = globalThis[funcName];
+
+        if (typeof method !== "function")
+            throw new Error(`Function ${funcName} not found in Go WASM.`);
+
+        const output = method(...args);
+
+        return {
+            result: output
+        };
+    }
+    catch (er)
+    {
+        throw new Error(`Go WASM execution failed: ${er.message}`, er);
+    }
+}
+
+// JAVA (TeaVM)
+async function cb_RunWasmMethod_Java(wasmUrl, funcName, args = [])
+{
+    let teavm;
+
+    try
+    {
+        const isRuntime = wasmUrl.endsWith(".wasm-runtime.js");
+
+        const runtimeUrl = isRuntime
+            ? wasmUrl
+            : wasmUrl.replace(/\.wasm$/, ".wasm-runtime.js");
+
+        const wasmFileUrl = isRuntime
+            ? wasmUrl.replace(/\.wasm-runtime\.js$/, ".wasm")
+            : wasmUrl;
+
+        if (!window.TeaVM)
+        {
+            const response = await fetch(runtimeUrl);
+
+            if (!response.ok)
+                throw new Error(`TeaVM runtime HTTP ${response.status}`);
+
+            const runtimeCode = await response.text();
+
+            const blob = new Blob(
+                [runtimeCode],
+                { type: "text/javascript" }
+            );
+
+            const runtimeBlobUrl = URL.createObjectURL(blob);
+
+            try
+            {
+                await import(runtimeBlobUrl);
+            }
+            finally
+            {
+                URL.revokeObjectURL(runtimeBlobUrl);
+            }
+        }
+
+        if (!window.TeaVM)
+            throw new Error("TeaVM runtime was loaded but TeaVM is not defined");
+
+        teavm = await TeaVM.wasmGC.load(wasmFileUrl);
+    }
+    catch (er)
+    {
+        throw new Error(`Java WASM init failed: ${er.message}`, { cause: er });
+    }
+
+    const method = teavm.exports[funcName];
+
+    if (typeof method !== "function")
+        throw new Error(`Function ${funcName} not found in Java WASM exports`);
+
+    try
+    {
+        const result = method(...args);
+
+        return {
+            result,
+            memory: teavm.instance.exports.memory
+        };
+    }
+    catch (er)
+    {
+        throw new Error(
+            `Java WASM method failed: ${funcName}: ${er.message}`,
+            { cause: er }
+        );
+    }
+}
+
+// RUST (Also Support wasm-bindgen)
+async function cb_RunWasmMethod_Rust(wasmUrl, funcName, args = [])
+{
+    if (wasmUrl.EndsWith(".wasm"))
+    {
+        let instance;
+        let memory;
+        let wasmBindgen = false;
+
+        try
+        {
+            const response = await fetch(wasmUrl);
+
+            if (!response.ok)
+                throw new Error(`Failed to fetch WASM: ${response.status} ${response.statusText}`);
+
+            const bytes = await response.arrayBuffer();
+            const module = await WebAssembly.compile(bytes);
+
+            const imports = WebAssembly.Module.imports(module);
+            const importObject = {};
+
+            for (const item of imports)
+            {
+                if (!importObject[item.module])
+                    importObject[item.module] = {};
+
+                if (item.name === "__wbindgen_init_externref_table")
+                {
+                    importObject[item.module][item.name] = function()
+                    {
+                        const table = instance.exports.__wbindgen_externrefs;
+                        const offset = table.grow(4);
+
+                        table.set(0, undefined);
+                        table.set(offset + 0, undefined);
+                        table.set(offset + 1, null);
+                        table.set(offset + 2, true);
+                        table.set(offset + 3, false);
+                    };
+                }
+                else
+                    throw new Error(`Unsupported WASM import: ${item.module}.${item.name}`);
+            }
+
+            wasmBindgen = imports.some(x => x.name.startsWith("__wbindgen_")) || WebAssembly.Module.exports(module).some(x => x.name.startsWith("__wbindgen_"));
+
+            const result = await WebAssembly.instantiate(module, importObject);
+
+            instance = result instanceof WebAssembly.Instance ? result : result.instance;
+
+            memory = instance.exports.memory;
+
+            if (!memory)
+                throw new Error("WASM memory export not found.");
+
+            if (wasmBindgen && instance.exports.__wbindgen_start)
+                instance.exports.__wbindgen_start();
+        }
+        catch (er)
+        {
+            throw new Error(`Failed to instantiate WASM module: ${er.message}`,{ cause: er });
+        }
+
+        let method = instance.exports[funcName];
+
+        if (typeof method !== "function")
+        {
+            const snakeName = funcName.replace(/[A-Z]/g, letter => "_" + letter.toLowerCase());
+
+            method = instance.exports[snakeName];
+        }
+
+        if (typeof method !== "function")
+            throw new Error(`Function "${funcName}" not found. Available: ${Object.keys(instance.exports).join(", ")}`);
+
+        if (wasmBindgen)
+        {
+            const processedArgs = [];
+
+            for (const arg of args)
+            {
+                if (typeof arg === "string")
+                {
+                    const encoder = new TextEncoder();
+                    const encoded = encoder.encode(arg);
+
+                    const ptr = instance.exports.__wbindgen_malloc(encoded.length, 1);
+
+                    new Uint8Array(memory.buffer).subarray(ptr, ptr + encoded.length).set(encoded);
+
+                    processedArgs.push(ptr);
+                    processedArgs.push(encoded.length);
+                }
+                else
+                    processedArgs.push(arg);
+            }
+
+            const ret = method(...processedArgs);
+
+            // wasm-bindgen String Return:
+            // [pointer, length]
+            if (ret && typeof ret === "object" && 0 in ret && 1 in ret)
+            {
+                const ptr = ret[0];
+                const len = ret[1];
+
+                const text = new TextDecoder("utf-8").decode(new Uint8Array(memory.buffer).subarray(ptr, ptr + len));
+
+                if (instance.exports.__wbindgen_free)
+                    instance.exports.__wbindgen_free(ptr, len, 1);
+
+                return {result: text, memory};
+            }
+
+            return {result: ret, memory};
+        }
+
+        const processedArgs = [];
+
+        for (const arg of args)
+        {
+            if (typeof arg === "string")
+            {
+                if (!instance.exports.alloc)
+                {
+                    if (WebFormsOptions.AddConsoleMessage)
+                        console.warn("alloc not exported: cannot pass strings to WASM directly");
+
+                    processedArgs.push(0);
+                }
+                else
+                {
+                    const encoder = new TextEncoder();
+                    const encoded = encoder.encode(arg + "\0");
+
+                    const ptr = instance.exports.alloc(encoded.length);
+
+                    new Uint8Array(memory.buffer)
+                        .set(encoded, ptr);
+
+                    processedArgs.push(ptr);
+                }
+            }
+            else
+                processedArgs.push(arg);
+        }
+
+        let result = method(...processedArgs);
+
+        if (typeof result === "number" && result > 0 && memory)
+        {
+            try
+            {
+                const memView = new Uint8Array(memory.buffer);
+                let end = result;
+
+                while (end < memView.length && memView[end] !== 0)
+                    end++;
+
+                const text = new TextDecoder("utf-8").decode(memView.subarray(result, end));
+
+                if (text.trim().length > 0)
+                    result = text;
+            }
+            catch
+            {
+                /* empty */
+            }
+        }
+
+        return {result, memory};
+    }
+    else if (wasmUrl.EndsWith(".js"))
+    {
+        let module;
+
+        try
+        {
+            const absoluteUrl = new URL(wasmUrl, document.baseURI).href;
+
+            module = await import(absoluteUrl);
+        }
+        catch (er)
+        {
+            throw new Error(`Failed to load WASM JavaScript module: ${er.message}`, { cause: er });
+        }
+
+        // wasm-bindgen initialization
+        if (typeof module.default === "function")
+            await module.default();
+
+        let method = module[funcName];
+
+        // Support camelCase names for snake_case Rust exports.
+        if (typeof method !== "function")
+        {
+            const snakeName = funcName.replace(/[A-Z]/g, letter => "_" + letter.toLowerCase());
+
+            method = module[snakeName];
+        }
+
+        if (typeof method !== "function")
+        {
+            throw new Error(`Function "${funcName}" not found. Available: ${Object.keys(module).join(", ")}`);
+        }
+
+        const result = await method(...args);
+
+        return {result};
     }
 }
 
@@ -12150,6 +12553,17 @@ function cb_GetGeoPosition()
 }
 
 /* End Hardware */
+
+/* Start Error Handling */
+
+function cb_AddTrace(e, location)
+{
+  e.cb_Trace = e.cb_Trace || [];
+  e.cb_Trace.push(location);
+  return e;
+}
+
+/* End Error Handling */
 
 /* Start Global Method */
 
