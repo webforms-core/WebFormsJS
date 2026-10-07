@@ -89,6 +89,9 @@ WebFormsOptions.AddConsoleMessageForModule = true;
 WebFormsOptions.UseProgressBar = true;
 WebFormsOptions.UseLoader = true;
 WebFormsOptions.UseLoaderForFirstPageLoad = true;
+WebFormsOptions.UseLoaderForCommentBack = false;
+WebFormsOptions.UseLoaderForFrontBack = true;
+WebFormsOptions.UseLoaderForWasmBack = true;
 WebFormsOptions.LoaderIgnoreTimeout = 100;
 WebFormsOptions.LoaderMinimumDuration = 500;
 WebFormsOptions.HideLoaderTimeout = 5000;
@@ -593,7 +596,7 @@ function cb_RemovePostBackFunctionInSubmit(obj, evt)
 window.onload = function ()
 {
     if (WebFormsOptions.UseLoaderForFirstPageLoad)
-        cb_ShowLoader();
+        cb_ShowLoader(true);
 
     cb_Initialization();
 
@@ -2296,7 +2299,9 @@ function cb_SetResponse(evt, ResponseResult, ViewState, RequestName)
 
 function CommentBack(evt, index, InputPlace)
 {
-    cb_ShowLoader();
+    if (WebFormsOptions.UseLoaderForCommentBack)
+        cb_ShowLoader();
+
     evt = evt || cb_FakeEvent();
 
     const elementPlace = InputPlace ? cb_GetElementByElementPlace(InputPlace) : null;
@@ -2306,7 +2311,8 @@ function CommentBack(evt, index, InputPlace)
 
     cb_SetWebFormsCommentsValue(elementPlace, evt, index, true);
 
-    cb_HideLoader();
+    if (WebFormsOptions.UseLoaderForCommentBack)
+        cb_HideLoader();
 }
 
 /* End Comment-Back */
@@ -2315,14 +2321,17 @@ function CommentBack(evt, index, InputPlace)
 
 async function WasmBack(evt, wasmLanguage, wasmUrl, funcName, args, OutputPlace)
 {
-    cb_ShowLoader();
+    if (WebFormsOptions.UseLoaderForWasmBack)
+        cb_ShowLoader();
+
     evt = evt || cb_FakeEvent();
 
     const result = await cb_RunWasmMethodResult(wasmLanguage, wasmUrl, funcName, args);
 
     cb_SetResponse(evt, String(result), OutputPlace, "");
 
-    cb_HideLoader();
+    if (WebFormsOptions.UseLoaderForWasmBack)
+        cb_HideLoader();
 }
 
 /* End Wasm-Back */
@@ -2331,7 +2340,8 @@ async function WasmBack(evt, wasmLanguage, wasmUrl, funcName, args, OutputPlace)
 
 async function FrontBack(evt, modulePath, OutputPlace, ...args)
 {
-    cb_ShowLoader();
+    if (WebFormsOptions.UseLoaderForFrontBack)
+        cb_ShowLoader();
 
     if (WebFormsOptions.DisableLoadModule)
     {
@@ -2363,7 +2373,8 @@ async function FrontBack(evt, modulePath, OutputPlace, ...args)
             console.error("Error loading module:", er);
     }
 
-    cb_HideLoader();
+    if (WebFormsOptions.UseLoaderForFrontBack)
+        cb_HideLoader();
 }
 
 /* End Front-Back */
@@ -7386,6 +7397,8 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
                     return;
                 }
         }
+        
+        cb_ShowLoader();
 
         const XMLHttp = new XMLHttpRequest();
         XMLHttp.open("GET", url, true);
@@ -7408,24 +7421,32 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
                     {
                         const parser = new DOMParser();
                         const xmlDoc = parser.parseFromString(responseText, "application/xml");
+                        cb_HideLoader();
                         resolve(xmlDoc);
                     }
                     catch (er)
                     {
+                        cb_HideLoader();
                         reject("Failed to parse XML: " + er.message);
                     }
                 }
                 else
+                {
+                    cb_HideLoader();
                     resolve(cb_RemoveScripts(responseText));
+                }
             }
             else
+            {
+                cb_HideLoader();
                 reject("HTTP Error: " + XMLHttp.status);
+            }
         };
 
         if (sendPostBackHeader)
             XMLHttp.setRequestHeader("Post-Back", "true");
 
-        XMLHttp.onerror = () => reject("Network Error");
+        XMLHttp.onerror = () => { cb_HideLoader(); reject("Network Error"); }
         XMLHttp.send();
     });
 }
@@ -9027,7 +9048,7 @@ let cb_LoaderTimeout = null;
 let cb_LoaderStartTime = null;
 let cb_LoaderShowTimeout = null;
 
-function cb_ShowLoader()
+function cb_ShowLoader(isInitialRequest)
 {
     if (!WebFormsOptions.UseLoader)
         return;
@@ -9066,7 +9087,7 @@ function cb_ShowLoader()
         if (spinner)
             spinner.style.display = "block";
 
-    }, WebFormsOptions.LoaderIgnoreTimeout);
+    }, (isInitialRequest ? 0 : WebFormsOptions.LoaderIgnoreTimeout));
 
     cb_LoaderTimeout = setTimeout(() =>
     {
