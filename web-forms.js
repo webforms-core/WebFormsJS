@@ -1,4 +1,4 @@
-/* WebFormsJS 2.2 - The Front-End Part of WebForms Core Technology, Owned by Elanat (https://elanat.net) */
+/* WebFormsJS 2.2.1 - The Front-End Part of WebForms Core Technology, Owned by Elanat (https://elanat.net) */
 
 /* Start Options */
 
@@ -42,6 +42,7 @@ WebFormsOptions.IgnoreQueryAndHashInSPALink = false;
 WebFormsOptions.ReloadOnMissingHistory = true;
 WebFormsOptions.CloseAllFixedFeaturesAfterHistoryReview = true;
 WebFormsOptions.RestoreListenersAfterHistoryReview = true;
+WebFormsOptions.ResetOptionsAfterReplaceBodyLocation = true;
 
 // Queue
 WebFormsOptions.UseQueue = true;
@@ -88,6 +89,7 @@ WebFormsOptions.AddConsoleMessageForModule = true;
 WebFormsOptions.UseProgressBar = true;
 WebFormsOptions.UseLoader = true;
 WebFormsOptions.UseLoaderForFirstPageLoad = true;
+WebFormsOptions.LoaderIgnoreTimeout = 100;
 WebFormsOptions.LoaderMinimumDuration = 500;
 WebFormsOptions.HideLoaderTimeout = 5000;
 WebFormsOptions.HideLoaderWhenUpload = true;
@@ -2279,6 +2281,9 @@ function cb_SetResponse(evt, ResponseResult, ViewState, RequestName)
     }
     else if (ResponseResult || !WebFormsOptions.IgnoreEmptyResult)
     {
+        if (WebFormsOptions.ResetOptionsAfterReplaceBodyLocation)
+            Object.assign(WebFormsOptions, WebFormsDefaultOptions);
+
         cb_GetResponseLocation().replaceChildren(...(WebFormsOptions.SetResponseInsideDivTag ? [tmpDiv] : tmpDiv.childNodes));
         cb_AppendJavaScriptTag(ResponseResult);
         cb_Initialization(cb_GetResponseLocation());
@@ -9020,6 +9025,7 @@ function cb_RollBack(element, key, isPermanent)
 
 let cb_LoaderTimeout = null;
 let cb_LoaderStartTime = null;
+let cb_LoaderShowTimeout = null;
 
 function cb_ShowLoader()
 {
@@ -9027,11 +9033,16 @@ function cb_ShowLoader()
         return;
 
     cb_CreateLoader();
+
     const loader = document.getElementById("cb_Loader");
     if (!loader)
-        return
+        return;
 
+    // Immediately block user interaction, but keep it visually transparent.
     loader.style.display = "flex";
+    loader.style.background = "transparent";
+    loader.style.backdropFilter = "none";
+
     cb_LoaderStartTime = Date.now();
 
     if (cb_LoaderTimeout)
@@ -9040,7 +9051,27 @@ function cb_ShowLoader()
         cb_LoaderTimeout = null;
     }
 
-    cb_LoaderTimeout = setTimeout(() => { cb_HideLoader(); }, WebFormsOptions.HideLoaderTimeout);
+    if (cb_LoaderShowTimeout)
+    {
+        clearTimeout(cb_LoaderShowTimeout);
+        cb_LoaderShowTimeout = null;
+    }
+
+    cb_LoaderShowTimeout = setTimeout(() =>
+    {
+        loader.style.background = "rgba(0,0,0,0.4)";
+        loader.style.backdropFilter = "blur(5px)";
+
+        const spinner = loader.firstElementChild;
+        if (spinner)
+            spinner.style.display = "block";
+
+    }, WebFormsOptions.LoaderIgnoreTimeout);
+
+    cb_LoaderTimeout = setTimeout(() =>
+    {
+        cb_HideLoader();
+    }, WebFormsOptions.HideLoaderTimeout);
 }
 
 function cb_HideLoader(immediate)
@@ -9049,21 +9080,35 @@ function cb_HideLoader(immediate)
     if (!loader)
         return;
 
+    if (cb_LoaderShowTimeout)
+    {
+        clearTimeout(cb_LoaderShowTimeout);
+        cb_LoaderShowTimeout = null;
+    }
+
     const elapsed = Date.now() - (cb_LoaderStartTime || 0);
     const remaining = WebFormsOptions.LoaderMinimumDuration - elapsed;
 
     const hide = () =>
     {
         loader.style.display = "none";
+        loader.style.background = "transparent";
+        loader.style.backdropFilter = "none";
+
+        const spinner = loader.firstElementChild;
+        if (spinner)
+            spinner.style.display = "none";
+
         if (cb_LoaderTimeout)
         {
             clearTimeout(cb_LoaderTimeout);
             cb_LoaderTimeout = null;
         }
+
         cb_LoaderStartTime = null;
     };
 
-    if (!immediate && (remaining > 0))
+    if (!immediate && remaining > 0)
         setTimeout(hide, remaining);
     else
         hide();
@@ -9074,28 +9119,29 @@ function cb_CreateLoader()
     if (document.getElementById("cb_Loader"))
         return;
 
-    // Making Outer Element
     const loader = document.createElement("div");
     loader.id = "cb_Loader";
+
     Object.assign(loader.style,
     {
         display: "none",
         position: "fixed",
-        top: '0',
-        left: '0',
+        top: "0",
+        left: "0",
         width: "100%",
         height: "100%",
-        background: "rgba(0,0,0,0.4)",
-        backdropFilter: "blur(5px)",
+        background: "transparent",
+        backdropFilter: "none",
         zIndex: "9999",
         justifyContent: "center",
         alignItems: "center"
     });
 
-    // Making Spinner
     const spinner = document.createElement("div");
+
     Object.assign(spinner.style,
     {
+        display: "none",
         width: "50px",
         height: "50px",
         border: "6px solid #ccc",
@@ -9104,18 +9150,18 @@ function cb_CreateLoader()
         animation: "spin 1s linear infinite"
     });
 
-    // Adding Spinner To The Loader
     loader.appendChild(spinner);
     document.body.appendChild(loader);
 
-    // Adding keyframes To Style
     const style = document.createElement("style");
+
     style.textContent = `
 @keyframes spin
 {
     to { transform: rotate(360deg); }
 }
-  `;
+`;
+
     document.head.appendChild(style);
 }
 
