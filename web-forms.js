@@ -9056,6 +9056,7 @@ function cb_RollBack(element, key, isPermanent)
 let cb_LoaderTimeout = null;
 let cb_LoaderStartTime = null;
 let cb_LoaderShowTimeout = null;
+let cb_LoaderCursorTimeout = null;
 
 function cb_ShowLoader(isInitialRequest)
 {
@@ -9087,6 +9088,20 @@ function cb_ShowLoader(isInitialRequest)
         cb_LoaderShowTimeout = null;
     }
 
+    if (cb_LoaderCursorTimeout)
+    {
+        clearTimeout(cb_LoaderCursorTimeout);
+        cb_LoaderCursorTimeout = null;
+    }
+
+    document.documentElement.style.cursor = "wait";
+
+    cb_LoaderCursorTimeout = setTimeout(() =>
+    {
+        document.documentElement.style.cursor = "";
+        cb_LoaderCursorTimeout = null;
+    }, (isInitialRequest ? 0 : WebFormsOptions.LoaderIgnoreTimeout));
+
     cb_LoaderShowTimeout = setTimeout(() =>
     {
         loader.style.background = "rgba(0,0,0,0.4)";
@@ -9115,6 +9130,14 @@ function cb_HideLoader(immediate)
         clearTimeout(cb_LoaderShowTimeout);
         cb_LoaderShowTimeout = null;
     }
+
+    if (cb_LoaderCursorTimeout)
+    {
+        clearTimeout(cb_LoaderCursorTimeout);
+        cb_LoaderCursorTimeout = null;
+    }
+
+    document.documentElement.style.cursor = "";
 
     const elapsed = Date.now() - (cb_LoaderStartTime || 0);
     const remaining = WebFormsOptions.LoaderMinimumDuration - elapsed;
