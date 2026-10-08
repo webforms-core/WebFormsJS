@@ -6012,8 +6012,6 @@ function cb_FetchElementByElementPlace(ElementPlace, obj, TransientDOM)
 
                 return cb_ElementPlaceCriteria(Element, criteria);
             }
-            
-            return cb_ElementPlaceCriteria(FromPlace.getElementById(ElementPlace), criteria);
         }
     }
     catch (er)
