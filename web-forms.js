@@ -5996,11 +5996,22 @@ function cb_FetchElementByElementPlace(ElementPlace, obj, TransientDOM)
                 return cb_ElementPlaceCriteria(TmpElementPlace, criteria);
             }
             default:
+            {
                 if (ElementPlace.Contains('?'))
                 {
                     criteria = '?' + ElementPlace.GetTextAfter('?');
                     ElementPlace = ElementPlace.GetTextBefore('?');
                 }
+
+                let Element;
+
+                if (FromPlace == document)
+                    Element = document.getElementById(ElementPlace);
+                else
+                    Element = FromPlace.querySelector('[id="' + ElementPlace + '"]');
+
+                return cb_ElementPlaceCriteria(Element, criteria);
+            }
             
             return cb_ElementPlaceCriteria(FromPlace.getElementById(ElementPlace), criteria);
         }
