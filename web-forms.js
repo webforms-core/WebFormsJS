@@ -6504,6 +6504,9 @@ async function cb_FetchValue(evt, Value)
     {
         if (Value.substring(0, 1) == '$')
         {
+            if (Value == '$')
+                return '$';
+
             Value = Value.substring(1);
 
             if (Value.substring(0, 1) == '$')
