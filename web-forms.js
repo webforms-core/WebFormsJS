@@ -2231,7 +2231,7 @@ function cb_SetResponse(evt, ResponseResult, ViewState, RequestName)
 
 	if (IsWebForms)
     {
-        cb_SetWebFormsValues(evt, RequestName, ResponseResult, true);
+        cb_SetWebFormsValues(evt, RequestName, ResponseResult);
 
         if (WebFormsOptions.CreateCommentForWebFormsResponse)
         {
@@ -3173,7 +3173,7 @@ function cb_SetWebFormsCommentsValue(obj, evt, requestName = "", breakDone = fal
         if (rawData.endsWith("$[da];"))
             rawData = rawData.slice(0, -6) + '-';
 
-        cb_SetWebFormsValues(evt, requestName, rawData.Replace("$[dd];", "--"), true, false);
+        cb_SetWebFormsValues(evt, requestName, rawData.Replace("$[dd];", "--"), false);
     }
 }
 
@@ -3202,7 +3202,7 @@ async function cb_ReplaceDynamicValue(evt, ActionControl)
     return ActionControl;
 }
 
-async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBack, WithoutWebFormsSection, loopIndex = 0)
+async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWebFormsSection, loopIndex = 0)
 {
     // Initialization to Index
     let StartIndex = RequestName.Contains('#') ? RequestName.GetTextAfter('#') : "";
@@ -3230,7 +3230,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
                 WebFormsValues = WebFormsValues.substring(1);
     }
 
-    const WebFormsList = (UsePostBack) ? WebFormsValues.split('\n') : WebFormsValues.split("$[sln];");
+    const WebFormsList = WebFormsValues.split('\n');
 
     let TransientDOM = null;
     let TransientDOMPlace = null;
@@ -3457,7 +3457,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
             if (PreRunner.length > 0)
             {
                 let tmpActionControl = ActionControl;
-                cb_SetPreRunnerQueue(PreRunner, async () => await cb_RunWebFormsValues(evt, "", tmpActionControl, true, true));
+                cb_SetPreRunnerQueue(PreRunner, async () => await cb_RunWebFormsValues(evt, "", tmpActionControl, true));
                 continue;
             }
 
@@ -3509,7 +3509,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
                         
                         cb_WaitForCondition(WebFormsOptions.AwaitConditionInterval, cb_CheckCondition, evt, tmpActionControl.substring(4)).then(async () =>
                         {
-                            cb_RunWebFormsValues(evt, "", WebFormsList.join('\n'), true, true, i + 1);
+                            cb_RunWebFormsValues(evt, "", WebFormsList.join('\n'), true, i + 1);
                         }).catch(() => { });
 
                         return;
@@ -3565,7 +3565,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
 
                         // Is Async
                         if (ConditionIsAsync)
-                            cb_RunAsync(() => { cb_RunWebFormsValues(evt, "", conditionAsyncList.join('\n'), true, true); });
+                            cb_RunAsync(() => { cb_RunWebFormsValues(evt, "", conditionAsyncList.join('\n'), true); });
                         else // Is Async Interval
                         {
                             // Replace Dynamic Value
@@ -3573,7 +3573,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
 
                             cb_WaitForCondition(ConditionPeriodMiliSecond, cb_CheckCondition, evt, tmpActionControl.GetTextAfter(')')).then(async () =>
                             {
-                                await cb_RunWebFormsValues(evt, "", conditionAsyncList.join('\n'), true, true);
+                                await cb_RunWebFormsValues(evt, "", conditionAsyncList.join('\n'), true);
                             }).catch(() => { });
                         }
                         continue;
@@ -3707,7 +3707,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
                             var index = v3 ? '#' + v3 : "";
                             var actionControls = v4;
                             
-                            cb_SetWebFormsValues(currentEvent, index, actionControls, true, withoutWebFormsSection);
+                            cb_SetWebFormsValues(currentEvent, index, actionControls, withoutWebFormsSection);
                             continue;
                         }
                         case 's':
@@ -4396,7 +4396,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBac
     }
 }
 
-function cb_SetWebFormsValues(evt, RequestName, WebFormsValues, UsePostBack, WithoutWebFormsSection)
+function cb_SetWebFormsValues(evt, RequestName, WebFormsValues, WithoutWebFormsSection)
 {
     evt = cb_PreServedEvent(evt);
 
@@ -4404,11 +4404,11 @@ function cb_SetWebFormsValues(evt, RequestName, WebFormsValues, UsePostBack, Wit
     {
         cb_AddToQueue(async () =>
         {
-            await cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBack, WithoutWebFormsSection);
+            await cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWebFormsSection);
         });
     }
     else
-        cb_RunWebFormsValues(evt, RequestName, WebFormsValues, UsePostBack, WithoutWebFormsSection);
+        cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWebFormsSection);
 }
 
 async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionValue, vArgs, LastElementPlaceList, TransientDOM)
@@ -7313,7 +7313,7 @@ function cb_UsedCache(evt, RequestName, RequestNameForCache)
     const SessionCacheValue = cb_GetStorage(false, RequestName);
     if (SessionCacheValue)
     {
-        cb_SetWebFormsValues(evt, RequestNameForCache, SessionCacheValue, true, true);
+        cb_SetWebFormsValues(evt, RequestNameForCache, SessionCacheValue, true);
         return true;
     }
 
@@ -7328,7 +7328,7 @@ function cb_UsedCache(evt, RequestName, RequestNameForCache)
 
             if (CacheDate.getTime() > CurrentDate.getTime())
             {
-                cb_SetWebFormsValues(evt, RequestNameForCache, LocalCacheValue, true, true);
+                cb_SetWebFormsValues(evt, RequestNameForCache, LocalCacheValue, true);
                 return true;
             }
             else
@@ -7339,7 +7339,7 @@ function cb_UsedCache(evt, RequestName, RequestNameForCache)
         }
         else
         {
-            cb_SetWebFormsValues(evt, RequestNameForCache, LocalCacheValue, true, true);
+            cb_SetWebFormsValues(evt, RequestNameForCache, LocalCacheValue, true);
             return true;
         }
     }
