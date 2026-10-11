@@ -5749,7 +5749,7 @@ function cb_FetchElementByElementPlace(ElementPlace, obj, TransientDOM)
                 }
                 else
                 {
-                    NameList = FromPlace.getElementsByName(TagNameAttr);
+                    NameList = FromPlace.querySelectorAll('[name="' + TagNameAttr + '"]');
                 }
 
                 if (TagNameIndex == '*')
