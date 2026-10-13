@@ -3202,6 +3202,21 @@ async function cb_ReplaceDynamicValue(evt, ActionControl)
     return ActionControl;
 }
 
+async function RunWebForms(evt, webFormsValues, index)
+{
+    const hasWebFormsSection = (webFormsValues.TrimStart().substring(0, 11) == "[web-forms]");
+
+    if (WebFormsOptions.UseQueueForWebFormsValue)
+    {
+        cb_AddToQueue(async () =>
+        {
+            await cb_RunWebFormsValues(evt, index, webFormsValues, !hasWebFormsSection);
+        });
+    }
+    else
+        cb_RunWebFormsValues(evt, index, WebFormsValues, !hasWebFormsSection);
+}
+
 async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWebFormsSection, loopIndex = 0)
 {
     // Initialization to Index
@@ -12697,6 +12712,7 @@ window.FrontBack = FrontBack;
 window.WebSocketBack = WebSocketBack;
 window.SendBack = SendBack;
 window.SSEBack = SSEBack;
+window.RunWebForms = RunWebForms;
 window.cb_GetElementByElementPlace = cb_GetElementByElementPlace;
 window.cb_MasterPages = cb_MasterPages;
 window.cb_ServiceWorker = cb_ServiceWorker;
