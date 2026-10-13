@@ -3204,6 +3204,7 @@ async function cb_ReplaceDynamicValue(evt, ActionControl)
 
 async function RunWebForms(evt, webFormsValues, index)
 {
+    index = index ?? "";
     const hasWebFormsSection = (webFormsValues.TrimStart().substring(0, 11) == "[web-forms]");
 
     if (WebFormsOptions.UseQueueForWebFormsValue)
