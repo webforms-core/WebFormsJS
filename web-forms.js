@@ -8256,9 +8256,6 @@ String.prototype.DeleteHtmlClass = function(ClassName)
 
 String.prototype.Contains = function(Text)
 {
-    if (!this)
-        return false;
-
     return this.indexOf(Text) !== -1;
 };
 
