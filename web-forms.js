@@ -459,7 +459,7 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
 
         const response = event.data.Replace("$[sln];" , '\n');
 
-        cb_SetResponse(evt, response, viewState, "");
+        SetResponse(evt, response, viewState, "");
     };
 
     source.onerror = () =>
@@ -1699,7 +1699,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             cb_WebSockets[tmpFormAction].onmessage = function (event)
             {
                 const WebSocketResult = event.data;
-                cb_SetResponse(evt, WebSocketResult, ViewState, RequestName);
+                SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
                 Form.focus();
 
@@ -1743,7 +1743,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
                 if (XMLHttp.status != 202 && XMLHttp.status != 204)
                 {
                     const HttpResult = XMLHttp.responseText;
-                    cb_SetResponse(evt, HttpResult, ViewState, RequestName);
+                    SetResponse(evt, HttpResult, ViewState, RequestName);
                 }
 
                 // Reset Input Type
@@ -2016,7 +2016,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
             cb_WebSockets[tmpFormAction].onmessage = function (event)
             {
                 const WebSocketResult = event.data;
-                cb_SetResponse(evt, WebSocketResult, ViewState, RequestName);
+                SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
                 if (WebFormsOptions.AddConsoleMessageForWebSockets)
                     console.log("WebSocket server response:\n" + event.data);
@@ -2076,7 +2076,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
 
                     const HttpResult = XMLHttp.responseText;
                     if (Method.toUpperCase() != "HEAD")
-                        cb_SetResponse(evt, HttpResult, ViewState, RequestName);
+                        SetResponse(evt, HttpResult, ViewState, RequestName);
 
                     if (IsSPALink)
                     {
@@ -2217,7 +2217,7 @@ function OptionsBack(evt, FormAction, ViewState)
 
 /* Start Set Response Value */
 
-function cb_SetResponse(evt, ResponseResult, ViewState, RequestName)
+function SetResponse(evt, ResponseResult, ViewState, RequestName)
 {
 	let IsWebForms = false;
 
@@ -2328,7 +2328,7 @@ async function WasmBack(evt, wasmLanguage, wasmUrl, funcName, args, OutputPlace)
 
     const result = await cb_RunWasmMethodResult(wasmLanguage, wasmUrl, funcName, args);
 
-    cb_SetResponse(evt, String(result), OutputPlace, "");
+    SetResponse(evt, String(result), OutputPlace, "");
 
     if (WebFormsOptions.UseLoaderForWasmBack)
         cb_HideLoader();
@@ -2365,7 +2365,7 @@ async function FrontBack(evt, modulePath, OutputPlace, ...args)
         const mod = await import(modulePath);
         const result = await mod["PageLoad"](evt, ...args);
 
-        cb_SetResponse(evt, String(result), OutputPlace, "");
+        SetResponse(evt, String(result), OutputPlace, "");
     }
     catch (er)
     {
@@ -2497,7 +2497,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
             cb_WebSockets[tmpPath].onmessage = function (event)
             {
                 const WebSocketResult = event.data;
-                cb_SetResponse(evt, WebSocketResult, ViewState, RequestName);
+                SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
                 if (WebFormsOptions.AddConsoleMessageForWebSockets)
                     console.log("WebSocket server response:\n" + event.data);
@@ -2526,7 +2526,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
                 if (XMLHttp.status != 202 && XMLHttp.status != 204)
                 {
                     const HttpResult = XMLHttp.responseText;
-                    cb_SetResponse(evt, HttpResult, ViewState, RequestName);
+                    SetResponse(evt, HttpResult, ViewState, RequestName);
                 }
 
                 cb_HideLoader();
@@ -12711,6 +12711,7 @@ window.WebSocketBack = WebSocketBack;
 window.SendBack = SendBack;
 window.SSEBack = SSEBack;
 window.RunWebForms = RunWebForms;
+window.SetResponse = SetResponse;
 window.cb_GetElementByElementPlace = cb_GetElementByElementPlace;
 window.cb_MasterPages = cb_MasterPages;
 window.cb_ServiceWorker = cb_ServiceWorker;
