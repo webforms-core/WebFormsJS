@@ -194,7 +194,7 @@ const US = String.fromCharCode(31); // Unit Separator
 
 // Check If WebFormsJS Is Not Load Module Mode
 if (document.currentScript)
-    console.error("The WebFormsJS library must be loaded with <script type=\"module\">.");
+    cb_Console("error", "The WebFormsJS library must be loaded with <script type=\"module\">.");
 
 const cb_UnsupportedFeatures = [];
 
@@ -257,10 +257,10 @@ cb_BrowseFeatures.forEach(f =>
 const cb_WebFormsCoreUsingMessage = "You are using a web application built with WebForms Core technology.";
 
 if (cb_UnsupportedFeatures.length > 0)
-    console.warn(cb_WebFormsCoreUsingMessage + "\nYour browser is outdated or unsuitable and may experience performance issues because it does not support the following features:", cb_UnsupportedFeatures.join(", "));
+    cb_Console("warn", cb_WebFormsCoreUsingMessage + "\nYour browser is outdated or unsuitable and may experience performance issues because it does not support the following features:", cb_UnsupportedFeatures.join(", "));
 else
     if (WebFormsOptions.AddConsoleMessage)
-        console.log(cb_WebFormsCoreUsingMessage + "\nCongratulations! All core browser features are supported.");
+        cb_Console("log", cb_WebFormsCoreUsingMessage + "\nCongratulations! All core browser features are supported.");
 
 /* End Check Browser Support */
 
@@ -274,7 +274,7 @@ const cb_WebSocketRetryCount = {};
 function cb_AddWebSocketPath(path)
 {
     if (!path)
-        path = window.location.pathname;
+        path = location.pathname;
 
     if (cb_UseWebSocketPath.indexOf(path) === -1)
         cb_UseWebSocketPath.push(path);
@@ -309,7 +309,7 @@ function cb_WebSocketReconnect(Url, formAction)
     if (attempt >= WebFormsOptions.WebSocketReconnectMaxRetries)
     {
         if (WebFormsOptions.AddConsoleMessageForWebSockets)
-            console.warn("WebSocket max retry reached. Stop reconnecting.");
+            cb_Console("warn", "WebSocket max retry reached. Stop reconnecting.");
         return;
     }
 
@@ -326,7 +326,7 @@ function cb_WebSocketReconnect(Url, formAction)
 function cb_WebSocketOnClose(evt, formAction)
 {
     if (WebFormsOptions.AddConsoleMessageForWebSockets)
-        console.log("WebSocket disconnected, path: " + formAction);
+        cb_Console("log", "WebSocket disconnected, path: " + formAction);
 
     if (WebFormsOptions.AddMessageForWebSocketClose)
         cb_ShowMessage(WebFormsOptions.WebSocketDisconnectedLang, "none", WebFormsOptions.MessageDuration);
@@ -337,7 +337,7 @@ function cb_WebSocketOnClose(evt, formAction)
 function cb_WebSocketDelete(formAction)
 {
     if (!formAction)
-        formAction = window.location.pathname;
+        formAction = location.pathname;
 
     const ws = cb_WebSockets[formAction];
 
@@ -349,14 +349,14 @@ function cb_WebSocketDelete(formAction)
         delete cb_WebSockets[formAction];
 
         if (WebFormsOptions.AddConsoleMessageForWebSockets)
-            console.log("WebSocket manually closed and removed: " + formAction);
+            cb_Console("log", "WebSocket manually closed and removed: " + formAction);
     }
 }
 
 function cb_WebSocketIsConnected(path)
 {
     if (!path)
-        path = window.location.pathname;
+        path = location.pathname;
 
     const ws = cb_WebSockets[path];
 
@@ -369,7 +369,7 @@ function cb_WebSocketIsConnected(path)
 function cb_WebSocketOnError(evt, formAction)
 {
     if (WebFormsOptions.AddConsoleMessageForWebSockets)
-        console.log("WebSocket error, path: " + formAction);
+        cb_Console("log", "WebSocket error, path: " + formAction);
 
     if (WebFormsOptions.AddMessageForWebSocketError)
         cb_ShowMessage(WebFormsOptions.WebSocketErrorLang, "problem", WebFormsOptions.MessageDuration);
@@ -378,7 +378,7 @@ function cb_WebSocketOnError(evt, formAction)
 function cb_WebSocketDoSend(Message)
 {
     if (WebFormsOptions.AddConsoleMessageForWebSockets)
-        console.log("WebSocket sent:\n" + Message);
+        cb_Console("log", "WebSocket sent:\n" + Message);
 
     for (let formAction in cb_WebSockets)
         if (cb_WebSockets[formAction].readyState === WebSocket.OPEN)
@@ -388,12 +388,12 @@ function cb_WebSocketDoSend(Message)
 function cb_WebSocketSet(formAction)
 {
     if (!formAction)
-        formAction = window.location.pathname;
+        formAction = location.pathname;
 
     const Url = cb_ConvertToWebSocketUrl(formAction)
 
     if (WebFormsOptions.AddConsoleMessageForWebSockets)
-        console.log("WebSocket request path: " + formAction);
+        cb_Console("log", "WebSocket request path: " + formAction);
 
     let active = false;
     if (cb_WebSockets[formAction] && (cb_WebSockets[formAction].readyState === WebSocket.OPEN || cb_WebSockets[formAction].readyState === WebSocket.CONNECTING))
@@ -402,7 +402,7 @@ function cb_WebSocketSet(formAction)
     if (!active)
     {
         if (WebFormsOptions.AddConsoleMessageForWebSockets)
-            console.log("No active WebSocket for this path, initializing new one...");
+            cb_Console("log", "No active WebSocket for this path, initializing new one...");
 
         if (WebFormsOptions.AddMessageForWebSocketInitializing)
             cb_ShowMessage(WebFormsOptions.InitializingNewWebSocketLang, "help", WebFormsOptions.MessageDuration);
@@ -412,7 +412,7 @@ function cb_WebSocketSet(formAction)
     else
     {
         if (WebFormsOptions.AddConsoleMessageForWebSockets)
-            console.log("WebSocket already connected or connecting for this path");
+            cb_Console("log", "WebSocket already connected or connecting for this path");
     }
 }
 
@@ -426,7 +426,7 @@ const cb_SSERetryCount = {};
 function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout = 3000, viewState)
 {
     if (!path)
-        path = window.location.pathname;
+        path = location.pathname;
 
     // Close Old Connection On The Same Path (If Exist)
     if (cb_SSEConnections[path])
@@ -436,7 +436,7 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
     }
 
     if (WebFormsOptions.AddConsoleMessageForSSE)
-        console.log(`SSE Trying to connect: ${path}`);
+        cb_Console("log", `SSE Trying to connect: ${path}`);
 
     if (WebFormsOptions.AddMessageForSSEInitializing)
         cb_ShowMessage(WebFormsOptions.SSETryingToConnectLang, "help", WebFormsOptions.MessageDuration);
@@ -446,7 +446,7 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
     source.onopen = () =>
     {
         if (WebFormsOptions.AddConsoleMessageForSSE)
-            console.log(`SSE Connected: ${path}`);
+            cb_Console("log", `SSE Connected: ${path}`);
 
         if (WebFormsOptions.AddMessageForSSEConnect)
             cb_ShowMessage(WebFormsOptions.SSEConnectedLang, "success", WebFormsOptions.MessageDuration);
@@ -455,7 +455,7 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
     source.onmessage = (event) =>
     {
         if (WebFormsOptions.AddConsoleMessageForSSE)
-            console.log(`SSE Message from ${path}:`, event.data);
+            cb_Console("log", `SSE Message from ${path}:`, event.data);
 
         const response = event.data.Replace("$[sln];" , '\n');
 
@@ -465,7 +465,7 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
     source.onerror = () =>
     {
         if (WebFormsOptions.AddConsoleMessageForSSE)
-            console.warn(`SSE Disconnected: ${path}`);
+            cb_Console("warn", `SSE Disconnected: ${path}`);
 
         if (WebFormsOptions.AddMessageForSSEDisconnected)
             cb_ShowMessage(WebFormsOptions.SSEDisconnectedLang, "problem", WebFormsOptions.MessageDuration);
@@ -482,14 +482,14 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
         if (cb_SSERetryCount[path] >= WebFormsOptions.SSEReconnectMaxRetries)
         {
             if (WebFormsOptions.AddConsoleMessageForSSE)
-                console.log("SSE max retry reached");
+                cb_Console("log", "SSE max retry reached");
             return;
         }
 
         cb_SSERetryCount[path]++;
 
         if (WebFormsOptions.AddConsoleMessageForSSE)
-            console.log(`SSE Reconnecting to ${path} in ${reconnectTryTimeout}ms attempt ${cb_SSERetryCount[path]}...`);
+            cb_Console("log", `SSE Reconnecting to ${path} in ${reconnectTryTimeout}ms attempt ${cb_SSERetryCount[path]}...`);
 
         if (WebFormsOptions.AddMessageForSSEReconnecting)
             cb_ShowMessage(WebFormsOptions.SSEReconnectingLang + " ...", "none", WebFormsOptions.MessageDuration);
@@ -510,7 +510,7 @@ function cb_DisconnectSSE(path)
         source.close();
         delete cb_SSEConnections[path];
         if (WebFormsOptions.AddConsoleMessageForSSE)
-            console.log(`SSE Manually closed connection: ${path}`);
+            cb_Console("log", `SSE Manually closed connection: ${path}`);
 
         if (WebFormsOptions.AddMessageForSSEClose)
             cb_ShowMessage(WebFormsOptions.SSEManuallyCloseLang, "none", WebFormsOptions.MessageDuration);
@@ -533,7 +533,7 @@ function cb_DisconnectAllSSE()
     {
         cb_SSEConnections[path].close();
         if (WebFormsOptions.AddConsoleMessageForSSE)
-            console.log(`SSE Closed: ${path}`);
+            cb_Console("log", `SSE Closed: ${path}`);
     }
 
     Object.keys(cb_SSEConnections).forEach(k => delete cb_SSEConnections[k]);
@@ -875,39 +875,51 @@ function cb_SetSPALink(obj)
     const links = obj ? obj.querySelectorAll('a') : document.body.querySelectorAll('a');
 
     links.forEach(link =>
-    {
-        const targetAttr = link.getAttribute("target");
-        let hrefAttr = link.getAttribute("href");
+    {       
+        let linkHref = link.getAttribute("href");
 
-        if (!hrefAttr)
+        if (!linkHref)
             return;
 
-        if (hrefAttr.length > 1 && hrefAttr.substring(0, 2) == "#~")
-            hrefAttr = hrefAttr.substring(2);
+        const targetAttr = link.getAttribute("target");
 
-        if (hrefAttr.startsWith("#"))
+        let linkTitle = (WebFormsOptions.SetTitleBySPALink && (link.hasAttribute("title")) ? WebFormsOptions.SPAGlobalTitle.Replace("{{title}}", link.getAttribute("title")) : false);
+        
+        if (linkHref.length > 1 && linkHref.substring(0, 2) == "#~")
+            linkHref = linkHref.substring(2);
+
+        if (linkHref.startsWith("#"))
         {   
             if (!WebFormsOptions.IgnoreQueryAndHashInSPALink)
-                link.setAttribute("onclick", `PreventDefault(event);cb_AddHashState('${hrefAttr}');`);
+                cb_AddAttribute(link ,"onclick", `PreventDefault(event);cb_AddHashState('${linkHref}'` + (linkTitle ? `, '${linkTitle}');` : ");"));
             return;
         }
 
-        if (!hrefAttr.includes("://") && !hrefAttr.startsWith("mailto:") && !hrefAttr.startsWith("tel:") && (!targetAttr || targetAttr === "_self"))
-            link.setAttribute("onclick", `PreventDefault(event);GetBack(event, '${hrefAttr}');`);
+        if (!linkHref.includes("://") && !linkHref.startsWith("mailto:") && !linkHref.startsWith("tel:") && (!targetAttr || targetAttr === "_self"))
+            cb_AddAttribute(link, "onclick", `PreventDefault(event);GetBack(event, '${linkHref}');`);
     });
 }
 
-function cb_AddHashState(hrefAttr)
-{
-    window.location.href = hrefAttr;
+function cb_AddHashState(linkHref, linkTitle)
+{  
+    if (location.hash == linkHref)
+        return;
+
+    location.href = linkHref;
+
+    if (linkTitle)
+        document.title = linkTitle;
+
+    history.pushState(window.history.state, "", linkHref);
+    window.scrollTo(0, 0);
+
     cb_PopstateIsPending = true;
 
     setTimeout(() =>
     {
         try
         {
-            history.pushState(window.history.state, "", hrefAttr);
-            window.scrollTo(0, 0);
+            cb_SPA.setState(false, location.pathname + location.search + linkHref, linkTitle);
         }
         catch
         {
@@ -1611,11 +1623,11 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
 
     // Create Request Name
     let RequestNameForCache = '<';
-    let RequestName = (FormAction == "") ? window.location.pathname : FormAction;
+    let RequestName = (FormAction == "") ? location.pathname : FormAction;
     if (FormAction.length > 0)
     {
         if (FormAction.substring(0, 1) == '#')
-            RequestName = window.location.pathname + FormAction;
+            RequestName = location.pathname + FormAction;
 
         if (FormAction.Contains('#'))
             RequestNameForCache = '#' + FormAction.GetTextAfter('#');
@@ -1643,12 +1655,12 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
     // Check Accepted URL
     if (!cb_IsInternalUrl(FormAction))
     {
-        const tmpURL = new URL(FormAction, window.location.origin);
+        const tmpURL = new URL(FormAction, location.origin);
 
         if (WebFormsOptions.DisableLoadExternalHost)
         {
             if (WebFormsOptions.AddConsoleMessageForURL)
-                console.warn("Access for load the external host is disabled but is being attempted.\npath: " + FormAction);
+                cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + FormAction);
 
             cb_HideLoader();
 
@@ -1662,7 +1674,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
             {
                 if (WebFormsOptions.AddConsoleMessageForURL)
-                    console.warn("Access to load the external host is only possible in the list, but is being attempted.\npath: " + FormAction);
+                    cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + FormAction);
                 
                 cb_HideLoader();
 
@@ -1674,7 +1686,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
     }
 
     // Using WebSocket Protocol
-    const tmpFormAction = (FormAction == "") ? window.location.pathname : FormAction;
+    const tmpFormAction = (FormAction == "") ? location.pathname : FormAction;
     if (window.WebSocket && (cb_UseWebSocket || Form.hasAttribute("usewebsocket") || (cb_UseWebSocketPath.indexOf(tmpFormAction) >= 0)))
     {
         if (cb_UseWebSocket == '$')
@@ -1684,7 +1696,8 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
 
         if (cb_WebSockets[tmpFormAction])
         {
-            var formDataSerialize = "form=true&" + cb_FormDataSerialize(Form, obj.getAttribute("name"), TagSubmitValue, OldObjectType, false);
+            let tmpTagSubmitValue = (!TagSubmitValue && obj.tagName == "input") ? "Submit" : "";
+            var formDataSerialize = "form=true&" + cb_FormDataSerialize(Form, obj.getAttribute("name"), tmpTagSubmitValue, OldObjectType, false);
 
             if (cb_WebSockets[tmpFormAction].readyState === WebSocket.OPEN)
                 cb_WebSocketDoSend(formDataSerialize);
@@ -1710,7 +1723,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
                     obj.removeAttribute("main-type");
 
                 if (WebFormsOptions.AddConsoleMessageForWebSockets)
-                    console.log("WebSocket server response:\n" + event.data);
+                    cb_Console("log", "WebSocket server response:\n" + event.data);
             };
         }
 
@@ -1734,7 +1747,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
     XMLHttp.onreadystatechange = function ()
     {
         if (WebFormsOptions.AddConsoleMessageForHTTP)
-            console.log("HTTP request with method " + FormMethod.toUpperCase() + ", path: " + FormAction);
+            cb_Console("log", "HTTP request with method " + FormMethod.toUpperCase() + ", path: " + FormAction);
 
         if (XMLHttp.readyState == 4)
         {
@@ -1841,7 +1854,8 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             cb_HideLoader();
     };
 
-    var formDataSerialize = cb_FormDataSerialize(Form, obj.getAttribute("name"), TagSubmitValue, OldObjectType, FormIsMultiPart);
+    let tmpTagSubmitValue = (!TagSubmitValue && obj.tagName == "input") ? "Submit" : "";
+    var formDataSerialize = cb_FormDataSerialize(Form, obj.getAttribute("name"), tmpTagSubmitValue, OldObjectType, FormIsMultiPart);
     if ((FormMethod.toLowerCase() != "post") && (FormMethod.toLowerCase() != "put") && (FormMethod.toLowerCase() != "patch") && (FormMethod.toLowerCase() != "delete"))
     {
         FormAction = cb_AddQueryToUrl(FormAction, formDataSerialize);
@@ -1939,7 +1953,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
     let useHashPath = false;
     if (!FormAction)
         FormAction = "";
-    let RequestName = (FormAction == "") ? window.location.pathname : FormAction;
+    let RequestName = (FormAction == "") ? location.pathname : FormAction;
     if (FormAction.length > 0)
     {
         if (FormAction.length > 1)
@@ -1952,7 +1966,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
         }
 
         if (FormAction.substring(0, 1) == '#')
-            RequestName = window.location.pathname + FormAction;
+            RequestName = location.pathname + FormAction;
 
         if (FormAction.Contains('#'))
             RequestNameForCache = '#' + FormAction.GetTextAfter('#');
@@ -1972,12 +1986,12 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
     // Check Accepted URL
     if (!cb_IsInternalUrl(FormAction))
     {
-        const tmpURL = new URL(FormAction, window.location.origin);
+        const tmpURL = new URL(FormAction, location.origin);
 
         if (WebFormsOptions.DisableLoadExternalHost)
         {
             if (WebFormsOptions.AddConsoleMessageForURL)
-                console.warn("Access for load the external host is disabled but is being attempted.\npath: " + FormAction);
+                cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + FormAction);
 
             cb_HideLoader();
 
@@ -1991,7 +2005,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
             if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
             {
                 if (WebFormsOptions.AddConsoleMessageForURL)
-                    console.warn("Access to load the external host is only possible in the list, but is being attempted.\npath: " + FormAction);
+                    cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + FormAction);
                 
                 cb_HideLoader();
 
@@ -2003,7 +2017,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
     }
 
     // Using WebSocket Protocol
-    const tmpFormAction = (FormAction == "") ? window.location.pathname : FormAction;
+    const tmpFormAction = (FormAction == "") ? location.pathname : FormAction;
     if (window.WebSocket && (cb_UseWebSocket || (cb_UseWebSocketPath.indexOf(tmpFormAction) >= 0)))
     {
         if (cb_UseWebSocket == '@')
@@ -2019,7 +2033,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
                 SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
                 if (WebFormsOptions.AddConsoleMessageForWebSockets)
-                    console.log("WebSocket server response:\n" + event.data);
+                    cb_Console("log", "WebSocket server response:\n" + event.data);
             };
         }
 
@@ -2036,7 +2050,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
     XMLHttp.onreadystatechange = function ()
     {
         if (WebFormsOptions.AddConsoleMessageForHTTP)
-            console.log("HTTP request with method " + Method.toUpperCase() + ", path: " + FormAction);
+            cb_Console("log", "HTTP request with method " + Method.toUpperCase() + ", path: " + FormAction);
 
         if (XMLHttp.readyState == 4)
         {
@@ -2062,8 +2076,8 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
 
                             if (linkPath)
                             {
-                                const currentUrl = new URL(window.location.href);
-                                const targetUrl = new URL(linkPath, window.location.href);
+                                const currentUrl = new URL(location.href);
+                                const targetUrl = new URL(linkPath, location.href);
                                 
                                 IsIgnoreQueryAndHash = (WebFormsOptions.IgnoreQueryAndHashInSPALink && targetUrl.pathname == currentUrl.pathname);
 
@@ -2346,7 +2360,7 @@ async function FrontBack(evt, modulePath, OutputPlace, ...args)
     if (WebFormsOptions.DisableLoadModule)
     {
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn("Access for load the module is disabled but is being attempted.\nModule path: " + modulePath);
+            cb_Console("warn", "Access for load the module is disabled but is being attempted.\nModule path: " + modulePath);
         return null;
     }
 
@@ -2354,7 +2368,7 @@ async function FrontBack(evt, modulePath, OutputPlace, ...args)
         if (!WebFormsOptions.LoadModulePathOnlyInAcceptedList.some(p => cb_MatchesPattern(p, modulePath)))
         {
             if (WebFormsOptions.AddConsoleMessageForModule)
-                console.warn("Access to load the module is only possible in the list, but is being attempted.\nModule path: " + modulePath);
+                cb_Console("warn", "Access to load the module is only possible in the list, but is being attempted.\nModule path: " + modulePath);
             return null;
         }
 
@@ -2370,7 +2384,7 @@ async function FrontBack(evt, modulePath, OutputPlace, ...args)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.error("Error loading module:", er);
+            cb_Console("error", "Error loading module:", er);
     }
 
     if (WebFormsOptions.UseLoaderForFrontBack)
@@ -2417,11 +2431,11 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
 
     // Create Request Name
     let RequestNameForCache = '<';
-    let RequestName = (path == "") ? window.location.pathname : path;
+    let RequestName = (path == "") ? location.pathname : path;
     if (path.length > 0)
     {
         if (path.substring(0, 1) == '#')
-            RequestName = window.location.pathname + path;
+            RequestName = location.pathname + path;
 
         if (path.Contains('#'))
             RequestNameForCache = '#' + path.GetTextAfter('#');
@@ -2443,12 +2457,12 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
     // Check Accepted URL
     if (!cb_IsInternalUrl(path))
     {
-        const tmpURL = new URL(path, window.location.origin);
+        const tmpURL = new URL(path, location.origin);
 
         if (WebFormsOptions.DisableLoadExternalHost)
         {
             if (WebFormsOptions.AddConsoleMessageForURL)
-                console.warn("Access for load the external host is disabled but is being attempted.\npath: " + path);
+                cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + path);
 
             cb_HideLoader();
 
@@ -2462,7 +2476,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
             if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
             {
                 if (WebFormsOptions.AddConsoleMessageForURL)
-                    console.warn("Access to load the external host is only possible in the list, but is being attempted.\npath: " + path);
+                    cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + path);
                 
                 cb_HideLoader();
 
@@ -2474,7 +2488,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
     }
 
     // Using WebSocket Protocol
-    const tmpPath = (path == "") ? window.location.pathname : path;
+    const tmpPath = (path == "") ? location.pathname : path;
     if (window.WebSocket && (cb_UseWebSocket || (cb_UseWebSocketPath.indexOf(tmpPath) >= 0)))
     {
         if (cb_UseWebSocket == '$')
@@ -2500,7 +2514,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
                 SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
                 if (WebFormsOptions.AddConsoleMessageForWebSockets)
-                    console.log("WebSocket server response:\n" + event.data);
+                    cb_Console("log", "WebSocket server response:\n" + event.data);
             };
         }
 
@@ -2517,7 +2531,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
     XMLHttp.onreadystatechange = function ()
     {
         if (WebFormsOptions.AddConsoleMessageForHTTP)
-            console.log("HTTP request with method " + method.toUpperCase() + ", path: " + path);
+            cb_Console("log", "HTTP request with method " + method.toUpperCase() + ", path: " + path);
 
         if (XMLHttp.readyState == 4)
         {
@@ -2806,10 +2820,13 @@ function cb_FormDataSerialize(form, TagSubmitName, TagSubmitValue, TagSubmitType
     // Add Button Submit
     if (TagSubmitType === "submit")
     {
-        if (FormIsMultiPart)
-            TmpFormData.append(TagSubmitName, TagSubmitValue);
-        else
-            FormString += TagSubmitName + '=' + encodeURIComponent(TagSubmitValue);
+        if (TagSubmitName)
+        {
+            if (FormIsMultiPart)
+                TmpFormData.append(TagSubmitName, TagSubmitValue);
+            else
+                FormString += TagSubmitName + '=' + encodeURIComponent(TagSubmitValue);
+        }
     }
     else if (!FormIsMultiPart && FormString.length > 0)
         FormString = FormString.substring(0, FormString.length - 1);
@@ -3048,7 +3065,7 @@ function cb_AppendJavaScriptTag(HtmlSource)
     if (WebFormsOptions.DisableAppendJavaScriptTag)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.warn("Access to the JavaScript is disabled but is being attempted.");
+            cb_Console("warn", "Access to the JavaScript is disabled but is being attempted.");
         return;
     }
 
@@ -3061,7 +3078,7 @@ function cb_AppendJavaScriptTag(HtmlSource)
         if (cb_IsScriptAlreadyInDOM(script))
         {
             if (WebFormsOptions.AddConsoleMessage)
-                console.error("Warning: Exist duplicate script!\nThis issue occurs when the WebForms Core technology is incorrectly configured.");
+                cb_Console("error", "Warning: Exist duplicate script!\nThis issue occurs when the WebForms Core technology is incorrectly configured.");
             continue;
         }
 
@@ -3254,7 +3271,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
 
     // Using Debug
     if (cb_DebugActive)
-        console.log(WebFormsList);
+        cb_Console("log", WebFormsList);
 
     for (let i = loopIndex; i < WebFormsList.length; i++)
     {
@@ -3263,7 +3280,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
             // Using Debug
             if (cb_DebugActive)
             {
-                console.info(`[${i + 1}/${WebFormsList.length}] Stop in: ` + WebFormsList[i]);
+                cb_Console("info", `[${i + 1}/${WebFormsList.length}] Stop in: ` + WebFormsList[i]);
 
                 if (!DebugIsStarted)
                 {
@@ -3281,7 +3298,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                     cb_DebugPaused = true;
                 }
 
-                console.info(`[${i + 1}/${WebFormsList.length}] Running: ` + WebFormsList[i]);
+                cb_Console("info", `[${i + 1}/${WebFormsList.length}] Running: ` + WebFormsList[i]);
             }
 
             let ActionControl = WebFormsList[i].FullTrim();
@@ -3678,7 +3695,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                     if (WebFormsOptions.DisableEval)
                     {
                         if (WebFormsOptions.AddConsoleMessage)
-                            console.warn("Access to the eval method is disabled but is being attempted.\nScript value: " + scriptValue);
+                            cb_Console("warn", "Access to the eval method is disabled but is being attempted.\nScript value: " + scriptValue);
                         continue;
                     }
                     eval(scriptValue);
@@ -3730,7 +3747,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                         {
                             var path = v1;
                             if (!path)
-                                path = window.location.pathname + window.location.search + window.location.hash;
+                                path = location.pathname + location.search + location.hash;
 
                             cb_SPA.render(evt, path);
                             continue;
@@ -3760,7 +3777,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                             else if (v1)
                                 cb_SPA.deleteState(v1);
                             else
-                                cb_SPA.deleteState(window.location.pathname);
+                                cb_SPA.deleteState(location.pathname);
                             continue;
 
                         case 'c':
@@ -4090,7 +4107,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                                 WebFormsOptions[v1] = WebFormsDefaultOptions[v1];
                             else
                                 if (WebFormsOptions.AddConsoleMessage)
-                                    console.log("This option does not exist: " + name);
+                                    cb_Console("log", "This option does not exist: " + name);
                             continue;
                     }
                     break;
@@ -4137,7 +4154,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                             if (!Object.hasOwn(WebFormsOptions, name))
                             {
                                 if (WebFormsOptions.AddConsoleMessage)
-                                    console.log("This option does not exist: " + name);
+                                    cb_Console("log", "This option does not exist: " + name);
                                 continue;
                             }
 
@@ -4262,7 +4279,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                         {
                             var [linkPath, linkTitle] = [v1, v2];
                             if (!linkPath)
-                                linkPath = window.location.pathname + window.location.search + window.location.hash;
+                                linkPath = location.pathname + location.search + location.hash;
 
                             cb_SPA.setState(SecondChar == 'S', linkPath, linkTitle);
                             continue;
@@ -4312,21 +4329,9 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                         case 'c':
                         {
                             var text = v1;
-                            var type = v2 ? v2 : "log";
-
-                            switch (type)
-                            {
-                                case "log": console.log(text); break;
-                                case "info": console.info(text); break;
-                                case "warn": console.warn(text); break;
-                                case "error": console.error(text); break;
-                                case "debug": console.debug(text); break;
-                                case "trace": console.trace(text); break;
-                                case "group": console.group(text); break;
-                                case "groupend": console.groupEnd(text); break;
-                                case "table": console.table(text); break;
-                                default: console.log(text);
-                            }
+                            var type = v2 ?? "log";
+                            
+                            cb_Console(type, v1);
                             continue;
                         }
                         case 'a':
@@ -4391,7 +4396,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
             if (!er.cb_Trace)
             {
                 if (WebFormsOptions.AddConsoleMessage)
-                    console.warn("There was a problem in webforms value whene executing the command: " + er + "\nError in command: " + WebFormsList[i] + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+                    cb_Console("warn", "There was a problem in webforms value whene executing the command: " + er + "\nError in command: " + WebFormsList[i] + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
                 if (WebFormsOptions.AddMessageForProblemInSetWebFormsValue)
                     cb_ShowMessage(WebFormsOptions.ProblemInSetWebFormsValueLang, "problem", WebFormsOptions.MessageDuration);
@@ -5309,7 +5314,7 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
                                 if (WebFormsOptions.DisableCallMethod)
                                 {
                                     if (WebFormsOptions.AddConsoleMessage)
-                                        console.warn("Access to the call method is disabled but is being attempted.\nMethod: " + funcName);
+                                        cb_Console("warn", "Access to the call method is disabled but is being attempted.\nMethod: " + funcName);
                                     break;
                                 }
 
@@ -5317,7 +5322,7 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
                                     if (!WebFormsOptions.CallMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, funcName)))
                                     {
                                         if (WebFormsOptions.AddConsoleMessage)
-                                            console.warn("Access to call method is only possible in the list, but is being attempted.\nMethod: " + funcName);
+                                            cb_Console("warn", "Access to call method is only possible in the list, but is being attempted.\nMethod: " + funcName);
                                         break;
                                     }
 
@@ -5610,7 +5615,7 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
         catch (er)
         {
             if (WebFormsOptions.AddConsoleMessage)
-                console.warn("There was a problem in set value to input whene executing the command: " + er + "\nError in command: " + CurrentElement + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+                cb_Console("warn", "There was a problem in set value to input whene executing the command: " + er + "\nError in command: " + CurrentElement + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
             if (WebFormsOptions.AddMessageForProblemInSetValueToInput)
                 cb_ShowMessage(WebFormsOptions.ProblemInSetValueToInputLang, "problem", WebFormsOptions.MessageDuration);
@@ -6033,7 +6038,7 @@ function cb_FetchElementByElementPlace(ElementPlace, obj, TransientDOM)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.log("Problem in determining element: " + er + "\nError in input place: " + ElementPlace);
+            cb_Console("log", "Problem in determining element: " + er + "\nError in input place: " + ElementPlace);
 
         if (WebFormsOptions.AddMessageForProblemInDeterminingElement)
             cb_ShowMessage(WebFormsOptions.ProblemInDeterminingElementLang, "problem", WebFormsOptions.MessageDuration);
@@ -6531,7 +6536,7 @@ async function cb_FetchValue(evt, Value)
             if (WebFormsOptions.DisablePassObject)
             {
                 if (WebFormsOptions.AddConsoleMessage)
-                    console.warn("Access to the pass object is disabled but is being attempted.\nvalue:$" + Value);
+                    cb_Console("warn", "Access to the pass object is disabled but is being attempted.\nvalue:$" + Value);
 
                 return '$' + Value;
             }
@@ -6580,7 +6585,7 @@ async function cb_FetchValue(evt, Value)
             else
             {
                 if (WebFormsOptions.AddConsoleMessage)
-                    console.warn("Access to the eval method is disabled but is being attempted in Fetch.\nScript value:" + Value);
+                    cb_Console("warn", "Access to the eval method is disabled but is being attempted in Fetch.\nScript value:" + Value);
 
                 return value;
             }
@@ -6622,7 +6627,7 @@ async function cb_FetchValue(evt, Value)
             if (WebFormsOptions.DisableEval)
             {
                 if (WebFormsOptions.AddConsoleMessage)
-                    console.warn("Access to the eval method is disabled but is being attempted.\nScript value:" + ScriptValue);
+                    cb_Console("warn", "Access to the eval method is disabled but is being attempted.\nScript value:" + ScriptValue);
                 return "";
             }
 
@@ -6906,21 +6911,21 @@ async function cb_FetchValue(evt, Value)
             case 'w':
                 switch (ActionFeature)
                 {
-                    case 'f': return window.location.href;
-                    case 'P': return window.location.pathname;
+                    case 'f': return location.href;
+                    case 'P': return location.pathname;
                     case 'q':
                         if (Value == '*')
-                            return window.location.search;
+                            return location.search;
                         else
                         {
-                            var params = new URLSearchParams(window.location.search);
+                            var params = new URLSearchParams(location.search);
                             return params.get(Value);
                         }
-                    case 'h': return window.location.hash;
-                    case 'H': return window.location.host;
-                    case 'n': return window.location.hostname;
-                    case 'T': return window.location.port;
-                    case 'o': return window.location.origin;
+                    case 'h': return location.hash;
+                    case 'H': return location.host;
+                    case 'n': return location.hostname;
+                    case 'T': return location.port;
+                    case 'o': return location.origin;
                     case 's': return window.getSelection().toString();
                     case 'x': return window.scrollX;
                     case 'y': return window.scrollY;
@@ -6937,7 +6942,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     case 'S':
                     {
-                        var segments = window.location.pathname.substring(1).split('/');
+                        var segments = location.pathname.substring(1).split('/');
 
                         var index = Value;
 
@@ -6951,7 +6956,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     case 't':
                     {
-                        var hash = window.location.hash;
+                        var hash = location.hash;
                         hash = hash.substring(1);
 
                         if (hash.substring(0, 1) == '~')
@@ -6993,7 +6998,7 @@ async function cb_FetchValue(evt, Value)
                     catch (er)
                     {
                         if (WebFormsOptions.AddConsoleMessage)
-                            console.log("Geolocation error:", er);
+                            cb_Console("log", "Geolocation error:", er);
                         return "";
                     }
 
@@ -7005,7 +7010,7 @@ async function cb_FetchValue(evt, Value)
                         catch (er)
                         {
                             if (WebFormsOptions.AddConsoleMessage)
-                                console.log("clipboard error:", er);
+                                cb_Console("log", "clipboard error:", er);
                             return "";
                         }
                 }
@@ -7099,7 +7104,7 @@ async function cb_FetchValue(evt, Value)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.warn("There was a problem in fetch value whene executing the command: " + er + "\nError in value: " + Value + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+            cb_Console("warn", "There was a problem in fetch value whene executing the command: " + er + "\nError in value: " + Value + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
         if (WebFormsOptions.AddMessageForProblemInFetchValue)
             cb_ShowMessage(WebFormsOptions.ProblemInFetchValueLang, "problem", WebFormsOptions.MessageDuration);
@@ -7168,7 +7173,7 @@ async function cb_SaveValue(evt, ActionOperation, ActionFeature, ActionValue, La
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.warn("There was a problem in save value whene executing the command: " + er + "\nError in command: " + ActionOperation + ActionFeature + "\nError in value: " + ActionValue + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+            cb_Console("warn", "There was a problem in save value whene executing the command: " + er + "\nError in command: " + ActionOperation + ActionFeature + "\nError in value: " + ActionValue + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
         if (WebFormsOptions.AddMessageForProblemInSaveValue)
             cb_ShowMessage(WebFormsOptions.ProblemInSaveValueLang, "problem", WebFormsOptions.MessageDuration);
@@ -7406,12 +7411,12 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
         // Check Accepted URL
         if (!cb_IsInternalUrl(url))
         {
-            const tmpURL = new URL(url, window.location.origin);
+            const tmpURL = new URL(url, location.origin);
 
             if (WebFormsOptions.DisableLoadExternalHost)
             {
                 if (WebFormsOptions.AddConsoleMessageForURL)
-                    console.warn("Access for load the external host is disabled but is being attempted.\npath: " + url);
+                    cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + url);
                 resolve(null);
                 return;
             }
@@ -7420,7 +7425,7 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
                 if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
                 {
                     if (WebFormsOptions.AddConsoleMessageForURL)
-                        console.warn("Access to load the external host is only possible in the list, but is being attempted.\npath: " + url);
+                        cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + url);
                     resolve(null);
                     return;
                 }
@@ -7434,7 +7439,7 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
         XMLHttp.onload = function ()
         {
             if (WebFormsOptions.AddConsoleMessageForHTTP)
-                console.log("HTTP request with method GET, path: " + url);
+                cb_Console("log", "HTTP request with method GET, path: " + url);
 
             if (XMLHttp.status === 200)
             {
@@ -7481,9 +7486,9 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
 
 function cb_ConvertToWebSocketUrl(url)
 {
-    const currentUrl = window.location.href;
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const host = window.location.host;
+    const currentUrl = location.href;
+    const protocol = location.protocol === "https:" ? "wss:" : "ws:";
+    const host = location.host;
 
     if (url.startsWith('?'))
         return `${protocol}//${host}${currentUrl.split(host)[1]}${url}`;
@@ -7525,8 +7530,8 @@ function cb_IsInternalUrl(url)
 {
     try
     {
-        const absoluteUrl = new URL(url, window.location.origin);
-        return absoluteUrl.origin === window.location.origin;
+        const absoluteUrl = new URL(url, location.origin);
+        return absoluteUrl.origin === location.origin;
     }
     catch
     {
@@ -7662,7 +7667,7 @@ async function cb_CheckCondition(evt, ActionControl)
                 catch
                 {
                     if (WebFormsOptions.AddConsoleMessage)
-                        console.error("Invalid regex pattern:", pattern);
+                        cb_Console("error", "Invalid regex pattern:", pattern);
                     return null;
                 }
             }
@@ -7724,7 +7729,7 @@ async function cb_CheckCondition(evt, ActionControl)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.warn("There was a problem in check condition whene executing the command: " + er + "\nError in action control: " + ActionControl + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+            cb_Console("warn", "There was a problem in check condition whene executing the command: " + er + "\nError in action control: " + ActionControl + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
         if (WebFormsOptions.AddMessageForProblemInCheckCondition)
             cb_ShowMessage(WebFormsOptions.ProblemInCheckConditionLang, "problem", WebFormsOptions.MessageDuration);
@@ -7738,9 +7743,9 @@ async function cb_CheckCondition(evt, ActionControl)
 function cb_AssertEqual(element, tag, recursiveDepth = 0)
 {
     if (recursiveDepth > 0)
-        console.log(cb_Indent(recursiveDepth) + "Start inner testing depth: " + recursiveDepth);
+        cb_Console("log", cb_Indent(recursiveDepth) + "Start inner testing depth: " + recursiveDepth);
     else
-        console.log("Start unit testing assert equal");
+        cb_Console("log", "Start unit testing assert equal");
 
     // Normalize Both Inputs Into DOM Elements
     const temp = document.createElement("div");
@@ -7755,23 +7760,23 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
     }
     else
     {
-        console.info(cb_Indent(recursiveDepth) + "[ASSERT FAIL] Invalid 'tag' type — must be a DOM Node or HTML string.");
+        cb_Console("info", cb_Indent(recursiveDepth) + "[ASSERT FAIL] Invalid 'tag' type — must be a DOM Node or HTML string.");
 
         if (recursiveDepth > 0)
-            console.log(cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
+            cb_Console("log", cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
         else
-            console.log("End unit testing assert equal");
+            cb_Console("log", "End unit testing assert equal");
         return false;
     }
 
     if (!newElement)
     {
-        console.info(cb_Indent(recursiveDepth) + "[ASSERT FAIL] Failed to create comparable element from input.");
+        cb_Console("info", cb_Indent(recursiveDepth) + "[ASSERT FAIL] Failed to create comparable element from input.");
 
         if (recursiveDepth > 0)
-            console.log(cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
+            cb_Console("log", cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
         else
-            console.log("End unit testing assert equal");
+            cb_Console("log", "End unit testing assert equal");
         return false;
     }
 
@@ -7780,7 +7785,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
     // Compare Tag Names
     if (element.tagName !== newElement.tagName)
     {
-        console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Tag mismatch: expected <${newElement.tagName}> but got <${element.tagName}>`);
+        cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Tag mismatch: expected <${newElement.tagName}> but got <${element.tagName}>`);
         isEqual = false;
     }
 
@@ -7794,14 +7799,14 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
     for (let [name, value] of Object.entries(newAttrMap))
         if (elAttrMap[name] !== value)
         {
-            console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Attribute mismatch on "${name}": expected "${value}" but got "${elAttrMap[name] ?? 'undefined'}"`);
+            cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Attribute mismatch on "${name}": expected "${value}" but got "${elAttrMap[name] ?? 'undefined'}"`);
             isEqual = false;
         }
 
     for (let [name] of Object.entries(elAttrMap))
         if (!(name in newAttrMap))
         {
-            console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Unexpected attribute "${name}" found on element`);
+            cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Unexpected attribute "${name}" found on element`);
             isEqual = false;
         }
 
@@ -7811,7 +7816,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
 
     if (elClasses.sort().join(" ") !== newClasses.sort().join(" "))
     {
-        console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Class list mismatch: expected [${newClasses}] but got [${elClasses}]`);
+        cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Class list mismatch: expected [${newClasses}] but got [${elClasses}]`);
         isEqual = false;
     }
 
@@ -7820,7 +7825,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
     const newStyle = newElement.getAttribute("style") || "";
     if (elStyle.trim() !== newStyle.trim())
     {
-        console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Style mismatch: expected "${newStyle}" but got "${elStyle}"`);
+        cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Style mismatch: expected "${newStyle}" but got "${elStyle}"`);
         isEqual = false;
     }
 
@@ -7840,7 +7845,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
 
         if (val1 !== val2)
         {
-            console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Value mismatch in <${tagName}>: expected "${val2}" but got "${val1}"`);
+            cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Value mismatch in <${tagName}>: expected "${val2}" but got "${val1}"`);
             isEqual = false;
         }
     }
@@ -7851,7 +7856,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
 
     if (elChildren.length !== newChildren.length)
     {
-        console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Different number of child nodes: expected ${newChildren.length}, got ${elChildren.length}`);
+        cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Different number of child nodes: expected ${newChildren.length}, got ${elChildren.length}`);
         isEqual = false;
     }
 
@@ -7863,7 +7868,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
 
         if (c1.nodeType !== c2.nodeType)
         {
-            console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Node type mismatch at child index ${i}`);
+            cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Node type mismatch at child index ${i}`);
             isEqual = false;
             continue;
         }
@@ -7874,7 +7879,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
             const t2 = c2.textContent.trim();
             if (t1 !== t2)
             {
-                console.info(cb_Indent(recursiveDepth) + `[ASSERT FAIL] Text mismatch at index ${i}: expected "${t2}" but got "${t1}"`);
+                cb_Console("info", cb_Indent(recursiveDepth) + `[ASSERT FAIL] Text mismatch at index ${i}: expected "${t2}" but got "${t1}"`);
                 isEqual = false;
             }
         }
@@ -7887,15 +7892,15 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
     }
 
     if (isEqual)
-        console.info(cb_Indent(recursiveDepth) + "[ASSERT PASS] Elements are deeply equal");
+        cb_Console("info", cb_Indent(recursiveDepth) + "[ASSERT PASS] Elements are deeply equal");
     else
-        console.warn(cb_Indent(recursiveDepth) + "[ASSERT FAIL] Differences found");
+        cb_Console("warn", cb_Indent(recursiveDepth) + "[ASSERT FAIL] Differences found");
 
 
     if (recursiveDepth > 0)
-        console.log(cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
+        cb_Console("log", cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
     else
-        console.log("End unit testing assert equal");
+        cb_Console("log", "End unit testing assert equal");
 
     return isEqual;
 }
@@ -7976,7 +7981,7 @@ function cb_ConvertDynamicValue(x)
         if (WebFormsOptions.DisablePassObject)
         {
             if (WebFormsOptions.AddConsoleMessage)
-                console.warn("Access to the pass object is disabled but is being attempted.\nvalue:" + x);
+                cb_Console("warn", "Access to the pass object is disabled but is being attempted.\nvalue:" + x);
 
             return x;
         }
@@ -8583,7 +8588,7 @@ function cb_RunAsync(fn)
             catch (er)
             {
                 if (WebFormsOptions.AddConsoleMessage)
-                    console.error("Async error:", er);
+                    cb_Console("error", "Async error:", er);
                 resolve();
             }
         }, 0);
@@ -8604,17 +8609,17 @@ class cb_SPA
         
         const html = cb_SPA.getCurrentContent();
 
-        cb_SPA.contentCache[window.location.pathname] = html;
-        cb_SPA.titleCache[window.location.pathname] = document.title;
-        cb_SPA.scrollX[window.location.pathname] = window.scrollX;
-        cb_SPA.scrollY[window.location.pathname] = window.scrollY;
+        cb_SPA.contentCache[location.pathname] = html;
+        cb_SPA.titleCache[location.pathname] = document.title;
+        cb_SPA.scrollX[location.pathname] = window.scrollX;
+        cb_SPA.scrollY[location.pathname] = window.scrollY;
 
         history.replaceState({
             html,
             title: document.title,
             scrollX: window.scrollX,
             scrollY: window.scrollY
-        }, "", window.location.pathname + window.location.search + window.location.hash);
+        }, "", location.pathname + location.search + location.hash);
 
         window.addEventListener("popstate", (event) =>
         {
@@ -8625,7 +8630,7 @@ class cb_SPA
                 return;
             }
                 
-            const pathname = window.location.pathname;
+            const pathname = location.pathname + location.search + location.hash;
             if (event.state && event.state.html)
             {
                 cb_GetStateBodyLocation().outerHTML = event.state.html;
@@ -8666,7 +8671,7 @@ class cb_SPA
         }
         else
             if (WebFormsOptions.ReloadOnMissingHistory)
-                window.location.href = pathname; // Fallback
+                location.href = pathname; // Fallback
 
         cb_SPA.InitAfterRestoreState(evt);
 
@@ -8701,7 +8706,7 @@ class cb_SPA
         cb_SPA.scrollX = {};
         cb_SPA.scrollY = {};
 
-        history.replaceState(null, "", window.location.pathname + window.location.search + window.location.hash);
+        history.replaceState(null, "", location.pathname + location.search + location.hash);
     }
 
     static setState(setNew, pathname, linkTitle)
@@ -8802,6 +8807,23 @@ function cb_SetMainSubmitTypeToButtons(obj)
 
 function cb_SetStatePreservation(HtmlDOM, TransientDOM)
 {
+    const oldWalker = document.createTreeWalker(HtmlDOM, NodeFilter.SHOW_COMMENT);
+    const newWalker = document.createTreeWalker(TransientDOM, NodeFilter.SHOW_COMMENT);
+
+    let oldNode;
+    let newNode;
+
+    while ((oldNode = oldWalker.nextNode()))
+    {
+        if (!oldNode._done)
+            continue;
+
+        newNode = newWalker.nextNode();
+
+        if (newNode)
+            newNode._done = true;
+    }
+    
     // Save Current DOM state Including Select Values
     const selectValues = {};
     HtmlDOM.querySelectorAll("select").forEach((select, index) =>
@@ -9250,7 +9272,7 @@ const cb_ServiceWorker = (function ()
 
         if (!("serviceWorker" in navigator))
         {
-            console.log("[Service Worker] no Service Worker support");
+            cb_Console("log", "[Service Worker] no Service Worker support");
             return;
         }
 
@@ -9270,7 +9292,7 @@ const cb_ServiceWorker = (function ()
                 location.reload();
 
             if (WebFormsOptions.AddConsoleMessage)
-                console.warn("[Service Worker] Service Worker installed but not controlling page yet — a reload may be required in this browser.");
+                cb_Console("warn", "[Service Worker] Service Worker installed but not controlling page yet — a reload may be required in this browser.");
         }
 
         return reg;
@@ -9288,7 +9310,7 @@ const cb_ServiceWorker = (function ()
 
                 if (!navigator.serviceWorker.controller)
                 {
-                    console.warn("[Service Worker] Service Worker installed but not controlling page yet.");
+                    cb_Console("warn", "[Service Worker] Service Worker installed but not controlling page yet.");
                     return;
                 }
 
@@ -9348,7 +9370,7 @@ if (WebFormsOptions.RegisterServiceWorker)
     (async () => {
         await cb_ServiceWorker.register();
         await navigator.serviceWorker.ready;
-        console.log("[Service Worker] Service Worker is ready and controlling this page.");
+        cb_Console("log", "[Service Worker] Service Worker is ready and controlling this page.");
     })();
 }
 
@@ -9835,6 +9857,23 @@ function cb_CloseAllFixedFeatures()
     });
 }
 
+function cb_Console(type, ...args)
+{
+    switch (type)
+    {
+        case "log": console.log(...args); break;
+        case "info": console.info(...args); break;
+        case "warn": console.warn(...args); break;
+        case "error": console.error(...args); break;
+        case "debug": console.debug(...args); break;
+        case "trace": console.trace(...args); break;
+        case "group": console.group(...args); break;
+        case "groupend": console.groupEnd(); break;
+        case "table": console.table(...args); break;
+        default: console.log(...args);
+    }
+}
+
 /* End Message */
 
 /* Start Template Engine */
@@ -10115,6 +10154,15 @@ function cb_FindMorphMatch(parent, oldChild, newChild)
     return oldChild;
 }
 
+function cb_AddAttribute(el, name, value)
+{
+    const current = el.getAttribute(name);
+    if (current)
+        el.setAttribute(name, current + ";" + value);
+    else
+        el.setAttribute(name, value);
+}
+
 /* End Tag Change */
 
 /* Start Call Method */
@@ -10134,7 +10182,7 @@ function cb_GetMethod(funcName)
     if (WebFormsOptions.DisableCallMethod)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.warn("Access to the call method is disabled but is being attempted.\nMethod: " + funcName);
+            cb_Console("warn", "Access to the call method is disabled but is being attempted.\nMethod: " + funcName);
         return "";
     }
 
@@ -10142,7 +10190,7 @@ function cb_GetMethod(funcName)
         if (!WebFormsOptions.CallMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, funcName)))
         {
             if (WebFormsOptions.AddConsoleMessage)
-                console.warn("Access to call method is only possible in the list, but is being attempted.\nMethod: " + funcName);
+                cb_Console("warn", "Access to call method is only possible in the list, but is being attempted.\nMethod: " + funcName);
             return "";
         }
 
@@ -10152,7 +10200,7 @@ function cb_GetMethod(funcName)
     else
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.warn(`Method "${funcName}" not found or not loaded yet.`);
+            cb_Console("warn", `Method "${funcName}" not found or not loaded yet.`);
         return noop;
     }
 }
@@ -10844,7 +10892,7 @@ async function cb_RunWasmMethod_Rust(wasmUrl, funcName, args = [])
                 if (!instance.exports.alloc)
                 {
                     if (WebFormsOptions.AddConsoleMessage)
-                        console.warn("alloc not exported: cannot pass strings to WASM directly");
+                        cb_Console("warn", "alloc not exported: cannot pass strings to WASM directly");
 
                     processedArgs.push(0);
                 }
@@ -10942,7 +10990,7 @@ async function cb_LoadModule(modulePath, methods = [])
     if (WebFormsOptions.DisableLoadModule)
     {
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn("Access for load the module is disabled but is being attempted.\nModule path: " + modulePath);
+            cb_Console("warn", "Access for load the module is disabled but is being attempted.\nModule path: " + modulePath);
         return null;
     }
 
@@ -10950,14 +10998,14 @@ async function cb_LoadModule(modulePath, methods = [])
         if (!WebFormsOptions.LoadModulePathOnlyInAcceptedList.some(p => cb_MatchesPattern(p, modulePath)))
         {
             if (WebFormsOptions.AddConsoleMessageForModule)
-                console.warn("Access to load the module is only possible in the list, but is being attempted.\nModule path: " + modulePath);
+                cb_Console("warn", "Access to load the module is only possible in the list, but is being attempted.\nModule path: " + modulePath);
             return null;
         }
 
     if (cb_LoadedModules[modulePath])
     {
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn(`Module "${modulePath}" is already loaded.`);
+            cb_Console("warn", `Module "${modulePath}" is already loaded.`);
         return cb_LoadedModules[modulePath];
     }
 
@@ -10971,13 +11019,13 @@ async function cb_LoadModule(modulePath, methods = [])
         methodsToLoad.forEach(method => { cb_ModuleMethodMap[method] = mod[method]; });
 
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.log(`Module "${modulePath}" loaded (${methodsToLoad.length} methods).`);
+            cb_Console("log", `Module "${modulePath}" loaded (${methodsToLoad.length} methods).`);
 
         return mod;
     }
     catch (er)
     {
-        console.error(`Error loading module ${modulePath}:`, er);
+        cb_Console("error", `Error loading module ${modulePath}:`, er);
         throw er;
     }
 }
@@ -10996,11 +11044,11 @@ function cb_UnloadModule(modulePath)
 
         delete cb_LoadedModules[modulePath];
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.log(`Module "${modulePath}" and its methods were unloaded.`);
+            cb_Console("log", `Module "${modulePath}" and its methods were unloaded.`);
     }
     else
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn(`Module "${modulePath}" not found or not loaded.`);
+            cb_Console("warn", `Module "${modulePath}" not found or not loaded.`);
 }
 
 function cb_GetModuleMethod(method)
@@ -11010,7 +11058,7 @@ function cb_GetModuleMethod(method)
     if (WebFormsOptions.DisableCallModuleMethod)
     {
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn("Access to the call module method is disabled but is being attempted.\nMethod: " + method);
+            cb_Console("warn", "Access to the call module method is disabled but is being attempted.\nMethod: " + method);
         return noop;
     }
 
@@ -11018,7 +11066,7 @@ function cb_GetModuleMethod(method)
         if (!WebFormsOptions.CallModuleMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, method)))
         {
             if (WebFormsOptions.AddConsoleMessageForModule)
-                console.warn("Access to call module method is only possible in the list, but is being attempted.\nMethod: " + method);
+                cb_Console("warn", "Access to call module method is only possible in the list, but is being attempted.\nMethod: " + method);
             return noop;
         }
 
@@ -11028,7 +11076,7 @@ function cb_GetModuleMethod(method)
     else
     {
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn(`Method "${method}" not found or not loaded yet.`);
+            cb_Console("warn", `Method "${method}" not found or not loaded yet.`);
         return noop;
     }
 }
@@ -11041,11 +11089,11 @@ function cb_DeleteModuleMethod(method)
         delete cb_ModuleMethodMap[method];
 
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.log(`Method "${method}" removed.`);
+            cb_Console("log", `Method "${method}" removed.`);
     }
     else
         if (WebFormsOptions.AddConsoleMessageForModule)
-            console.warn(`Method "${method}" not found for removal.`);
+            cb_Console("warn", `Method "${method}" not found for removal.`);
 }
 
 /* End Module */
@@ -11510,7 +11558,7 @@ function cb_GetXML(text, path)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.error("XML Get error: ", er);
+            cb_Console("error", "XML Get error: ", er);
         return null;
     }
 }
@@ -11559,7 +11607,7 @@ function cb_SetXML(text, path, value)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.error("XML Set error: ", er);
+            cb_Console("error", "XML Set error: ", er);
         return text;
     }
 }
@@ -11595,7 +11643,7 @@ function cb_DeleteXML(text, path)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.error("XML Delete error: ", er);
+            cb_Console("error", "XML Delete error: ", er);
         return text;
     }
 }
@@ -11653,7 +11701,7 @@ function cb_AddXML(text, path, name, value = "")
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.error("XML Add error: ", er);
+            cb_Console("error", "XML Add error: ", er);
         return text;
     }
 }
@@ -11750,7 +11798,7 @@ function cb_GetXMLDictionary(text, path)
     catch (er)
     {
         if (WebFormsOptions.AddConsoleMessage)
-            console.error("XML Get Dictionary error: ", er);
+            cb_Console("error", "XML Get Dictionary error: ", er);
         return "{}";
     }
 }
@@ -12739,7 +12787,7 @@ async function cb_SetWebFormsValuesExtension(evt, ActionOperation, ActionFeature
 
                 default:
                     if (WebFormsOptions.AddConsoleMessage)
-                        console.warn("This action in webforms value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
+                        cb_Console("warn", "This action in webforms value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
 
                     if (WebFormsOptions.AddMessageForIncomprehensibleSetWebFormsValue)
                         cb_ShowMessage(WebFormsOptions.SetWebFormsValueIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
@@ -12754,11 +12802,11 @@ async function cb_SetValueToInputExtension(evt, ActionOperation, ActionFeature, 
         case '1':
             switch (ActionFeature)
             {
-                case '0': console.log(CurrentElement.outerHTML + '|' + vArgs[0]); break;
+                case '0': cb_Console("log", CurrentElement.outerHTML + '|' + vArgs[0]); break;
 
                 default:
                     if (WebFormsOptions.AddConsoleMessage)
-                        console.warn("This action in set value to input is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
+                        cb_Console("warn", "This action in set value to input is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
 
                     if (WebFormsOptions.AddMessageForIncomprehensibleSetValueToInput)
                         cb_ShowMessage(WebFormsOptions.SetValueToInputIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
@@ -12777,7 +12825,7 @@ async function cb_FetchValueExtension(evt, ActionOperation, ActionFeature, Value
 
                 default:
                     if (WebFormsOptions.AddConsoleMessage)
-                        console.warn("This action in fetch value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
+                        cb_Console("warn", "This action in fetch value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
 
                     if (WebFormsOptions.AddMessageForIncomprehensibleFetchValue)
                         cb_ShowMessage(WebFormsOptions.FetchValueIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
@@ -12798,7 +12846,7 @@ async function cb_SaveValueExtension(evt, ActionOperation, ActionFeature, Name, 
 
                 default:
                     if (WebFormsOptions.AddConsoleMessage)
-                        console.warn("This action in save value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in name: " + Name);
+                        cb_Console("warn", "This action in save value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in name: " + Name);
 
                     if (WebFormsOptions.AddMessageForIncomprehensibleSaveValue)
                         cb_ShowMessage(WebFormsOptions.SaveValueIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
@@ -12814,7 +12862,7 @@ async function cb_CheckConditionExtension(evt, Action, Control)
 
         default:
             if (WebFormsOptions.AddConsoleMessage)
-                console.warn("This action in check condition is incomprehensible: " + Action + "\nError in control: " + Control);
+                cb_Console("warn", "This action in check condition is incomprehensible: " + Action + "\nError in control: " + Control);
 
             if (WebFormsOptions.AddMessageForIncomprehensibleCheckCondition)
                 cb_ShowMessage(WebFormsOptions.CheckConditionIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
