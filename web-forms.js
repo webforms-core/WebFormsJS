@@ -2,182 +2,184 @@
 
 /* Start Options */
 
-const WebFormsOptions = new Object();
+const WFO = {
 
 // Initialization
-WebFormsOptions.AutoSetSubmitOnClick = true;
-WebFormsOptions.AutoSetFormCustomValidity = true;
+AutoSetSubmitOnClick: true,
+AutoSetFormCustomValidity: true,
 
 // Service Worker
-WebFormsOptions.RegisterServiceWorker = false;
-WebFormsOptions.RegisterServicePath = "/service-worker.js";
-WebFormsOptions.RegisterServiceScopePath = '/';
-WebFormsOptions.ReloadServiceWorkerIfNeed = true;
-WebFormsOptions.UseServiceWorkerPush = false;
-WebFormsOptions.UseServiceWorkerPushSubscribe = "/subscribe";
-WebFormsOptions.ServiceWorkerPushVapidPublicKey = "BOr9UhjogkDpIVlYweq0mSx0Gcnt8Y6XmvfPWeryfdaWebFormsCorekf1q1qgW93z7pX_AbeD23CE3vZhAkZTY";
-WebFormsOptions.ServiceWorkerWaitForControl = 100;
+RegisterServiceWorker: false,
+RegisterServicePath: "/service-worker.js",
+RegisterServiceScopePath: '/',
+ReloadServiceWorkerIfNeed: true,
+UseServiceWorkerPush: false,
+UseServiceWorkerPushSubscribe: "/subscribe",
+ServiceWorkerPushVapidPublicKey: "BOr9UhjogkDpIVlYweq0mSx0Gcnt8Y6XmvfPWeryfdaWebFormsCorekf1q1qgW93z7pX_AbeD23CE3vZhAkZTY",
+ServiceWorkerWaitForControl: 100,
 
 // Send
-WebFormsOptions.SendDataOnlyByPostMethod = false;
-WebFormsOptions.CheckValidityForFormSubmit = true;
+SendDataOnlyByPostMethod: false,
+CheckValidityForFormSubmit: true,
 
 // Response
-WebFormsOptions.SetResponseInsideDivTag = true;
-WebFormsOptions.ResponseLocation = "<body>";
-WebFormsOptions.CreateCommentForWebFormsResponse = false;
+SetResponseInsideDivTag: true,
+ResponseLocation: "<main>",
+CreateCommentForWebFormsResponse: false,
 
 // Non-Response Management
-WebFormsOptions.IgnoreEmptyResult = false;
-WebFormsOptions.UseRetryRequest = false;
-WebFormsOptions.MaxRetryCount = 3;
-WebFormsOptions.RetryRequestInterval = 3000;
+IgnoreEmptyResult: false,
+UseRetryRequest: false,
+MaxRetryCount: 3,
+RetryRequestInterval: 3000,
 
 // State
-WebFormsOptions.StateBodyLocation = "<body>";
-WebFormsOptions.UseSPALink = true;
-WebFormsOptions.SPASaveStateDelay = 500;
-WebFormsOptions.SetTitleBySPALink = true;
-WebFormsOptions.IgnoreQueryAndHashInSPALink = false;
-WebFormsOptions.ReloadOnMissingHistory = true;
-WebFormsOptions.CloseAllFixedFeaturesAfterHistoryReview = true;
-WebFormsOptions.RestoreListenersAfterHistoryReview = true;
-WebFormsOptions.ResetOptionsAfterReplaceBodyLocation = true;
+StateBodyLocation: "<main>",
+UseSPALink: true,
+SPASaveStateDelay: 500,
+SetTitleBySPALink: true,
+IgnoreQueryAndHashInSPALink: false,
+ReloadOnMissingHistory: true,
+CloseAllFixedFeaturesAfterHistoryReview: true,
+RestoreListenersAfterHistoryReview: true,
+ResetOptionsAfterReplaceBodyLocation: true,
 
 // Queue
-WebFormsOptions.UseQueue = true;
-WebFormsOptions.QueueLockDuration = 100;
-WebFormsOptions.UseQueueForWebFormsValue = true;
-WebFormsOptions.UseDebounceDelay = true;
-WebFormsOptions.QueueDebounceDelay = 200;
+UseQueue: true,
+QueueLockDuration: 100,
+UseQueueForWebFormsValue: true,
+UseDebounceDelay: true,
+QueueDebounceDelay: 200,
 
 // Message
-WebFormsOptions.MessageDuration = 3000;
-WebFormsOptions.UseConnectionErrorMessage = true;
-WebFormsOptions.AddMessageForProblemInDeterminingElement = false;
-WebFormsOptions.AddMessageForWebSocketInitializing = true;
-WebFormsOptions.AddMessageForWebSocketOpen = true;
-WebFormsOptions.AddMessageForWebSocketClose = true;
-WebFormsOptions.AddMessageForWebSocketError = true;
-WebFormsOptions.AddMessageForSSEInitializing = true;
-WebFormsOptions.AddMessageForSSEConnect = true;
-WebFormsOptions.AddMessageForSSEDisconnected = true;
-WebFormsOptions.AddMessageForSSEReconnecting = true;
-WebFormsOptions.AddMessageForSSEClose = true;
-WebFormsOptions.AddMessageForSSECloseAll = true;
-WebFormsOptions.AddMessageForIncomprehensibleSetWebFormsValue = false;
-WebFormsOptions.AddMessageForIncomprehensibleSetValueToInput = false;
-WebFormsOptions.AddMessageForIncomprehensibleFetchValue = false;
-WebFormsOptions.AddMessageForIncomprehensibleSaveValue = false;
-WebFormsOptions.AddMessageForIncomprehensibleCheckCondition = false;
-WebFormsOptions.AddMessageForProblemInSetWebFormsValue = false;
-WebFormsOptions.AddMessageForProblemInSetValueToInput = false;
-WebFormsOptions.AddMessageForProblemInFetchValue = false;
-WebFormsOptions.AddMessageForProblemInSaveValue = false;
-WebFormsOptions.AddMessageForProblemInCheckCondition = false;
+MessageDuration: 3000,
+UseConnectionErrorMessage: true,
+AddMessageForProblemInDeterminingElement: false,
+AddMessageForWebSocketInitializing: true,
+AddMessageForWebSocketOpen: true,
+AddMessageForWebSocketClose: true,
+AddMessageForWebSocketError: true,
+AddMessageForSSEInitializing: true,
+AddMessageForSSEConnect: true,
+AddMessageForSSEDisconnected: true,
+AddMessageForSSEReconnecting: true,
+AddMessageForSSEClose: true,
+AddMessageForSSECloseAll: true,
+AddMessageForIncomprehensibleSetWebFormsValue: false,
+AddMessageForIncomprehensibleSetValueToInput: false,
+AddMessageForIncomprehensibleFetchValue: false,
+AddMessageForIncomprehensibleSaveValue: false,
+AddMessageForIncomprehensibleCheckCondition: false,
+AddMessageForProblemInSetWebFormsValue: false,
+AddMessageForProblemInSetValueToInput: false,
+AddMessageForProblemInFetchValue: false,
+AddMessageForProblemInSaveValue: false,
+AddMessageForProblemInCheckCondition: false,
 
 // Console Message
-WebFormsOptions.AddConsoleMessage = true;
-WebFormsOptions.UseConsoleStackTrace = false;
-WebFormsOptions.AddConsoleMessageForHTTP = false;
-WebFormsOptions.AddConsoleMessageForURL = true;
-WebFormsOptions.AddConsoleMessageForWebSockets = true;
-WebFormsOptions.AddConsoleMessageForSSE = true;
-WebFormsOptions.AddConsoleMessageForModule = true;
+AddConsoleMessage: true,
+UseConsoleStackTrace: false,
+AddConsoleMessageForHTTP: false,
+AddConsoleMessageForURL: true,
+AddConsoleMessageForWebSockets: true,
+AddConsoleMessageForSSE: true,
+AddConsoleMessageForModule: true,
 
 // Animation
-WebFormsOptions.UseProgressBar = true;
-WebFormsOptions.UseLoader = true;
-WebFormsOptions.UseLoaderForFirstPageLoad = true;
-WebFormsOptions.UseLoaderForCommentBack = false;
-WebFormsOptions.UseLoaderForFrontBack = true;
-WebFormsOptions.UseLoaderForWasmBack = true;
-WebFormsOptions.LoaderIgnoreTimeout = 100;
-WebFormsOptions.LoaderMinimumDuration = 500;
-WebFormsOptions.HideLoaderTimeout = 5000;
-WebFormsOptions.HideLoaderWhenUpload = true;
-WebFormsOptions.HideLoaderAfterUploaded = 1024 * 1024;
+UseProgressBar: true,
+UseLoader: true,
+UseLoaderForFirstPageLoad: true,
+UseLoaderForCommentBack: false,
+UseLoaderForFrontBack: true,
+UseLoaderForWasmBack: true,
+LoaderIgnoreTimeout: 100,
+LoaderMinimumDuration: 500,
+HideLoaderTimeout: 5000,
+HideLoaderWhenUpload: true,
+HideLoaderAfterUploaded: 1024 * 1024,
 
 // Compress
-WebFormsOptions.UseGzipFileSend = false;
-WebFormsOptions.UseGzipFileSendIgnoreList = ["zip", "gzip", "rar"];
-WebFormsOptions.UseGzipDataSend = false;
-WebFormsOptions.UseGzipDataSendLargerThan = 5 * 1024;
+UseGzipFileSend: false,
+UseGzipFileSendIgnoreList: ["zip", "gzip", "rar"],
+UseGzipDataSend: false,
+UseGzipDataSendLargerThan: 5 * 1024,
 
 // Async/Await
-WebFormsOptions.AwaitConditionInterval = 100;
+AwaitConditionInterval: 100,
 
 // Connection
-WebFormsOptions.WebSocketReconnectMaxRetries = 5;
-WebFormsOptions.SSEReconnectMaxRetries = 5;
+WebSocketReconnectMaxRetries: 5,
+SSEReconnectMaxRetries: 5,
 
 // Security
-WebFormsOptions.DisableEval = false;
-WebFormsOptions.DisablePassObject = false;
-WebFormsOptions.DisableAppendJavaScriptTag = false;
-WebFormsOptions.DisableLoadModule = false;
-WebFormsOptions.UseLoadModulePathOnlyInAcceptedList = false;
-WebFormsOptions.LoadModulePathOnlyInAcceptedList = ["math"];
-WebFormsOptions.DisableCallMethod = false;
-WebFormsOptions.UseCallMethodOnlyInAcceptedList = false;
-WebFormsOptions.CallMethodOnlyInAcceptedList = ["alert"];
-WebFormsOptions.DisableCallModuleMethod = false;
-WebFormsOptions.UseCallModuleMethodOnlyInAcceptedList = false;
-WebFormsOptions.CallModuleMethodOnlyInAcceptedList = ["confirm"];
-WebFormsOptions.DisableLoadExternalHost = false;
-WebFormsOptions.UseLoadExternalHostOnlyInAcceptedList = false;
-WebFormsOptions.LoadExternalHostOnlyInAcceptedList = ["example.com"];
-WebFormsOptions.SendChecksum = false;
-WebFormsOptions.ChecksumName = "checksum";
+DisableEval: false,
+DisablePassObject: false,
+DisableAppendJavaScriptTag: false,
+DisableLoadModule: false,
+UseLoadModulePathOnlyInAcceptedList: false,
+LoadModulePathOnlyInAcceptedList: ["math"],
+DisableCallMethod: false,
+UseCallMethodOnlyInAcceptedList: false,
+CallMethodOnlyInAcceptedList: ["alert"],
+DisableCallModuleMethod: false,
+UseCallModuleMethodOnlyInAcceptedList: false,
+CallModuleMethodOnlyInAcceptedList: ["confirm"],
+DisableLoadExternalHost: false,
+UseLoadExternalHostOnlyInAcceptedList: false,
+LoadExternalHostOnlyInAcceptedList: ["example.com"],
+SendChecksum: false,
+ChecksumName: "checksum",
 
 // Language
-WebFormsOptions.SPAGlobalTitle = "My WebSite - {{title}}";
-WebFormsOptions.ConnectionErrorMessage = "Connection Error";
-WebFormsOptions.CheckConditionIsIncomprehensibleLang = "Check condition is incomprehensible";
-WebFormsOptions.SaveValueIsIncomprehensibleLang = "Save value is incomprehensible";
-WebFormsOptions.FetchValueIsIncomprehensibleLang = "Fetch value is incomprehensible";
-WebFormsOptions.SetValueToInputIsIncomprehensibleLang = "Set value to input is incomprehensible";
-WebFormsOptions.SetWebFormsValueIsIncomprehensibleLang = "Set webforms value is incomprehensible";
-WebFormsOptions.ConnectionErrorLang = "Connection error";
-WebFormsOptions.ProblemInCheckConditionLang = "Problem in check condition";
-WebFormsOptions.ProblemInSaveValueLang = "Problem in save value";
-WebFormsOptions.ProblemInFetchValueLang = "Problem in fetch value";
-WebFormsOptions.ProblemInDeterminingElementLang = "Problem in determining element";
-WebFormsOptions.ProblemInSetValueToInputLang = "Problem in set value to input";
-WebFormsOptions.ProblemInSetWebFormsValueLang = "Problem in set webforms value";
-WebFormsOptions.SSEClosingAllLang = "SSE Closing all";
-WebFormsOptions.SSEManuallyCloseLang = "SSE Manually close";
-WebFormsOptions.SSEReconnectingLang = "SSE Reconnecting";
-WebFormsOptions.SSEDisconnectedLang = "SSE Disconnected";
-WebFormsOptions.SSEConnectedLang = "SSE Connected";
-WebFormsOptions.SSETryingToConnectLang = "SSE Trying to connect";
-WebFormsOptions.InitializingNewWebSocketLang = "Initializing new WebSocket";
-WebFormsOptions.WebSocketErrorLang = "WebSocket error";
-WebFormsOptions.WebSocketDisconnectedLang = "WebSocket disconnected";
-WebFormsOptions.WebSocketConnectedLang = "WebSocket connected";
-WebFormsOptions.ValidityValueMissing = "Please fill out this field";
-WebFormsOptions.ValidityTypeMismatch = "Please enter a valid value";
-WebFormsOptions.ValidityPatternMismatch = "Please enter a value in the correct format";
-WebFormsOptions.ValidityTooLong = "Please use no more than {{maxLength}} characters (you are currently using {{valueLength}} characters).";
-WebFormsOptions.ValidityTooShort = "Please use at least {{minLength}} characters (you are currently using {{valueLength}} characters).";
-WebFormsOptions.ValidityRangeUnderflow = "Value must be greater than or equal to {{min}}.";
-WebFormsOptions.ValidityRangeOverflow = "Value must be less than or equal to {{max}}.";
-WebFormsOptions.ValidityStepMismatch = "The value entered is not a valid step";
-WebFormsOptions.ValidityBadInput = "Please enter a valid value";
-WebFormsOptions.ValidityCustomError = "The value entered is invalid";
+SPAGlobalTitle: "My WebSite - {{title}}",
+ConnectionErrorMessage: "Connection Error",
+CheckConditionIsIncomprehensibleLang: "Check condition is incomprehensible",
+SaveValueIsIncomprehensibleLang: "Save value is incomprehensible",
+FetchValueIsIncomprehensibleLang: "Fetch value is incomprehensible",
+SetValueToInputIsIncomprehensibleLang: "Set value to input is incomprehensible",
+SetWebFormsValueIsIncomprehensibleLang: "Set webforms value is incomprehensible",
+ConnectionErrorLang: "Connection error",
+ProblemInCheckConditionLang: "Problem in check condition",
+ProblemInSaveValueLang: "Problem in save value",
+ProblemInFetchValueLang: "Problem in fetch value",
+ProblemInDeterminingElementLang: "Problem in determining element",
+ProblemInSetValueToInputLang: "Problem in set value to input",
+ProblemInSetWebFormsValueLang: "Problem in set webforms value",
+SSEClosingAllLang: "SSE Closing all",
+SSEManuallyCloseLang: "SSE Manually close",
+SSEReconnectingLang: "SSE Reconnecting",
+SSEDisconnectedLang: "SSE Disconnected",
+SSEConnectedLang: "SSE Connected",
+SSETryingToConnectLang: "SSE Trying to connect",
+InitializingNewWebSocketLang: "Initializing new WebSocket",
+WebSocketErrorLang: "WebSocket error",
+WebSocketDisconnectedLang: "WebSocket disconnected",
+WebSocketConnectedLang: "WebSocket connected",
+ValidityValueMissing: "Please fill out this field",
+ValidityTypeMismatch: "Please enter a valid value",
+ValidityPatternMismatch: "Please enter a value in the correct format",
+ValidityTooLong: "Please use no more than {{maxLength}} characters (you are currently using {{valueLength}} characters).",
+ValidityTooShort: "Please use at least {{minLength}} characters (you are currently using {{valueLength}} characters).",
+ValidityRangeUnderflow: "Value must be greater than or equal to {{min}}.",
+ValidityRangeOverflow: "Value must be less than or equal to {{max}}.",
+ValidityStepMismatch: "The value entered is not a valid step",
+ValidityBadInput: "Please enter a valid value",
+ValidityCustomError: "The value entered is invalid",
 
 // Style
-WebFormsOptions.WebFormsTagsBackgroundColor = "#eee";
-WebFormsOptions.ProgressBarStyle = "width:100%;min-width:300px;max-width:600px;background-color:#eee;margin:2px 0px";
-WebFormsOptions.ProgressBarPercentLoadedStyle = "position:absolute;padding:0px 4px;line-height:22px";
-WebFormsOptions.ProgressBarValueStyle = "height:20px;background-color:#4D93DD;width:0%";
-WebFormsOptions.MessageNoneStyle = "background-color: #464646";
-WebFormsOptions.MessageWarningStyle = "background-color: #AF4C4C";
-WebFormsOptions.MessageProblemStyle = "background-color: #AFA04C";
-WebFormsOptions.MessageHelpStyle = "background-color: #4C81AF";
-WebFormsOptions.MessageSuccessStyle = "background-color: #4CAF8F";
+WebFormsTagsBackgroundColor: "#eee",
+ProgressBarStyle: "width:100%;min-width:300px;max-width:600px;background-color:#eee;margin:2px 0px",
+ProgressBarPercentLoadedStyle: "position:absolute;padding:0px 4px;line-height:22px",
+ProgressBarValueStyle: "height:20px;background-color:#4D93DD;width:0%",
+MessageNoneStyle: "background-color: #464646",
+MessageWarningStyle: "background-color: #AF4C4C",
+MessageProblemStyle: "background-color: #AFA04C",
+MessageHelpStyle: "background-color: #4C81AF",
+MessageSuccessStyle: "background-color: #4CAF8F"
 
-const WebFormsDefaultOptions = Object.assign({}, WebFormsOptions);
+};
+
+const WebFormsDefaultOptions = Object.assign({}, WFO);
 
 /* End Options */
 
@@ -259,7 +261,7 @@ const cb_WebFormsCoreUsingMessage = "You are using a web application built with 
 if (cb_UnsupportedFeatures.length > 0)
     cb_Console("warn", cb_WebFormsCoreUsingMessage + "\nYour browser is outdated or unsuitable and may experience performance issues because it does not support the following features:", cb_UnsupportedFeatures.join(", "));
 else
-    if (WebFormsOptions.AddConsoleMessage)
+    if (WFO.AddConsoleMessage)
         cb_Console("log", cb_WebFormsCoreUsingMessage + "\nCongratulations! All core browser features are supported.");
 
 /* End Check Browser Support */
@@ -302,13 +304,13 @@ function cb_WebSocketReconnect(Url, formAction)
 {
 
     if (!cb_WebSocketRetryCount[formAction])
-        cb_WebSocketRetryCount[formAction] = WebFormsOptions.WebSocketReconnectMaxRetries;
+        cb_WebSocketRetryCount[formAction] = WFO.WebSocketReconnectMaxRetries;
 
     const attempt = cb_WebSocketRetryCount[formAction];
 
-    if (attempt >= WebFormsOptions.WebSocketReconnectMaxRetries)
+    if (attempt >= WFO.WebSocketReconnectMaxRetries)
     {
-        if (WebFormsOptions.AddConsoleMessageForWebSockets)
+        if (WFO.AddConsoleMessageForWebSockets)
             cb_Console("warn", "WebSocket max retry reached. Stop reconnecting.");
         return;
     }
@@ -325,11 +327,11 @@ function cb_WebSocketReconnect(Url, formAction)
 
 function cb_WebSocketOnClose(evt, formAction)
 {
-    if (WebFormsOptions.AddConsoleMessageForWebSockets)
+    if (WFO.AddConsoleMessageForWebSockets)
         cb_Console("log", "WebSocket disconnected, path: " + formAction);
 
-    if (WebFormsOptions.AddMessageForWebSocketClose)
-        cb_ShowMessage(WebFormsOptions.WebSocketDisconnectedLang, "none", WebFormsOptions.MessageDuration);
+    if (WFO.AddMessageForWebSocketClose)
+        cb_ShowMessage(WFO.WebSocketDisconnectedLang, "none", WFO.MessageDuration);
 
     delete cb_WebSockets[formAction];
 }
@@ -348,7 +350,7 @@ function cb_WebSocketDelete(formAction)
 
         delete cb_WebSockets[formAction];
 
-        if (WebFormsOptions.AddConsoleMessageForWebSockets)
+        if (WFO.AddConsoleMessageForWebSockets)
             cb_Console("log", "WebSocket manually closed and removed: " + formAction);
     }
 }
@@ -368,16 +370,16 @@ function cb_WebSocketIsConnected(path)
 
 function cb_WebSocketOnError(evt, formAction)
 {
-    if (WebFormsOptions.AddConsoleMessageForWebSockets)
+    if (WFO.AddConsoleMessageForWebSockets)
         cb_Console("log", "WebSocket error, path: " + formAction);
 
-    if (WebFormsOptions.AddMessageForWebSocketError)
-        cb_ShowMessage(WebFormsOptions.WebSocketErrorLang, "problem", WebFormsOptions.MessageDuration);
+    if (WFO.AddMessageForWebSocketError)
+        cb_ShowMessage(WFO.WebSocketErrorLang, "problem", WFO.MessageDuration);
 }
 
 function cb_WebSocketDoSend(Message)
 {
-    if (WebFormsOptions.AddConsoleMessageForWebSockets)
+    if (WFO.AddConsoleMessageForWebSockets)
         cb_Console("log", "WebSocket sent:\n" + Message);
 
     for (let formAction in cb_WebSockets)
@@ -392,7 +394,7 @@ function cb_WebSocketSet(formAction)
 
     const Url = cb_ConvertToWebSocketUrl(formAction)
 
-    if (WebFormsOptions.AddConsoleMessageForWebSockets)
+    if (WFO.AddConsoleMessageForWebSockets)
         cb_Console("log", "WebSocket request path: " + formAction);
 
     let active = false;
@@ -401,17 +403,17 @@ function cb_WebSocketSet(formAction)
 
     if (!active)
     {
-        if (WebFormsOptions.AddConsoleMessageForWebSockets)
+        if (WFO.AddConsoleMessageForWebSockets)
             cb_Console("log", "No active WebSocket for this path, initializing new one...");
 
-        if (WebFormsOptions.AddMessageForWebSocketInitializing)
-            cb_ShowMessage(WebFormsOptions.InitializingNewWebSocketLang, "help", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForWebSocketInitializing)
+            cb_ShowMessage(WFO.InitializingNewWebSocketLang, "help", WFO.MessageDuration);
 
         cb_WebSocketInitialization(Url, formAction);
     }
     else
     {
-        if (WebFormsOptions.AddConsoleMessageForWebSockets)
+        if (WFO.AddConsoleMessageForWebSockets)
             cb_Console("log", "WebSocket already connected or connecting for this path");
     }
 }
@@ -435,26 +437,26 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
         delete cb_SSEConnections[path];
     }
 
-    if (WebFormsOptions.AddConsoleMessageForSSE)
+    if (WFO.AddConsoleMessageForSSE)
         cb_Console("log", `SSE Trying to connect: ${path}`);
 
-    if (WebFormsOptions.AddMessageForSSEInitializing)
-        cb_ShowMessage(WebFormsOptions.SSETryingToConnectLang, "help", WebFormsOptions.MessageDuration);
+    if (WFO.AddMessageForSSEInitializing)
+        cb_ShowMessage(WFO.SSETryingToConnectLang, "help", WFO.MessageDuration);
 
     const source = new EventSource(path);
 
     source.onopen = () =>
     {
-        if (WebFormsOptions.AddConsoleMessageForSSE)
+        if (WFO.AddConsoleMessageForSSE)
             cb_Console("log", `SSE Connected: ${path}`);
 
-        if (WebFormsOptions.AddMessageForSSEConnect)
-            cb_ShowMessage(WebFormsOptions.SSEConnectedLang, "success", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForSSEConnect)
+            cb_ShowMessage(WFO.SSEConnectedLang, "success", WFO.MessageDuration);
     };
 
     source.onmessage = (event) =>
     {
-        if (WebFormsOptions.AddConsoleMessageForSSE)
+        if (WFO.AddConsoleMessageForSSE)
             cb_Console("log", `SSE Message from ${path}:`, event.data);
 
         const response = event.data.Replace("$[sln];" , '\n');
@@ -464,11 +466,11 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
 
     source.onerror = () =>
     {
-        if (WebFormsOptions.AddConsoleMessageForSSE)
+        if (WFO.AddConsoleMessageForSSE)
             cb_Console("warn", `SSE Disconnected: ${path}`);
 
-        if (WebFormsOptions.AddMessageForSSEDisconnected)
-            cb_ShowMessage(WebFormsOptions.SSEDisconnectedLang, "problem", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForSSEDisconnected)
+            cb_ShowMessage(WFO.SSEDisconnectedLang, "problem", WFO.MessageDuration);
 
         source.close();
         delete cb_SSEConnections[path];
@@ -479,20 +481,20 @@ function cb_ConnectToSSE(evt, path, shouldReconnect = true, reconnectTryTimeout 
         if (!cb_SSERetryCount[path])
             cb_SSERetryCount[path] = 0;
 
-        if (cb_SSERetryCount[path] >= WebFormsOptions.SSEReconnectMaxRetries)
+        if (cb_SSERetryCount[path] >= WFO.SSEReconnectMaxRetries)
         {
-            if (WebFormsOptions.AddConsoleMessageForSSE)
+            if (WFO.AddConsoleMessageForSSE)
                 cb_Console("log", "SSE max retry reached");
             return;
         }
 
         cb_SSERetryCount[path]++;
 
-        if (WebFormsOptions.AddConsoleMessageForSSE)
+        if (WFO.AddConsoleMessageForSSE)
             cb_Console("log", `SSE Reconnecting to ${path} in ${reconnectTryTimeout}ms attempt ${cb_SSERetryCount[path]}...`);
 
-        if (WebFormsOptions.AddMessageForSSEReconnecting)
-            cb_ShowMessage(WebFormsOptions.SSEReconnectingLang + " ...", "none", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForSSEReconnecting)
+            cb_ShowMessage(WFO.SSEReconnectingLang + " ...", "none", WFO.MessageDuration);
 
         setTimeout(() => cb_ConnectToSSE(evt, path, shouldReconnect, reconnectTryTimeout, viewState), reconnectTryTimeout);
     };
@@ -509,11 +511,11 @@ function cb_DisconnectSSE(path)
     {
         source.close();
         delete cb_SSEConnections[path];
-        if (WebFormsOptions.AddConsoleMessageForSSE)
+        if (WFO.AddConsoleMessageForSSE)
             cb_Console("log", `SSE Manually closed connection: ${path}`);
 
-        if (WebFormsOptions.AddMessageForSSEClose)
-            cb_ShowMessage(WebFormsOptions.SSEManuallyCloseLang, "none", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForSSEClose)
+            cb_ShowMessage(WFO.SSEManuallyCloseLang, "none", WFO.MessageDuration);
     }
 }
 
@@ -532,14 +534,14 @@ function cb_DisconnectAllSSE()
     for (const path in cb_SSEConnections)
     {
         cb_SSEConnections[path].close();
-        if (WebFormsOptions.AddConsoleMessageForSSE)
+        if (WFO.AddConsoleMessageForSSE)
             cb_Console("log", `SSE Closed: ${path}`);
     }
 
     Object.keys(cb_SSEConnections).forEach(k => delete cb_SSEConnections[k]);
 
-    if (WebFormsOptions.AddMessageForSSECloseAll)
-        cb_ShowMessage(WebFormsOptions.SSEClosingAllLang, "none", WebFormsOptions.MessageDuration);
+    if (WFO.AddMessageForSSECloseAll)
+        cb_ShowMessage(WFO.SSEClosingAllLang, "none", WFO.MessageDuration);
 }
 
 /* End SSE */
@@ -553,7 +555,7 @@ function cb_FakeEvent()
 
 function cb_SetPostBackFunctionToSubmit(obj)
 {
-    if (!WebFormsOptions.AutoSetSubmitOnClick)
+    if (!WFO.AutoSetSubmitOnClick)
         return;
 
     const SubmitInputs = (obj) ? obj.querySelectorAll('input[type="submit"], button[type="submit"]') : document.querySelectorAll('input[type="submit"], button[type="submit"]');
@@ -595,12 +597,12 @@ function cb_RemovePostBackFunctionInSubmit(obj, evt)
 
 window.onload = function ()
 {
-    if (WebFormsOptions.UseLoaderForFirstPageLoad)
+    if (WFO.UseLoaderForFirstPageLoad)
         cb_ShowLoader(true);
 
     cb_Initialization();
 
-    if (WebFormsOptions.UseLoaderForFirstPageLoad)
+    if (WFO.UseLoaderForFirstPageLoad)
         cb_HideLoader();
 };
 
@@ -869,7 +871,7 @@ function StopPropagation(evt)
 
 function cb_SetSPALink(obj)
 {
-    if (!WebFormsOptions.UseSPALink)
+    if (!WFO.UseSPALink)
         return;
 
     const links = obj ? obj.querySelectorAll('a') : document.body.querySelectorAll('a');
@@ -883,14 +885,14 @@ function cb_SetSPALink(obj)
 
         const targetAttr = link.getAttribute("target");
 
-        let linkTitle = (WebFormsOptions.SetTitleBySPALink && (link.hasAttribute("title")) ? WebFormsOptions.SPAGlobalTitle.Replace("{{title}}", link.getAttribute("title")) : false);
+        let linkTitle = (WFO.SetTitleBySPALink && (link.hasAttribute("title")) ? WFO.SPAGlobalTitle.Replace("{{title}}", link.getAttribute("title")) : false);
         
         if (linkHref.length > 1 && linkHref.substring(0, 2) == "#~")
             linkHref = linkHref.substring(2);
 
         if (linkHref.startsWith("#"))
         {   
-            if (!WebFormsOptions.IgnoreQueryAndHashInSPALink)
+            if (!WFO.IgnoreQueryAndHashInSPALink)
                 cb_AddAttribute(link ,"onclick", `PreventDefault(event);cb_AddHashState('${linkHref}'` + (linkTitle ? `, '${linkTitle}');` : ");"));
             return;
         }
@@ -926,7 +928,7 @@ function cb_AddHashState(linkHref, linkTitle)
             cb_PopstateIsPending = false;
         }
         cb_PopstateIsPending = false;
-    }, WebFormsOptions.SPASaveStateDelay);
+    }, WFO.SPASaveStateDelay);
 }
 
 function cb_TriggerEvent(element, constructorNameOrEvent, eventNameOrOptions, maybeOptions = {})
@@ -1567,7 +1569,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
         return;
     }
 
-    if (WebFormsOptions.CheckValidityForFormSubmit && !Form.checkValidity())
+    if (WFO.CheckValidityForFormSubmit && !Form.checkValidity())
     {
         cb_RefreshFormCustomValidity();
 
@@ -1586,7 +1588,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
         return;
     }
 
-    const FormMethod = (WebFormsOptions.SendDataOnlyByPostMethod) ? "POST" : (Form.hasAttribute("method") ? Form.getAttribute("method") : "GET");
+    const FormMethod = (WFO.SendDataOnlyByPostMethod) ? "POST" : (Form.hasAttribute("method") ? Form.getAttribute("method") : "GET");
     var FormAction = Form.hasAttribute("action")? Form.getAttribute("action") : "";
 
     // Chek Form Multi Part
@@ -1597,7 +1599,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
 
 
     // Set Progress Tag
-    if (WebFormsOptions.UseProgressBar)
+    if (WFO.UseProgressBar)
         cb_SetProgressTag(obj, Form);
 
 
@@ -1657,9 +1659,9 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
     {
         const tmpURL = new URL(FormAction, location.origin);
 
-        if (WebFormsOptions.DisableLoadExternalHost)
+        if (WFO.DisableLoadExternalHost)
         {
-            if (WebFormsOptions.AddConsoleMessageForURL)
+            if (WFO.AddConsoleMessageForURL)
                 cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + FormAction);
 
             cb_HideLoader();
@@ -1670,10 +1672,10 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             return;
         }
 
-        if (WebFormsOptions.UseLoadExternalHostOnlyInAcceptedList)
-            if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
+        if (WFO.UseLoadExternalHostOnlyInAcceptedList)
+            if (!WFO.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
             {
-                if (WebFormsOptions.AddConsoleMessageForURL)
+                if (WFO.AddConsoleMessageForURL)
                     cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + FormAction);
                 
                 cb_HideLoader();
@@ -1722,7 +1724,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
                 if (obj.hasAttribute("main-type"))
                     obj.removeAttribute("main-type");
 
-                if (WebFormsOptions.AddConsoleMessageForWebSockets)
+                if (WFO.AddConsoleMessageForWebSockets)
                     cb_Console("log", "WebSocket server response:\n" + event.data);
             };
         }
@@ -1746,7 +1748,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
     const XMLHttp = new XMLHttpRequest();
     XMLHttp.onreadystatechange = function ()
     {
-        if (WebFormsOptions.AddConsoleMessageForHTTP)
+        if (WFO.AddConsoleMessageForHTTP)
             cb_Console("log", "HTTP request with method " + FormMethod.toUpperCase() + ", path: " + FormAction);
 
         if (XMLHttp.readyState == 4)
@@ -1774,7 +1776,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             }
             else if (XMLHttp.status >= 400 && XMLHttp.status < 500)
             {
-                if (WebFormsOptions.UseConnectionErrorMessage)
+                if (WFO.UseConnectionErrorMessage)
                     cb_ShowConnectionError(XMLHttp.status);
 
                 // Reset Input Type
@@ -1792,13 +1794,13 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             }
             else if (XMLHttp.status >= 500 && XMLHttp.status < 600)
             {
-                if (WebFormsOptions.UseRetryRequest && retryCount < WebFormsOptions.MaxRetryCount)
+                if (WFO.UseRetryRequest && retryCount < WFO.MaxRetryCount)
                 {
-                    setTimeout(() => { cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount + 1); }, WebFormsOptions.RetryRequestInterval);
+                    setTimeout(() => { cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount + 1); }, WFO.RetryRequestInterval);
                 }
                 else
                 {
-                    if (WebFormsOptions.UseConnectionErrorMessage)
+                    if (WFO.UseConnectionErrorMessage)
                         cb_ShowConnectionError(XMLHttp.status);
 
                     // Reset Input Type
@@ -1820,13 +1822,13 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
 
     XMLHttp.onerror = function ()
     {
-        if (WebFormsOptions.UseRetryRequest && retryCount < WebFormsOptions.MaxRetryCount)
+        if (WFO.UseRetryRequest && retryCount < WFO.MaxRetryCount)
         {
-            setTimeout(() => { cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount + 1); }, WebFormsOptions.RetryRequestInterval);
+            setTimeout(() => { cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount + 1); }, WFO.RetryRequestInterval);
         }
         else
         {
-            if (WebFormsOptions.UseConnectionErrorMessage)
+            if (WFO.UseConnectionErrorMessage)
                 cb_ShowConnectionError();
 
             // Reset Input Type
@@ -1844,13 +1846,13 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
         }
 
         // Clean Progress Value
-        if (WebFormsOptions.UseProgressBar)
+        if (WFO.UseProgressBar)
             cb_CleanProgressValue();
     }
 
     XMLHttp.upload.onprogress = function (event)
     {
-        if (WebFormsOptions.HideLoaderWhenUpload && event.lengthComputable && event.loaded >= WebFormsOptions.HideLoaderAfterUploaded)
+        if (WFO.HideLoaderWhenUpload && event.lengthComputable && event.loaded >= WFO.HideLoaderAfterUploaded)
             cb_HideLoader();
     };
 
@@ -1864,7 +1866,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
         
     XMLHttp.open(FormMethod, FormAction, true);
 
-    if (WebFormsOptions.UseProgressBar && cb_HasFileInput(Form))
+    if (WFO.UseProgressBar && cb_HasFileInput(Form))
         XMLHttp.upload.addEventListener("progress", cb_ProgressHandler, false);
 
     if (!FormIsMultiPart)
@@ -1872,7 +1874,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
 
     XMLHttp.setRequestHeader("Post-Back", "true");
 
-    if (FormIsMultiPart && "CompressionStream" in window && Blob.prototype.stream && cb_HasFileInput(Form) && WebFormsOptions.UseGzipFileSend)
+    if (FormIsMultiPart && "CompressionStream" in window && Blob.prototype.stream && cb_HasFileInput(Form) && WFO.UseGzipFileSend)
     {
         // Gzip Files
         (async () =>
@@ -1885,7 +1887,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
                     const ext = value.name.split('.').pop().toLowerCase();
 
                     // Check Ignore List
-                    if (WebFormsOptions.UseGzipFileSendIgnoreList.includes(ext))
+                    if (WFO.UseGzipFileSendIgnoreList.includes(ext))
                     {
                         // The File Is Added Unchanged.
                         newFormData.append(key, value);
@@ -1905,7 +1907,7 @@ function cb_PostRequestAndResponse(evt, ViewState, formElement, retryCount = 0, 
             XMLHttp.send(newFormData);
         })();
     }
-    else if (!FormIsMultiPart && "CompressionStream" in window && Blob.prototype.stream && formDataSerialize && WebFormsOptions.UseGzipDataSend && WebFormsOptions.UseGzipDataSendLargerThan <= (new TextEncoder().encode(formDataSerialize).length))
+    else if (!FormIsMultiPart && "CompressionStream" in window && Blob.prototype.stream && formDataSerialize && WFO.UseGzipDataSend && WFO.UseGzipDataSendLargerThan <= (new TextEncoder().encode(formDataSerialize).length))
     {
         // Gzip All Data (Except for multipart)
         (async () =>
@@ -1988,9 +1990,9 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
     {
         const tmpURL = new URL(FormAction, location.origin);
 
-        if (WebFormsOptions.DisableLoadExternalHost)
+        if (WFO.DisableLoadExternalHost)
         {
-            if (WebFormsOptions.AddConsoleMessageForURL)
+            if (WFO.AddConsoleMessageForURL)
                 cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + FormAction);
 
             cb_HideLoader();
@@ -2001,10 +2003,10 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
             return;
         }
 
-        if (WebFormsOptions.UseLoadExternalHostOnlyInAcceptedList)
-            if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
+        if (WFO.UseLoadExternalHostOnlyInAcceptedList)
+            if (!WFO.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
             {
-                if (WebFormsOptions.AddConsoleMessageForURL)
+                if (WFO.AddConsoleMessageForURL)
                     cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + FormAction);
                 
                 cb_HideLoader();
@@ -2032,7 +2034,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
                 const WebSocketResult = event.data;
                 SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
-                if (WebFormsOptions.AddConsoleMessageForWebSockets)
+                if (WFO.AddConsoleMessageForWebSockets)
                     cb_Console("log", "WebSocket server response:\n" + event.data);
             };
         }
@@ -2049,7 +2051,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
     const XMLHttp = new XMLHttpRequest();
     XMLHttp.onreadystatechange = function ()
     {
-        if (WebFormsOptions.AddConsoleMessageForHTTP)
+        if (WFO.AddConsoleMessageForHTTP)
             cb_Console("log", "HTTP request with method " + Method.toUpperCase() + ", path: " + FormAction);
 
         if (XMLHttp.readyState == 4)
@@ -2069,7 +2071,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
                         if (IsSPALink)
                         {
                             linkPath = evt.currentTarget.getAttribute("href");
-                            linkTitle = (WebFormsOptions.SetTitleBySPALink && (evt.currentTarget.hasAttribute("title")) ? WebFormsOptions.SPAGlobalTitle.Replace("{{title}}", evt.currentTarget.getAttribute("title")) : null);
+                            linkTitle = (WFO.SetTitleBySPALink && (evt.currentTarget.hasAttribute("title")) ? WFO.SPAGlobalTitle.Replace("{{title}}", evt.currentTarget.getAttribute("title")) : null);
 
                             if (linkTitle)
                                 document.title = linkTitle;
@@ -2079,7 +2081,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
                                 const currentUrl = new URL(location.href);
                                 const targetUrl = new URL(linkPath, location.href);
                                 
-                                IsIgnoreQueryAndHash = (WebFormsOptions.IgnoreQueryAndHashInSPALink && targetUrl.pathname == currentUrl.pathname);
+                                IsIgnoreQueryAndHash = (WFO.IgnoreQueryAndHashInSPALink && targetUrl.pathname == currentUrl.pathname);
 
                                 if (!IsIgnoreQueryAndHash)
                                     history.pushState(window.history.state, "", linkPath);
@@ -2107,7 +2109,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
                                 cb_PopstateIsPending = false;
                             }
                             cb_PopstateIsPending = false;
-                        }, WebFormsOptions.SPASaveStateDelay);
+                        }, WFO.SPASaveStateDelay);
                     }
                 }
 
@@ -2118,7 +2120,7 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
             }
             else if (XMLHttp.status >= 400 && XMLHttp.status < 500)
             {
-                if (WebFormsOptions.UseConnectionErrorMessage)
+                if (WFO.UseConnectionErrorMessage)
                     cb_ShowConnectionError(XMLHttp.status);
 
                 cb_HideLoader();
@@ -2128,11 +2130,11 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
             }
             else if (XMLHttp.status >= 500 && XMLHttp.status < 600)
             {
-                if (WebFormsOptions.UseRetryRequest && retryCount < WebFormsOptions.MaxRetryCount)
-                    setTimeout(() => { cb_RequestAndResponse(evt, (useHashPath? "#~" : "") + FormAction, ViewState, Method, retryCount + 1); }, WebFormsOptions.RetryRequestInterval);
+                if (WFO.UseRetryRequest && retryCount < WFO.MaxRetryCount)
+                    setTimeout(() => { cb_RequestAndResponse(evt, (useHashPath? "#~" : "") + FormAction, ViewState, Method, retryCount + 1); }, WFO.RetryRequestInterval);
                 else
                 {
-                    if (WebFormsOptions.UseConnectionErrorMessage)
+                    if (WFO.UseConnectionErrorMessage)
                         cb_ShowConnectionError(XMLHttp.status);
 
                     cb_HideLoader();
@@ -2146,11 +2148,11 @@ function cb_RequestAndResponse(evt, FormAction, ViewState, Method, retryCount = 
 
     XMLHttp.onerror = function ()
     {
-        if (WebFormsOptions.UseRetryRequest && retryCount < WebFormsOptions.MaxRetryCount)
-            setTimeout(() => { cb_RequestAndResponse(evt, (useHashPath? "#~" : "") + FormAction, ViewState, Method, retryCount + 1); }, WebFormsOptions.RetryRequestInterval);
+        if (WFO.UseRetryRequest && retryCount < WFO.MaxRetryCount)
+            setTimeout(() => { cb_RequestAndResponse(evt, (useHashPath? "#~" : "") + FormAction, ViewState, Method, retryCount + 1); }, WFO.RetryRequestInterval);
         else
         {
-            if (WebFormsOptions.UseConnectionErrorMessage)
+            if (WFO.UseConnectionErrorMessage)
                 cb_ShowConnectionError();
 
             cb_HideLoader();
@@ -2247,7 +2249,7 @@ function SetResponse(evt, ResponseResult, ViewState, RequestName)
     {
         cb_SetWebFormsValues(evt, RequestName, ResponseResult);
 
-        if (WebFormsOptions.CreateCommentForWebFormsResponse)
+        if (WFO.CreateCommentForWebFormsResponse)
         {
             const comment = document.createComment(ResponseResult);
             cb_GetResponseLocation().append(comment);
@@ -2267,7 +2269,7 @@ function SetResponse(evt, ResponseResult, ViewState, RequestName)
             ViewStateObject.replaceChildren(tmpDiv);
             cb_AppendJavaScriptTag(ResponseResult);
             cb_Initialization(ViewStateObject.getElementsByTagName("div")[0]);
-            if (!WebFormsOptions.SetResponseInsideDivTag)
+            if (!WFO.SetResponseInsideDivTag)
             {
                 var divElement = ViewStateObject.getElementsByTagName("div")[0];
                 divElement.replaceChildren(...divElement.childNodes);
@@ -2278,7 +2280,7 @@ function SetResponse(evt, ResponseResult, ViewState, RequestName)
             ViewState.replaceChildren(tmpDiv);
             cb_AppendJavaScriptTag(ResponseResult);
             cb_Initialization(ViewState.getElementsByTagName("div")[0]);
-            if (!WebFormsOptions.SetResponseInsideDivTag)
+            if (!WFO.SetResponseInsideDivTag)
             {
                 var divElement = ViewState.getElementsByTagName("div")[0];
                 divElement.replaceChildren(...divElement.childNodes);
@@ -2289,19 +2291,19 @@ function SetResponse(evt, ResponseResult, ViewState, RequestName)
             cb_GetResponseLocation().prepend(tmpDiv);
             cb_AppendJavaScriptTag(ResponseResult);
             cb_Initialization(cb_GetResponseLocation().getElementsByTagName("div")[0]);
-            if (!WebFormsOptions.SetResponseInsideDivTag)
+            if (!WFO.SetResponseInsideDivTag)
             {
                 var divElement = cb_GetResponseLocation().getElementsByTagName("div")[0];
                 divElement.replaceChildren(...divElement.childNodes);
             }
         }
     }
-    else if (ResponseResult || !WebFormsOptions.IgnoreEmptyResult)
+    else if (ResponseResult || !WFO.IgnoreEmptyResult)
     {
-        if (WebFormsOptions.ResetOptionsAfterReplaceBodyLocation)
-            Object.assign(WebFormsOptions, WebFormsDefaultOptions);
+        if (WFO.ResetOptionsAfterReplaceBodyLocation)
+            Object.assign(WFO, WebFormsDefaultOptions);
 
-        cb_GetResponseLocation().replaceChildren(...(WebFormsOptions.SetResponseInsideDivTag ? [tmpDiv] : tmpDiv.childNodes));
+        cb_GetResponseLocation().replaceChildren(...(WFO.SetResponseInsideDivTag ? [tmpDiv] : tmpDiv.childNodes));
         cb_AppendJavaScriptTag(ResponseResult);
         cb_Initialization(cb_GetResponseLocation());
     }
@@ -2313,7 +2315,7 @@ function SetResponse(evt, ResponseResult, ViewState, RequestName)
 
 function CommentBack(evt, index, InputPlace)
 {
-    if (WebFormsOptions.UseLoaderForCommentBack)
+    if (WFO.UseLoaderForCommentBack)
         cb_ShowLoader();
 
     evt = evt || cb_FakeEvent();
@@ -2325,7 +2327,7 @@ function CommentBack(evt, index, InputPlace)
 
     cb_SetWebFormsCommentsValue(elementPlace, evt, index, true);
 
-    if (WebFormsOptions.UseLoaderForCommentBack)
+    if (WFO.UseLoaderForCommentBack)
         cb_HideLoader();
 }
 
@@ -2335,7 +2337,7 @@ function CommentBack(evt, index, InputPlace)
 
 async function WasmBack(evt, wasmLanguage, wasmUrl, funcName, args, OutputPlace)
 {
-    if (WebFormsOptions.UseLoaderForWasmBack)
+    if (WFO.UseLoaderForWasmBack)
         cb_ShowLoader();
 
     evt = evt || cb_FakeEvent();
@@ -2344,7 +2346,7 @@ async function WasmBack(evt, wasmLanguage, wasmUrl, funcName, args, OutputPlace)
 
     SetResponse(evt, String(result), OutputPlace, "");
 
-    if (WebFormsOptions.UseLoaderForWasmBack)
+    if (WFO.UseLoaderForWasmBack)
         cb_HideLoader();
 }
 
@@ -2354,20 +2356,20 @@ async function WasmBack(evt, wasmLanguage, wasmUrl, funcName, args, OutputPlace)
 
 async function FrontBack(evt, modulePath, OutputPlace, ...args)
 {
-    if (WebFormsOptions.UseLoaderForFrontBack)
+    if (WFO.UseLoaderForFrontBack)
         cb_ShowLoader();
 
-    if (WebFormsOptions.DisableLoadModule)
+    if (WFO.DisableLoadModule)
     {
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", "Access for load the module is disabled but is being attempted.\nModule path: " + modulePath);
         return null;
     }
 
-    if (WebFormsOptions.UseLoadModulePathOnlyInAcceptedList)
-        if (!WebFormsOptions.LoadModulePathOnlyInAcceptedList.some(p => cb_MatchesPattern(p, modulePath)))
+    if (WFO.UseLoadModulePathOnlyInAcceptedList)
+        if (!WFO.LoadModulePathOnlyInAcceptedList.some(p => cb_MatchesPattern(p, modulePath)))
         {
-            if (WebFormsOptions.AddConsoleMessageForModule)
+            if (WFO.AddConsoleMessageForModule)
                 cb_Console("warn", "Access to load the module is only possible in the list, but is being attempted.\nModule path: " + modulePath);
             return null;
         }
@@ -2383,11 +2385,11 @@ async function FrontBack(evt, modulePath, OutputPlace, ...args)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("error", "Error loading module:", er);
     }
 
-    if (WebFormsOptions.UseLoaderForFrontBack)
+    if (WFO.UseLoaderForFrontBack)
         cb_HideLoader();
 }
 
@@ -2459,9 +2461,9 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
     {
         const tmpURL = new URL(path, location.origin);
 
-        if (WebFormsOptions.DisableLoadExternalHost)
+        if (WFO.DisableLoadExternalHost)
         {
-            if (WebFormsOptions.AddConsoleMessageForURL)
+            if (WFO.AddConsoleMessageForURL)
                 cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + path);
 
             cb_HideLoader();
@@ -2472,10 +2474,10 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
             return;
         }
 
-        if (WebFormsOptions.UseLoadExternalHostOnlyInAcceptedList)
-            if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
+        if (WFO.UseLoadExternalHostOnlyInAcceptedList)
+            if (!WFO.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
             {
-                if (WebFormsOptions.AddConsoleMessageForURL)
+                if (WFO.AddConsoleMessageForURL)
                     cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + path);
                 
                 cb_HideLoader();
@@ -2513,7 +2515,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
                 const WebSocketResult = event.data;
                 SetResponse(evt, WebSocketResult, ViewState, RequestName);
 
-                if (WebFormsOptions.AddConsoleMessageForWebSockets)
+                if (WFO.AddConsoleMessageForWebSockets)
                     cb_Console("log", "WebSocket server response:\n" + event.data);
             };
         }
@@ -2530,7 +2532,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
     const XMLHttp = new XMLHttpRequest();
     XMLHttp.onreadystatechange = function ()
     {
-        if (WebFormsOptions.AddConsoleMessageForHTTP)
+        if (WFO.AddConsoleMessageForHTTP)
             cb_Console("log", "HTTP request with method " + method.toUpperCase() + ", path: " + path);
 
         if (XMLHttp.readyState == 4)
@@ -2550,7 +2552,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
             }
             else if (XMLHttp.status >= 400 && XMLHttp.status < 500)
             {
-                if (WebFormsOptions.UseConnectionErrorMessage)
+                if (WFO.UseConnectionErrorMessage)
                     cb_ShowConnectionError(XMLHttp.status);
 
                 cb_HideLoader();
@@ -2560,13 +2562,13 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
             }
             else if (XMLHttp.status >= 500 && XMLHttp.status < 600)
             {
-                if (WebFormsOptions.UseRetryRequest && retryCount < WebFormsOptions.MaxRetryCount)
+                if (WFO.UseRetryRequest && retryCount < WFO.MaxRetryCount)
                 {
-                    setTimeout(() => { cb_SendRequestAndResponse(evt, ViewState, path, method, isMultiPart, contentType, data, retryCount + 1) }, WebFormsOptions.RetryRequestInterval);
+                    setTimeout(() => { cb_SendRequestAndResponse(evt, ViewState, path, method, isMultiPart, contentType, data, retryCount + 1) }, WFO.RetryRequestInterval);
                 }
                 else
                 {
-                    if (WebFormsOptions.UseConnectionErrorMessage)
+                    if (WFO.UseConnectionErrorMessage)
                         cb_ShowConnectionError(XMLHttp.status);
 
                     cb_HideLoader();
@@ -2580,13 +2582,13 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
 
     XMLHttp.onerror = function ()
     {
-        if (WebFormsOptions.UseRetryRequest && retryCount < WebFormsOptions.MaxRetryCount)
+        if (WFO.UseRetryRequest && retryCount < WFO.MaxRetryCount)
         {
-            setTimeout(() => { cb_SendRequestAndResponse(evt, ViewState, path, method, isMultiPart, contentType, data, retryCount + 1) }, WebFormsOptions.RetryRequestInterval);
+            setTimeout(() => { cb_SendRequestAndResponse(evt, ViewState, path, method, isMultiPart, contentType, data, retryCount + 1) }, WFO.RetryRequestInterval);
         }
         else
         {
-            if (WebFormsOptions.UseConnectionErrorMessage)
+            if (WFO.UseConnectionErrorMessage)
                 cb_ShowConnectionError();
 
             cb_HideLoader();
@@ -2609,7 +2611,7 @@ async function cb_SendRequestAndResponse(evt, ViewState, path, method = "POST", 
 
     XMLHttp.setRequestHeader("Post-Back", "true");
 
-    if (!isMultiPart && "CompressionStream" in window && Blob.prototype.stream && data && WebFormsOptions.UseGzipDataSend && WebFormsOptions.UseGzipDataSendLargerThan <= (new TextEncoder().encode(data).length))
+    if (!isMultiPart && "CompressionStream" in window && Blob.prototype.stream && data && WFO.UseGzipDataSend && WFO.UseGzipDataSendLargerThan <= (new TextEncoder().encode(data).length))
     {
         // Gzip All Data (Except for multipart)
         (async () =>
@@ -2832,7 +2834,7 @@ function cb_FormDataSerialize(form, TagSubmitName, TagSubmitValue, TagSubmitType
         FormString = FormString.substring(0, FormString.length - 1);
 
     // Add Checksum Value
-    if (WebFormsOptions.SendChecksum)
+    if (WFO.SendChecksum)
         if (FormIsMultiPart)
         {
             let checksumSource = "";
@@ -2842,10 +2844,10 @@ function cb_FormDataSerialize(form, TagSubmitName, TagSubmitValue, TagSubmitType
             if (checksumSource.endsWith('&'))
                 checksumSource = checksumSource.slice(0, -1);
 
-            TmpFormData.append(WebFormsOptions.ChecksumName, cb_Checksum(checksumSource, true));
+            TmpFormData.append(WFO.ChecksumName, cb_Checksum(checksumSource, true));
         }
         else
-            FormString += '&' + WebFormsOptions.ChecksumName + '=' + cb_Checksum(FormString, true);
+            FormString += '&' + WFO.ChecksumName + '=' + cb_Checksum(FormString, true);
 
     return FormIsMultiPart ? TmpFormData : FormString;
 }
@@ -2929,23 +2931,23 @@ function cb_SetValidityMessage(element)
     let message = "";
 
     if (validity.valueMissing)
-        message = WebFormsOptions.ValidityValueMissing;
+        message = WFO.ValidityValueMissing;
     else if (validity.typeMismatch)
-        message = WebFormsOptions.ValidityTypeMismatch;
+        message = WFO.ValidityTypeMismatch;
     else if (validity.patternMismatch)
-        message = WebFormsOptions.ValidityPatternMismatch;
+        message = WFO.ValidityPatternMismatch;
     else if (validity.tooLong)
-        message = WebFormsOptions.ValidityTooLong.replaceAll("{{maxLength}}", element.maxLength).replaceAll("{{valueLength}}", element.value.length);
+        message = WFO.ValidityTooLong.replaceAll("{{maxLength}}", element.maxLength).replaceAll("{{valueLength}}", element.value.length);
     else if (validity.tooShort)
-        message = WebFormsOptions.ValidityTooShort.replaceAll("{{minLength}}", element.minLength).replaceAll("{{valueLength}}", element.value.length);
+        message = WFO.ValidityTooShort.replaceAll("{{minLength}}", element.minLength).replaceAll("{{valueLength}}", element.value.length);
     else if (validity.rangeUnderflow)
-        message = WebFormsOptions.ValidityRangeUnderflow.replaceAll("{{min}}", element.min);
+        message = WFO.ValidityRangeUnderflow.replaceAll("{{min}}", element.min);
     else if (validity.rangeOverflow)
-        message = WebFormsOptions.ValidityRangeOverflow.replaceAll("{{max}}", element.max);
+        message = WFO.ValidityRangeOverflow.replaceAll("{{max}}", element.max);
     else if (validity.stepMismatch)
-        message = WebFormsOptions.ValidityStepMismatch;
+        message = WFO.ValidityStepMismatch;
     else if (validity.badInput)
-        message = WebFormsOptions.ValidityBadInput;
+        message = WFO.ValidityBadInput;
 
     if (message)
     {
@@ -2956,7 +2958,7 @@ function cb_SetValidityMessage(element)
 
 function cb_SetFormCustomValidity(obj)
 {
-    if (!WebFormsOptions.AutoSetFormCustomValidity)
+    if (!WFO.AutoSetFormCustomValidity)
         return;
 
     const Forms = obj ? obj.querySelectorAll("form") : document.querySelectorAll("form");
@@ -3062,9 +3064,9 @@ function cb_IsScriptAlreadyInDOM(script)
 
 function cb_AppendJavaScriptTag(HtmlSource)
 {
-    if (WebFormsOptions.DisableAppendJavaScriptTag)
+    if (WFO.DisableAppendJavaScriptTag)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("warn", "Access to the JavaScript is disabled but is being attempted.");
         return;
     }
@@ -3077,7 +3079,7 @@ function cb_AppendJavaScriptTag(HtmlSource)
 
         if (cb_IsScriptAlreadyInDOM(script))
         {
-            if (WebFormsOptions.AddConsoleMessage)
+            if (WFO.AddConsoleMessage)
                 cb_Console("error", "Warning: Exist duplicate script!\nThis issue occurs when the WebForms Core technology is incorrectly configured.");
             continue;
         }
@@ -3120,15 +3122,15 @@ function cb_SetProgressTag(obj, form)
     {
         const DivProgressUpload = document.createElement("div");
         DivProgressUpload.id = "div_ProgressUpload";
-        DivProgressUpload.setAttribute("style", WebFormsOptions.ProgressBarStyle);
+        DivProgressUpload.setAttribute("style", WFO.ProgressBarStyle);
 
         const DivProgressPercentLoaded = document.createElement("div");
         DivProgressPercentLoaded.id = "div_ProgressPercentLoaded";
-        DivProgressPercentLoaded.setAttribute("style", WebFormsOptions.ProgressBarPercentLoadedStyle);
+        DivProgressPercentLoaded.setAttribute("style", WFO.ProgressBarPercentLoadedStyle);
 
         const DivProgressUploadValue = document.createElement("div");
         DivProgressUploadValue.id = "div_ProgressUploadValue";
-        DivProgressUploadValue.setAttribute("style", WebFormsOptions.ProgressBarValueStyle);
+        DivProgressUploadValue.setAttribute("style", WFO.ProgressBarValueStyle);
 
         DivProgressUpload.appendChild(DivProgressPercentLoaded);
         DivProgressUpload.appendChild(DivProgressUploadValue);
@@ -3224,7 +3226,7 @@ async function RunWebForms(evt, webFormsValues, index)
     index = index ?? "";
     const hasWebFormsSection = (webFormsValues.TrimStart().substring(0, 11) == "[web-forms]");
 
-    if (WebFormsOptions.UseQueueForWebFormsValue)
+    if (WFO.UseQueueForWebFormsValue)
     {
         cb_AddToQueue(async () =>
         {
@@ -3540,7 +3542,7 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                         let tmpActionControl = WebFormsList[i];
                         tmpActionControl = await cb_ReplaceDynamicValue(evt, tmpActionControl);
                         
-                        cb_WaitForCondition(WebFormsOptions.AwaitConditionInterval, cb_CheckCondition, evt, tmpActionControl.substring(4)).then(async () =>
+                        cb_WaitForCondition(WFO.AwaitConditionInterval, cb_CheckCondition, evt, tmpActionControl.substring(4)).then(async () =>
                         {
                             cb_RunWebFormsValues(evt, "", WebFormsList.join('\n'), true, i + 1);
                         }).catch(() => { });
@@ -3692,9 +3694,9 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                 case '_':
                 {
                     const scriptValue = String(v1).Replace("$[ln];", "\n").FullTrim();
-                    if (WebFormsOptions.DisableEval)
+                    if (WFO.DisableEval)
                     {
-                        if (WebFormsOptions.AddConsoleMessage)
+                        if (WFO.AddConsoleMessage)
                             cb_Console("warn", "Access to the eval method is disabled but is being attempted.\nScript value: " + scriptValue);
                         continue;
                     }
@@ -4099,14 +4101,14 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                         case 'o':
                             if (!v1)
                             {
-                                Object.assign(WebFormsOptions, WebFormsDefaultOptions);
+                                Object.assign(WFO, WebFormsDefaultOptions);
                                 continue;
                             }
 
                             if (Object.hasOwn(WebFormsDefaultOptions, v1))
-                                WebFormsOptions[v1] = WebFormsDefaultOptions[v1];
+                                WFO[v1] = WebFormsDefaultOptions[v1];
                             else
-                                if (WebFormsOptions.AddConsoleMessage)
+                                if (WFO.AddConsoleMessage)
                                     cb_Console("log", "This option does not exist: " + name);
                             continue;
                     }
@@ -4151,14 +4153,14 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
                         {
                             var [name, value] = [v1, v2];
                             
-                            if (!Object.hasOwn(WebFormsOptions, name))
+                            if (!Object.hasOwn(WFO, name))
                             {
-                                if (WebFormsOptions.AddConsoleMessage)
+                                if (WFO.AddConsoleMessage)
                                     cb_Console("log", "This option does not exist: " + name);
                                 continue;
                             }
 
-                            WebFormsOptions[name] = value;
+                            WFO[name] = value;
 
                             continue;
                         }
@@ -4395,11 +4397,11 @@ async function cb_RunWebFormsValues(evt, RequestName, WebFormsValues, WithoutWeb
         {
             if (!er.cb_Trace)
             {
-                if (WebFormsOptions.AddConsoleMessage)
-                    cb_Console("warn", "There was a problem in webforms value whene executing the command: " + er + "\nError in command: " + WebFormsList[i] + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+                if (WFO.AddConsoleMessage)
+                    cb_Console("warn", "There was a problem in webforms value whene executing the command: " + er + "\nError in command: " + WebFormsList[i] + (WFO.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
-                if (WebFormsOptions.AddMessageForProblemInSetWebFormsValue)
-                    cb_ShowMessage(WebFormsOptions.ProblemInSetWebFormsValueLang, "problem", WebFormsOptions.MessageDuration);
+                if (WFO.AddMessageForProblemInSetWebFormsValue)
+                    cb_ShowMessage(WFO.ProblemInSetWebFormsValueLang, "problem", WFO.MessageDuration);
             }
             
             if (TryHasStarted)
@@ -4421,7 +4423,7 @@ function cb_SetWebFormsValues(evt, RequestName, WebFormsValues, WithoutWebFormsS
 {
     evt = cb_PreServedEvent(evt);
 
-    if (WebFormsOptions.UseQueueForWebFormsValue)
+    if (WFO.UseQueueForWebFormsValue)
     {
         cb_AddToQueue(async () =>
         {
@@ -5311,17 +5313,17 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
                             }
                             if (ActionFeature == 'm' || ActionFeature == 'M')
                             {
-                                if (WebFormsOptions.DisableCallMethod)
+                                if (WFO.DisableCallMethod)
                                 {
-                                    if (WebFormsOptions.AddConsoleMessage)
+                                    if (WFO.AddConsoleMessage)
                                         cb_Console("warn", "Access to the call method is disabled but is being attempted.\nMethod: " + funcName);
                                     break;
                                 }
 
-                                if (WebFormsOptions.UseCallMethodOnlyInAcceptedList)
-                                    if (!WebFormsOptions.CallMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, funcName)))
+                                if (WFO.UseCallMethodOnlyInAcceptedList)
+                                    if (!WFO.CallMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, funcName)))
                                     {
-                                        if (WebFormsOptions.AddConsoleMessage)
+                                        if (WFO.AddConsoleMessage)
                                             cb_Console("warn", "Access to call method is only possible in the list, but is being attempted.\nMethod: " + funcName);
                                         break;
                                     }
@@ -5614,11 +5616,11 @@ async function cb_SetValueToInput(evt, ActionOperation, ActionFeature, ActionVal
         }
         catch (er)
         {
-            if (WebFormsOptions.AddConsoleMessage)
-                cb_Console("warn", "There was a problem in set value to input whene executing the command: " + er + "\nError in command: " + CurrentElement + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+            if (WFO.AddConsoleMessage)
+                cb_Console("warn", "There was a problem in set value to input whene executing the command: " + er + "\nError in command: " + CurrentElement + (WFO.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
-            if (WebFormsOptions.AddMessageForProblemInSetValueToInput)
-                cb_ShowMessage(WebFormsOptions.ProblemInSetValueToInputLang, "problem", WebFormsOptions.MessageDuration);
+            if (WFO.AddMessageForProblemInSetValueToInput)
+                cb_ShowMessage(WFO.ProblemInSetValueToInputLang, "problem", WFO.MessageDuration);
 
             throw cb_AddTrace(er, "set-value-to-input");
         }
@@ -6037,11 +6039,11 @@ function cb_FetchElementByElementPlace(ElementPlace, obj, TransientDOM)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("log", "Problem in determining element: " + er + "\nError in input place: " + ElementPlace);
 
-        if (WebFormsOptions.AddMessageForProblemInDeterminingElement)
-            cb_ShowMessage(WebFormsOptions.ProblemInDeterminingElementLang, "problem", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForProblemInDeterminingElement)
+            cb_ShowMessage(WFO.ProblemInDeterminingElementLang, "problem", WFO.MessageDuration);
     }
 }
 
@@ -6511,12 +6513,12 @@ function cb_CountElements(value)
 
 function cb_GetResponseLocation()
 {
-    return cb_GetElementByElementPlace(WebFormsOptions.ResponseLocation);
+    return cb_GetElementByElementPlace(WFO.ResponseLocation) ?? cb_GetElementByElementPlace("<body>");
 }
 
 function cb_GetStateBodyLocation()
 {
-    return cb_GetElementByElementPlace(WebFormsOptions.StateBodyLocation);
+    return cb_GetElementByElementPlace(WFO.StateBodyLocation) ?? cb_GetElementByElementPlace("<body>");
 }
 
 async function cb_FetchValue(evt, Value)
@@ -6533,9 +6535,9 @@ async function cb_FetchValue(evt, Value)
             if (Value.substring(0, 1) == '$')
                 return Value;
 
-            if (WebFormsOptions.DisablePassObject)
+            if (WFO.DisablePassObject)
             {
-                if (WebFormsOptions.AddConsoleMessage)
+                if (WFO.AddConsoleMessage)
                     cb_Console("warn", "Access to the pass object is disabled but is being attempted.\nvalue:$" + Value);
 
                 return '$' + Value;
@@ -6580,11 +6582,11 @@ async function cb_FetchValue(evt, Value)
                 }
             }
 
-            if (!WebFormsOptions.DisableEval)
+            if (!WFO.DisableEval)
                 return eval(Value);
             else
             {
-                if (WebFormsOptions.AddConsoleMessage)
+                if (WFO.AddConsoleMessage)
                     cb_Console("warn", "Access to the eval method is disabled but is being attempted in Fetch.\nScript value:" + Value);
 
                 return value;
@@ -6624,9 +6626,9 @@ async function cb_FetchValue(evt, Value)
         {
             var ScriptValue = Value.substring(1).Replace("$[ln];", "\n").FullTrim();
 
-            if (WebFormsOptions.DisableEval)
+            if (WFO.DisableEval)
             {
-                if (WebFormsOptions.AddConsoleMessage)
+                if (WFO.AddConsoleMessage)
                     cb_Console("warn", "Access to the eval method is disabled but is being attempted.\nScript value:" + ScriptValue);
                 return "";
             }
@@ -6997,7 +6999,7 @@ async function cb_FetchValue(evt, Value)
                     }
                     catch (er)
                     {
-                        if (WebFormsOptions.AddConsoleMessage)
+                        if (WFO.AddConsoleMessage)
                             cb_Console("log", "Geolocation error:", er);
                         return "";
                     }
@@ -7009,7 +7011,7 @@ async function cb_FetchValue(evt, Value)
                         }
                         catch (er)
                         {
-                            if (WebFormsOptions.AddConsoleMessage)
+                            if (WFO.AddConsoleMessage)
                                 cb_Console("log", "clipboard error:", er);
                             return "";
                         }
@@ -7103,11 +7105,11 @@ async function cb_FetchValue(evt, Value)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
-            cb_Console("warn", "There was a problem in fetch value whene executing the command: " + er + "\nError in value: " + Value + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+        if (WFO.AddConsoleMessage)
+            cb_Console("warn", "There was a problem in fetch value whene executing the command: " + er + "\nError in value: " + Value + (WFO.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
-        if (WebFormsOptions.AddMessageForProblemInFetchValue)
-            cb_ShowMessage(WebFormsOptions.ProblemInFetchValueLang, "problem", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForProblemInFetchValue)
+            cb_ShowMessage(WFO.ProblemInFetchValueLang, "problem", WFO.MessageDuration);
 
         return "";
     }
@@ -7172,11 +7174,11 @@ async function cb_SaveValue(evt, ActionOperation, ActionFeature, ActionValue, La
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
-            cb_Console("warn", "There was a problem in save value whene executing the command: " + er + "\nError in command: " + ActionOperation + ActionFeature + "\nError in value: " + ActionValue + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+        if (WFO.AddConsoleMessage)
+            cb_Console("warn", "There was a problem in save value whene executing the command: " + er + "\nError in command: " + ActionOperation + ActionFeature + "\nError in value: " + ActionValue + (WFO.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
-        if (WebFormsOptions.AddMessageForProblemInSaveValue)
-            cb_ShowMessage(WebFormsOptions.ProblemInSaveValueLang, "problem", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForProblemInSaveValue)
+            cb_ShowMessage(WFO.ProblemInSaveValueLang, "problem", WFO.MessageDuration);
     }
 }
 
@@ -7413,18 +7415,18 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
         {
             const tmpURL = new URL(url, location.origin);
 
-            if (WebFormsOptions.DisableLoadExternalHost)
+            if (WFO.DisableLoadExternalHost)
             {
-                if (WebFormsOptions.AddConsoleMessageForURL)
+                if (WFO.AddConsoleMessageForURL)
                     cb_Console("warn", "Access for load the external host is disabled but is being attempted.\npath: " + url);
                 resolve(null);
                 return;
             }
 
-            if (WebFormsOptions.UseLoadExternalHostOnlyInAcceptedList)
-                if (!WebFormsOptions.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
+            if (WFO.UseLoadExternalHostOnlyInAcceptedList)
+                if (!WFO.LoadExternalHostOnlyInAcceptedList.some(p => cb_MatchesPattern(p, tmpURL.hostname)))
                 {
-                    if (WebFormsOptions.AddConsoleMessageForURL)
+                    if (WFO.AddConsoleMessageForURL)
                         cb_Console("warn", "Access to load the external host is only possible in the list, but is being attempted.\npath: " + url);
                     resolve(null);
                     return;
@@ -7438,7 +7440,7 @@ function cb_GetUrl(url, fetchScript, isXML, sendPostBackHeader)
 
         XMLHttp.onload = function ()
         {
-            if (WebFormsOptions.AddConsoleMessageForHTTP)
+            if (WFO.AddConsoleMessageForHTTP)
                 cb_Console("log", "HTTP request with method GET, path: " + url);
 
             if (XMLHttp.status === 200)
@@ -7666,7 +7668,7 @@ async function cb_CheckCondition(evt, ActionControl)
                 }
                 catch
                 {
-                    if (WebFormsOptions.AddConsoleMessage)
+                    if (WFO.AddConsoleMessage)
                         cb_Console("error", "Invalid regex pattern:", pattern);
                     return null;
                 }
@@ -7728,11 +7730,11 @@ async function cb_CheckCondition(evt, ActionControl)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
-            cb_Console("warn", "There was a problem in check condition whene executing the command: " + er + "\nError in action control: " + ActionControl + (WebFormsOptions.UseConsoleStackTrace ? "\n" + er.stack : ""));
+        if (WFO.AddConsoleMessage)
+            cb_Console("warn", "There was a problem in check condition whene executing the command: " + er + "\nError in action control: " + ActionControl + (WFO.UseConsoleStackTrace ? "\n" + er.stack : ""));
 
-        if (WebFormsOptions.AddMessageForProblemInCheckCondition)
-            cb_ShowMessage(WebFormsOptions.ProblemInCheckConditionLang, "problem", WebFormsOptions.MessageDuration);
+        if (WFO.AddMessageForProblemInCheckCondition)
+            cb_ShowMessage(WFO.ProblemInCheckConditionLang, "problem", WFO.MessageDuration);
     }
 }
 
@@ -7760,7 +7762,7 @@ function cb_AssertEqual(element, tag, recursiveDepth = 0)
     }
     else
     {
-        cb_Console("info", cb_Indent(recursiveDepth) + "[ASSERT FAIL] Invalid 'tag' type — must be a DOM Node or HTML string.");
+        cb_Console("info", cb_Indent(recursiveDepth) + "[ASSERT FAIL] Invalid 'tag' type - must be a DOM Node or HTML string.");
 
         if (recursiveDepth > 0)
             cb_Console("log", cb_Indent(recursiveDepth) + "End inner testing depth: " + recursiveDepth);
@@ -7978,9 +7980,9 @@ function cb_ConvertDynamicValue(x)
 
     if (x.startsWith("$@"))
     {
-        if (WebFormsOptions.DisablePassObject)
+        if (WFO.DisablePassObject)
         {
-            if (WebFormsOptions.AddConsoleMessage)
+            if (WFO.AddConsoleMessage)
                 cb_Console("warn", "Access to the pass object is disabled but is being attempted.\nvalue:" + x);
 
             return x;
@@ -8358,13 +8360,13 @@ let cb_QueueLockTimer = null;
 
 function cb_LockQueue(miliSecond)
 {
-    WebFormsOptions.QueueLockDuration = miliSecond;
+    WFO.QueueLockDuration = miliSecond;
 
     clearTimeout(cb_QueueLockTimer);
 
     cb_QueueLockTimer = setTimeout(() =>
     {
-        WebFormsOptions.QueueLockDuration = WebFormsDefaultOptions.QueueLockDuration;
+        WFO.QueueLockDuration = WebFormsDefaultOptions.QueueLockDuration;
     }, miliSecond);
 }
 
@@ -8396,7 +8398,7 @@ async function cb_ProcessQueue()
 
 function cb_AddToQueue(action)
 {
-    if (!WebFormsOptions.UseQueue)
+    if (!WFO.UseQueue)
     {
         return new Promise((resolve, reject) =>
         {
@@ -8433,7 +8435,7 @@ function cb_AddToQueue(action)
                         return await new Promise(resolve =>
                             setTimeout(
                                 () => resolve(null),
-                                WebFormsOptions.QueueLockDuration - 100
+                                WFO.QueueLockDuration - 100
                             )
                         );
                     })();
@@ -8453,10 +8455,10 @@ function cb_AddToQueue(action)
 
 function cb_RunInQueue(action)
 {
-    if (WebFormsOptions.UseDebounceDelay)
+    if (WFO.UseDebounceDelay)
     {
         clearTimeout(cb_QueueDebounceTimer);
-        cb_QueueDebounceTimer = setTimeout(() => cb_AddToQueue(action), WebFormsOptions.QueueDebounceDelay);
+        cb_QueueDebounceTimer = setTimeout(() => cb_AddToQueue(action), WFO.QueueDebounceDelay);
     }
     else
         cb_AddToQueue(action);
@@ -8587,7 +8589,7 @@ function cb_RunAsync(fn)
             }
             catch (er)
             {
-                if (WebFormsOptions.AddConsoleMessage)
+                if (WFO.AddConsoleMessage)
                     cb_Console("error", "Async error:", er);
                 resolve();
             }
@@ -8651,10 +8653,10 @@ class cb_SPA
 
     static InitAfterRestoreState(evt)
     {
-        if (WebFormsOptions.CloseAllFixedFeaturesAfterHistoryReview)
+        if (WFO.CloseAllFixedFeaturesAfterHistoryReview)
             cb_CloseAllFixedFeatures();
 
-        if (WebFormsOptions.RestoreListenersAfterHistoryReview)
+        if (WFO.RestoreListenersAfterHistoryReview)
             cb_RestoreListenersAfterDOMReplace();
 
         cb_SetWebFormsCommentsValue(null, evt, "#$");
@@ -8670,7 +8672,7 @@ class cb_SPA
             window.scrollTo(cb_SPA.scrollX[pathname] || 0, cb_SPA.scrollY[pathname] || 0);
         }
         else
-            if (WebFormsOptions.ReloadOnMissingHistory)
+            if (WFO.ReloadOnMissingHistory)
                 location.href = pathname; // Fallback
 
         cb_SPA.InitAfterRestoreState(evt);
@@ -8789,7 +8791,7 @@ function cb_GetBodyState(tag)
     return clonedBody.outerHTML;
 }
 
-setTimeout(() => { cb_SPA.init(); }, WebFormsOptions.SPASaveStateDelay);
+setTimeout(() => { cb_SPA.init(); }, WFO.SPASaveStateDelay);
 
 function cb_SetMainSubmitTypeToButtons(obj)
 {
@@ -9098,7 +9100,7 @@ let cb_LoaderCursorTimeout = null;
 
 function cb_ShowLoader(isInitialRequest)
 {
-    if (!WebFormsOptions.UseLoader)
+    if (!WFO.UseLoader)
         return;
 
     cb_CreateLoader();
@@ -9138,7 +9140,7 @@ function cb_ShowLoader(isInitialRequest)
     {
         document.documentElement.style.cursor = "";
         cb_LoaderCursorTimeout = null;
-    }, (isInitialRequest ? 0 : WebFormsOptions.LoaderIgnoreTimeout));
+    }, (isInitialRequest ? 0 : WFO.LoaderIgnoreTimeout));
 
     cb_LoaderShowTimeout = setTimeout(() =>
     {
@@ -9149,12 +9151,12 @@ function cb_ShowLoader(isInitialRequest)
         if (spinner)
             spinner.style.display = "block";
 
-    }, (isInitialRequest ? 0 : WebFormsOptions.LoaderIgnoreTimeout));
+    }, (isInitialRequest ? 0 : WFO.LoaderIgnoreTimeout));
 
     cb_LoaderTimeout = setTimeout(() =>
     {
         cb_HideLoader();
-    }, WebFormsOptions.HideLoaderTimeout);
+    }, WFO.HideLoaderTimeout);
 }
 
 function cb_HideLoader(immediate)
@@ -9178,7 +9180,7 @@ function cb_HideLoader(immediate)
     document.documentElement.style.cursor = "";
 
     const elapsed = Date.now() - (cb_LoaderStartTime || 0);
-    const remaining = WebFormsOptions.LoaderMinimumDuration - elapsed;
+    const remaining = WFO.LoaderMinimumDuration - elapsed;
 
     const hide = () =>
     {
@@ -9265,10 +9267,10 @@ const cb_ServiceWorker = (function ()
     async function register(path, scopePath)
     {
         if (!path)
-            path = WebFormsOptions.RegisterServicePath;
+            path = WFO.RegisterServicePath;
 
         if (!scopePath)
-            scopePath = WebFormsOptions.RegisterServiceScopePath;
+            scopePath = WFO.RegisterServiceScopePath;
 
         if (!("serviceWorker" in navigator))
         {
@@ -9284,15 +9286,15 @@ const cb_ServiceWorker = (function ()
 
         await navigator.serviceWorker.ready;
 
-        await new Promise(r => setTimeout(r, WebFormsOptions.ServiceWorkerWaitForControl));
+        await new Promise(r => setTimeout(r, WFO.ServiceWorkerWaitForControl));
 
         if (!navigator.serviceWorker.controller)
         {
-            if (WebFormsOptions.ReloadServiceWorkerIfNeed)
+            if (WFO.ReloadServiceWorkerIfNeed)
                 location.reload();
 
-            if (WebFormsOptions.AddConsoleMessage)
-                cb_Console("warn", "[Service Worker] Service Worker installed but not controlling page yet — a reload may be required in this browser.");
+            if (WFO.AddConsoleMessage)
+                cb_Console("warn", "[Service Worker] Service Worker installed but not controlling page yet - a reload may be required in this browser.");
         }
 
         return reg;
@@ -9365,7 +9367,7 @@ const cb_ServiceWorker = (function ()
     return API;
 })();
 
-if (WebFormsOptions.RegisterServiceWorker)
+if (WFO.RegisterServiceWorker)
 {
     (async () => {
         await cb_ServiceWorker.register();
@@ -9384,10 +9386,10 @@ async function cb_ServiceWorkerPush()
 
     const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: cb_UrlBase64ToUint8Array(WebFormsOptions.ServiceWorkerPushVapidPublicKey)
+        applicationServerKey: cb_UrlBase64ToUint8Array(WFO.ServiceWorkerPushVapidPublicKey)
     });
 
-    await fetch(WebFormsOptions.UseServiceWorkerPushSubscribe,
+    await fetch(WFO.UseServiceWorkerPushSubscribe,
     {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -9407,7 +9409,7 @@ function cb_UrlBase64ToUint8Array(base64String)
 
 async function cb_InitServiceWorker()
 {
-    if (WebFormsOptions.UseServiceWorkerPush)
+    if (WFO.UseServiceWorkerPush)
     {
         const permission = await Notification.requestPermission();
         if (permission === "granted")
@@ -9576,11 +9578,11 @@ function cb_MessageTypeStyle(type)
 {
     switch (type)
     {
-        case "warning": return WebFormsOptions.MessageWarningStyle;
-        case "problem": return WebFormsOptions.MessageProblemStyle;
-        case "help": return WebFormsOptions.MessageHelpStyle;
-        case "success": return WebFormsOptions.MessageSuccessStyle;
-        default: return WebFormsOptions.MessageNoneStyle;
+        case "warning": return WFO.MessageWarningStyle;
+        case "problem": return WFO.MessageProblemStyle;
+        case "help": return WFO.MessageHelpStyle;
+        case "success": return WFO.MessageSuccessStyle;
+        default: return WFO.MessageNoneStyle;
     }
 }
 
@@ -9762,7 +9764,7 @@ function cb_ShowMessage(text, type, duration = 0)
     messageText.textContent = text;
 
     const closeButton = document.createElement("button");
-    closeButton.textContent = '×';
+    closeButton.textContent = 'x';
     closeButton.setAttribute("style", cb_MessageButtonStyle);
     closeButton.setAttribute("title", "Close");
     closeButton.classList.add("cb-message-close");
@@ -9840,12 +9842,12 @@ function cb_ShowMessage(text, type, duration = 0)
 
 function cb_ShowConnectionError(errorCode)
 {
-    let message = WebFormsOptions.ConnectionErrorLang;
+    let message = WFO.ConnectionErrorLang;
 
     if (errorCode)
         message += ": " + errorCode;
 
-    cb_ShowMessage(message, "problem", WebFormsOptions.MessageDuration);
+    cb_ShowMessage(message, "problem", WFO.MessageDuration);
 }
 
 function cb_CloseAllFixedFeatures()
@@ -10179,17 +10181,17 @@ function cb_GetMethod(funcName)
 {
     const noop = () => { return ""; }; // Empty Fallback To Avoid Runtime Errors
 
-    if (WebFormsOptions.DisableCallMethod)
+    if (WFO.DisableCallMethod)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("warn", "Access to the call method is disabled but is being attempted.\nMethod: " + funcName);
         return "";
     }
 
-    if (WebFormsOptions.UseCallMethodOnlyInAcceptedList)
-        if (!WebFormsOptions.CallMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, funcName)))
+    if (WFO.UseCallMethodOnlyInAcceptedList)
+        if (!WFO.CallMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, funcName)))
         {
-            if (WebFormsOptions.AddConsoleMessage)
+            if (WFO.AddConsoleMessage)
                 cb_Console("warn", "Access to call method is only possible in the list, but is being attempted.\nMethod: " + funcName);
             return "";
         }
@@ -10199,7 +10201,7 @@ function cb_GetMethod(funcName)
         return fn;
     else
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("warn", `Method "${funcName}" not found or not loaded yet.`);
         return noop;
     }
@@ -10891,7 +10893,7 @@ async function cb_RunWasmMethod_Rust(wasmUrl, funcName, args = [])
             {
                 if (!instance.exports.alloc)
                 {
-                    if (WebFormsOptions.AddConsoleMessage)
+                    if (WFO.AddConsoleMessage)
                         cb_Console("warn", "alloc not exported: cannot pass strings to WASM directly");
 
                     processedArgs.push(0);
@@ -10987,24 +10989,24 @@ const cb_LoadedModules = {};
 
 async function cb_LoadModule(modulePath, methods = [])
 {
-    if (WebFormsOptions.DisableLoadModule)
+    if (WFO.DisableLoadModule)
     {
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", "Access for load the module is disabled but is being attempted.\nModule path: " + modulePath);
         return null;
     }
 
-    if (WebFormsOptions.UseLoadModulePathOnlyInAcceptedList)
-        if (!WebFormsOptions.LoadModulePathOnlyInAcceptedList.some(p => cb_MatchesPattern(p, modulePath)))
+    if (WFO.UseLoadModulePathOnlyInAcceptedList)
+        if (!WFO.LoadModulePathOnlyInAcceptedList.some(p => cb_MatchesPattern(p, modulePath)))
         {
-            if (WebFormsOptions.AddConsoleMessageForModule)
+            if (WFO.AddConsoleMessageForModule)
                 cb_Console("warn", "Access to load the module is only possible in the list, but is being attempted.\nModule path: " + modulePath);
             return null;
         }
 
     if (cb_LoadedModules[modulePath])
     {
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", `Module "${modulePath}" is already loaded.`);
         return cb_LoadedModules[modulePath];
     }
@@ -11018,7 +11020,7 @@ async function cb_LoadModule(modulePath, methods = [])
 
         methodsToLoad.forEach(method => { cb_ModuleMethodMap[method] = mod[method]; });
 
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("log", `Module "${modulePath}" loaded (${methodsToLoad.length} methods).`);
 
         return mod;
@@ -11043,11 +11045,11 @@ function cb_UnloadModule(modulePath)
         });
 
         delete cb_LoadedModules[modulePath];
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("log", `Module "${modulePath}" and its methods were unloaded.`);
     }
     else
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", `Module "${modulePath}" not found or not loaded.`);
 }
 
@@ -11055,17 +11057,17 @@ function cb_GetModuleMethod(method)
 {
     const noop = () => { return ""; }; // Empty Fallback To Avoid Runtime Errors
 
-    if (WebFormsOptions.DisableCallModuleMethod)
+    if (WFO.DisableCallModuleMethod)
     {
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", "Access to the call module method is disabled but is being attempted.\nMethod: " + method);
         return noop;
     }
 
-    if (WebFormsOptions.UseCallModuleMethodOnlyInAcceptedList)
-        if (!WebFormsOptions.CallModuleMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, method)))
+    if (WFO.UseCallModuleMethodOnlyInAcceptedList)
+        if (!WFO.CallModuleMethodOnlyInAcceptedList.some(p => cb_MatchesPattern(p, method)))
         {
-            if (WebFormsOptions.AddConsoleMessageForModule)
+            if (WFO.AddConsoleMessageForModule)
                 cb_Console("warn", "Access to call module method is only possible in the list, but is being attempted.\nMethod: " + method);
             return noop;
         }
@@ -11075,7 +11077,7 @@ function cb_GetModuleMethod(method)
         return fn;
     else
     {
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", `Method "${method}" not found or not loaded yet.`);
         return noop;
     }
@@ -11088,11 +11090,11 @@ function cb_DeleteModuleMethod(method)
     {
         delete cb_ModuleMethodMap[method];
 
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("log", `Method "${method}" removed.`);
     }
     else
-        if (WebFormsOptions.AddConsoleMessageForModule)
+        if (WFO.AddConsoleMessageForModule)
             cb_Console("warn", `Method "${method}" not found for removal.`);
 }
 
@@ -11557,7 +11559,7 @@ function cb_GetXML(text, path)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("error", "XML Get error: ", er);
         return null;
     }
@@ -11606,7 +11608,7 @@ function cb_SetXML(text, path, value)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("error", "XML Set error: ", er);
         return text;
     }
@@ -11642,7 +11644,7 @@ function cb_DeleteXML(text, path)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("error", "XML Delete error: ", er);
         return text;
     }
@@ -11700,7 +11702,7 @@ function cb_AddXML(text, path, name, value = "")
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("error", "XML Add error: ", er);
         return text;
     }
@@ -11797,7 +11799,7 @@ function cb_GetXMLDictionary(text, path)
     }
     catch (er)
     {
-        if (WebFormsOptions.AddConsoleMessage)
+        if (WFO.AddConsoleMessage)
             cb_Console("error", "XML Get Dictionary error: ", er);
         return "{}";
     }
@@ -12786,11 +12788,11 @@ async function cb_SetWebFormsValuesExtension(evt, ActionOperation, ActionFeature
                 case '2': if (TransientDOM) alert("Hello " + vArgs[0]); return true;
 
                 default:
-                    if (WebFormsOptions.AddConsoleMessage)
+                    if (WFO.AddConsoleMessage)
                         cb_Console("warn", "This action in webforms value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
 
-                    if (WebFormsOptions.AddMessageForIncomprehensibleSetWebFormsValue)
-                        cb_ShowMessage(WebFormsOptions.SetWebFormsValueIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
+                    if (WFO.AddMessageForIncomprehensibleSetWebFormsValue)
+                        cb_ShowMessage(WFO.SetWebFormsValueIsIncomprehensibleLang, "problem", WFO.MessageDuration);
             }
     }
 }
@@ -12805,11 +12807,11 @@ async function cb_SetValueToInputExtension(evt, ActionOperation, ActionFeature, 
                 case '0': cb_Console("log", CurrentElement.outerHTML + '|' + vArgs[0]); break;
 
                 default:
-                    if (WebFormsOptions.AddConsoleMessage)
+                    if (WFO.AddConsoleMessage)
                         cb_Console("warn", "This action in set value to input is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
 
-                    if (WebFormsOptions.AddMessageForIncomprehensibleSetValueToInput)
-                        cb_ShowMessage(WebFormsOptions.SetValueToInputIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
+                    if (WFO.AddMessageForIncomprehensibleSetValueToInput)
+                        cb_ShowMessage(WFO.SetValueToInputIsIncomprehensibleLang, "problem", WFO.MessageDuration);
             }
     }
 }
@@ -12824,11 +12826,11 @@ async function cb_FetchValueExtension(evt, ActionOperation, ActionFeature, Value
                 case '0': return "Hello " + Value;
 
                 default:
-                    if (WebFormsOptions.AddConsoleMessage)
+                    if (WFO.AddConsoleMessage)
                         cb_Console("warn", "This action in fetch value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in value: " + Value);
 
-                    if (WebFormsOptions.AddMessageForIncomprehensibleFetchValue)
-                        cb_ShowMessage(WebFormsOptions.FetchValueIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
+                    if (WFO.AddMessageForIncomprehensibleFetchValue)
+                        cb_ShowMessage(WFO.FetchValueIsIncomprehensibleLang, "problem", WFO.MessageDuration);
             }
     }
 }
@@ -12845,11 +12847,11 @@ async function cb_SaveValueExtension(evt, ActionOperation, ActionFeature, Name, 
                 case '3': cb_SetStorage(true, Name, CurrentElement.outerHTML); break;
 
                 default:
-                    if (WebFormsOptions.AddConsoleMessage)
+                    if (WFO.AddConsoleMessage)
                         cb_Console("warn", "This action in save value is incomprehensible: " + ActionOperation + ActionFeature + "\nError in name: " + Name);
 
-                    if (WebFormsOptions.AddMessageForIncomprehensibleSaveValue)
-                        cb_ShowMessage(WebFormsOptions.SaveValueIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
+                    if (WFO.AddMessageForIncomprehensibleSaveValue)
+                        cb_ShowMessage(WFO.SaveValueIsIncomprehensibleLang, "problem", WFO.MessageDuration);
             }
     }
 }
@@ -12861,11 +12863,11 @@ async function cb_CheckConditionExtension(evt, Action, Control)
         case "40": return (Control == "Hello");
 
         default:
-            if (WebFormsOptions.AddConsoleMessage)
+            if (WFO.AddConsoleMessage)
                 cb_Console("warn", "This action in check condition is incomprehensible: " + Action + "\nError in control: " + Control);
 
-            if (WebFormsOptions.AddMessageForIncomprehensibleCheckCondition)
-                cb_ShowMessage(WebFormsOptions.CheckConditionIsIncomprehensibleLang, "problem", WebFormsOptions.MessageDuration);
+            if (WFO.AddMessageForIncomprehensibleCheckCondition)
+                cb_ShowMessage(WFO.CheckConditionIsIncomprehensibleLang, "problem", WFO.MessageDuration);
     }
 }
 
