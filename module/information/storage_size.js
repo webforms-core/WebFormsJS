@@ -1,4 +1,6 @@
-﻿function sz_GetIndexedDBObjectSize(value, visited)
+/* WebForms Core Technology - Module: Storage Size */
+
+function sz_GetIndexedDBObjectSize(value, visited)
 {
     if (value === null || value === undefined)
         return 0;
