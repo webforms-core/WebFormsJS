@@ -1,4 +1,6 @@
-﻿const menuItems = [];
+/* WebForms Core Technology - Module: Drop Down Menu */
+
+const menuItems = [];
 const defaultClass = "my-dropdown";
 const stack = []; 
 
